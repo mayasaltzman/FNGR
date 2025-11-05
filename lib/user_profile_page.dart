@@ -49,27 +49,39 @@ class KeyInfo extends StatelessWidget {
   }
 }
 
-// class Preferences extends StatelessWidget {
-//   const Preferences({super.key});
+//preferences box
+class Preferences extends StatelessWidget {
+  const Preferences({super.key});
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       width: 375.0,
-//       decoration: BoxDecoration(
-//         border: Border.all(
-//           color: Colors.black,
-//           width: 1,
-//         ),
-//       ),
-//       child: const Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [Text("Preferences")],
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: ProfileStyles.containerWidth,
+      decoration: ProfileStyles.boxDecoration,
+      child: const Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [Text("Preferences")],
+      ),
+    );
+  }
+}
 
+//interests box
+class Interests extends StatelessWidget {
+  const Interests({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: ProfileStyles.containerWidth,
+      decoration: ProfileStyles.boxDecoration,
+      child: const Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [Text("Interests")],
+      ),
+    );
+  }
+}
 
 class UserProfilePage extends StatefulWidget {
   const UserProfilePage({super.key});
@@ -103,6 +115,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
             Text("Name, Age"),
             AboutMe(),
             KeyInfo(),
+            Preferences(),
+            Interests()
           ],
       )),
     );
