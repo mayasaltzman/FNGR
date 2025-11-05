@@ -9,6 +9,7 @@ class AboutMe extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 375.0,
       decoration: BoxDecoration(
         border: Border.all(
           color: Colors.black,
@@ -18,6 +19,27 @@ class AboutMe extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [const Text("About Me"), Text(aboutText)],
+      ),
+    );
+  }
+}
+
+class KeyInfo extends StatelessWidget {
+  const KeyInfo({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 375.0,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.black,
+          width: 1,
+        ),
+      ),
+      child: const Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [Text("Key Info")],
       ),
     );
   }
@@ -40,14 +62,15 @@ class _UserProfilePageState extends State<UserProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Nearby Users'),
-        centerTitle: true,
+        backgroundColor: const Color(0xFFD461A6),
       ),
       body: const Center(
-        child: Column(
-        children: [
-          AboutMe(),
-        ],
+          child: Column(
+          children: [
+            Text("Name, Age"),
+            AboutMe(),
+            KeyInfo(),
+          ],
       )),
     );
   }

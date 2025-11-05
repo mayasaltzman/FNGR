@@ -14,10 +14,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(
+        seedColor: const Color(0xFFFBEFF6),
+      )),
       debugShowCheckedModeBanner: false,
-      // home: HomePage(),
-      home: UserProfilePage(),
+      // home: HomePage(),ß
+      home: const UserProfilePage(),
     );
   }
 }
