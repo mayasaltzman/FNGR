@@ -16,12 +16,21 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-        seedColor: const Color(0xFFFBEFF6),
-      )),
+        colorScheme: const ColorScheme.light(
+          primary:  Color(0xFFFBEFF6),
+          primaryContainer: Color(0xFFF9E7F2),
+          primaryFixed: Color(0xFFAA4E85),
+          secondary:  Color(0xFFD461A6),
+          secondaryContainer: Color(0xFFFFFFFF),
+          tertiary:  Color(0xFFFF9B55),
+          tertiaryContainer: Color(0xFFFFF0E6),
+          tertiaryFixed: Color(0xFFFFE0CA)
+        )
+      ),
       debugShowCheckedModeBanner: false,
       // home: HomePage(),ß
       home: const UserProfilePage(),
-    );
+      );
+     
   }
 }
