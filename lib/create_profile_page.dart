@@ -27,7 +27,16 @@ class _ProfileFormState extends State<ProfileForm> {
                 child: TextFormField(
                   decoration: const InputDecoration(labelText: "Name"),
                 ))
-          ])
+          ]),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            const Text("Age"),
+            SizedBox(
+                width: 200,
+                child: TextFormField(
+                  //hope to change this to date picker for birth day eventually
+                  decoration: const InputDecoration(labelText: "Age"),
+                ))
+          ]),
         ],
       ),
     ));
