@@ -25,7 +25,8 @@ class _ProfileFormState extends State<ProfileForm> {
 
   @override
   Widget build(BuildContext context) {
-    //list of sexuality fields drop down memebers we can add more LOL
+
+    //list of sexualities fields drop down memebers we can add more LOL
     var sexualities = [
       DropdownItem(label: 'Aromantic', value: "Aromantic"),
       DropdownItem(label: 'Asexual', value: "Asexual"),
@@ -33,10 +34,27 @@ class _ProfileFormState extends State<ProfileForm> {
       DropdownItem(label: 'Demisexual', value: "Demisexual"),
       DropdownItem(label: 'Gay', value: "Gay"),
       DropdownItem(label: 'Lesbian', value: "Lesbian"),
+      DropdownItem(label: 'Other', value: "Other"),
       DropdownItem(label: 'Pansexual', value: "Pansexual"),
       DropdownItem(label: 'Polysexual', value: "Polysexual"),
       DropdownItem(label: 'Queer', value: "Queer"),
       DropdownItem(label: 'Sapphic', value: "Sapphic")
+    ];
+
+    //gender identity values for drop down again we can add more not to get canceled but im lazy
+    var genders = [
+      DropdownItem(label: 'Agender', value: "Agender"),
+      DropdownItem(label: 'Bigender', value: "Bigender"),
+      DropdownItem(label: 'Genderfluid', value: "Genderfluid"),
+      DropdownItem(label: 'Genderqueer', value: "Genderqueer"),
+      DropdownItem(label: 'Intersex', value: "Intersex"),
+      DropdownItem(label: 'Non-binary', value: "Non-binary"),
+      DropdownItem(label: 'Pangender', value: "Pangender"),
+      DropdownItem(label: 'Transgender', value: "Transgender"),
+      DropdownItem(label: 'Trans Man', value: "Trans Man"),
+      DropdownItem(label: 'Trans Woman', value: "Trans Woman"),
+      DropdownItem(label: 'Two-Spirit', value: "Two-Spirit"),
+      DropdownItem(label: 'Woman', value: "Woman")
     ];
 
     return (SizedBox(
@@ -74,6 +92,14 @@ class _ProfileFormState extends State<ProfileForm> {
                 width: ProfileStyles.textInputWidth,
                 child: MultiDropdown(
                   items: sexualities, //need to add scrollable
+                ))
+          ]),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            const Text("Gender"),
+            SizedBox(
+                width: ProfileStyles.textInputWidth,
+                child: MultiDropdown(
+                  items: genders, //need to add scrollable
                 ))
           ])
         ],
