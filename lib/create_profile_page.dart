@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:multi_dropdown/multi_dropdown.dart';
+
+//styles for profile page
+abstract class ProfileStyles {
+  static const formWidth = 375.0;
+  static const textInputWidth = 250.0;
+}
 
 class ProfileForm extends StatefulWidget {
   const ProfileForm({super.key});
@@ -13,17 +20,24 @@ class _ProfileFormState extends State<ProfileForm> {
 
   //store name entered
   String _name = "";
+  String _age = ""; //this will have to be made integer idk probs convert before submit
 
   @override
   Widget build(BuildContext context) {
+
+    var sexualities = [
+      DropdownItem(label: 'Nepal', value: User(name: 'Nepal', id: 1)),
+  
+    ];
+    
     return (SizedBox(
-      width: 375,
+      width: ProfileStyles.formWidth,
       child: Column(
         children: [
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             const Text("Name"),
             SizedBox(
-                width: 200,
+                width: ProfileStyles.textInputWidth,
                 child: TextFormField(
                   decoration: const InputDecoration(labelText: "Name"),
                 ))
@@ -31,7 +45,7 @@ class _ProfileFormState extends State<ProfileForm> {
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             const Text("Age"),
             SizedBox(
-                width: 200,
+                width: ProfileStyles.textInputWidth,
                 child: TextFormField(
                   //hope to change this to date picker for birth day eventually
                   decoration: const InputDecoration(labelText: "Age"),
