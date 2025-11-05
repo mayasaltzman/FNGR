@@ -1,21 +1,29 @@
 import 'package:flutter/material.dart';
 
+//styles for the page
+abstract class ProfileStyles {
+
+  static BoxDecoration boxDecoration = BoxDecoration(
+    border: Border.all(
+          color: Colors.black,
+          width: 1,
+    )
+  );
+
+  static const containerWidth = 375.0; 
+}
+
 //about me box
 class AboutMe extends StatelessWidget {
-  final String aboutText = "testing text until db connection";
+  final String aboutText = "testing text until db connection"; //will replace with stuff from db
 
   const AboutMe({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 375.0,
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.black,
-          width: 1,
-        ),
-      ),
+      width: ProfileStyles.containerWidth,
+      decoration: ProfileStyles.boxDecoration,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [Text("About Me", style: Theme.of(context).textTheme.bodyMedium), Text(aboutText, style: Theme.of(context).textTheme.bodySmall)],
@@ -24,19 +32,15 @@ class AboutMe extends StatelessWidget {
   }
 }
 
+//key info box
 class KeyInfo extends StatelessWidget {
   const KeyInfo({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 375.0,
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.black,
-          width: 1,
-        ),
-      ),
+      width: ProfileStyles.containerWidth,
+      decoration: ProfileStyles.boxDecoration,
       child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [Text("Key Info")],
@@ -45,12 +49,35 @@ class KeyInfo extends StatelessWidget {
   }
 }
 
+// class Preferences extends StatelessWidget {
+//   const Preferences({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       width: 375.0,
+//       decoration: BoxDecoration(
+//         border: Border.all(
+//           color: Colors.black,
+//           width: 1,
+//         ),
+//       ),
+//       child: const Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [Text("Preferences")],
+//       ),
+//     );
+//   }
+// }
+
+
 class UserProfilePage extends StatefulWidget {
   const UserProfilePage({super.key});
 
   @override
   State<UserProfilePage> createState() => _UserProfilePageState();
 }
+
 
 class _UserProfilePageState extends State<UserProfilePage> {
   @override
