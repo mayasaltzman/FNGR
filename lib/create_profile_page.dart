@@ -25,7 +25,6 @@ class _ProfileFormState extends State<ProfileForm> {
 
   @override
   Widget build(BuildContext context) {
-
     //list of sexualities fields drop down memebers we can add more LOL
     var sexualities = [
       DropdownItem(label: 'Aromantic', value: "Aromantic"),
@@ -78,9 +77,8 @@ class _ProfileFormState extends State<ProfileForm> {
       DropdownItem(label: 'polyamorous', value: "polyamorous")
     ];
 
-
-    return (SizedBox(
-      width: ProfileStyles.formWidth,
+    return (Form(
+      key: _formKey,
       child: Column(
         children: [
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
@@ -147,11 +145,13 @@ class _ProfileFormState extends State<ProfileForm> {
                 child: MultiDropdown(
                   items: relationship_style, //need to add scrollable
                 ))
-          ])
+          ]),
+          ElevatedButton(
+              onPressed: () {},
+              child: const Text("Next")) //will handle form submit
         ],
       ),
     ));
-
   }
 }
 
