@@ -57,6 +57,18 @@ class _ProfileFormState extends State<ProfileForm> {
       DropdownItem(label: 'Woman', value: "Woman")
     ];
 
+    //pronouns ALSO NEED MORE BUT IM BUSY
+    var pronouns = [
+      DropdownItem(label: 'she/her', value: "she/her"),
+      DropdownItem(label: 'they/them', value: "they/them"),
+      DropdownItem(label: 'he/him', value: "he/him"),
+      DropdownItem(label: 'ze/zir', value: "ze/zir"),
+    ];
+
+    //relationship status for drop down
+
+    //relationship style for drop down
+
     return (SizedBox(
       width: ProfileStyles.formWidth,
       child: Column(
@@ -95,11 +107,19 @@ class _ProfileFormState extends State<ProfileForm> {
                 ))
           ]),
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            const Text("Gender"),
+            const Text("Gender Identity"),
             SizedBox(
                 width: ProfileStyles.textInputWidth,
                 child: MultiDropdown(
                   items: genders, //need to add scrollable
+                ))
+          ]),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            const Text("Pronouns"),
+            SizedBox(
+                width: ProfileStyles.textInputWidth,
+                child: MultiDropdown(
+                  items: pronouns, //need to add scrollable
                 ))
           ])
         ],
