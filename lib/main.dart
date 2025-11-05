@@ -17,18 +17,26 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         colorScheme: const ColorScheme.light(
-          primary:  Color(0xFFFBEFF6),
-          primaryContainer: Color(0xFFF9E7F2),
-          primaryFixed: Color(0xFFAA4E85),
-          secondary:  Color(0xFFD461A6),
-          secondaryContainer: Color(0xFFFFFFFF),
+          primary:  Color(0xFFFBEFF6), //app background
+          primaryContainer: Color(0xFFF9E7F2), //to distinguish from background
+          primaryFixed: Color(0xFFAA4E85), //pink dark text
+          secondary:  Color(0xFFD461A6), //header color
+          secondaryFixed: Color(0xFFFFFFFF), //white
           tertiary:  Color(0xFFFF9B55),
-          tertiaryContainer: Color(0xFFFFF0E6),
+          tertiaryContainer: Color(0xFFFFF0E6), 
           tertiaryFixed: Color(0xFFFFE0CA)
+        ),
+        textTheme: const TextTheme(
+          bodyMedium: TextStyle(
+            fontSize: 16,
+          ),
+          bodySmall: TextStyle(
+            fontSize: 14
+          )
         )
       ),
       debugShowCheckedModeBanner: false,
-      // home: HomePage(),ß
+      // home: HomePage(),
       home: const UserProfilePage(),
       );
      

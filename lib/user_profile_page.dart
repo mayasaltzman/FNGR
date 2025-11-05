@@ -18,7 +18,7 @@ class AboutMe extends StatelessWidget {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [const Text("About Me"), Text(aboutText)],
+        children: [Text("About Me", style: Theme.of(context).textTheme.bodyMedium), Text(aboutText, style: Theme.of(context).textTheme.bodySmall)],
       ),
     );
   }
@@ -61,14 +61,17 @@ class _UserProfilePageState extends State<UserProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.primary,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFD461A6),
+        backgroundColor: Theme.of(context).colorScheme.secondary,
       ),
       body: const Center(
           child: Column(
           children: [
             Text("Name, Age"),
+            SizedBox(height: 20),
             AboutMe(),
+            SizedBox(height: 20),
             KeyInfo(),
           ],
       )),
