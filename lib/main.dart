@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'home_page.dart'; // we’ll define this next
 import 'user_profile_page.dart';
+import 'create_profile_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,8 +37,9 @@ class MyApp extends StatelessWidget {
         )
       ),
       debugShowCheckedModeBanner: false,
-      // home: HomePage(),
-      home: const UserProfilePage(),
+      // home: const HomePage(),
+      //home: const UserProfilePage(),
+      home: const CreateProfilePage(),
       );
      
   }
