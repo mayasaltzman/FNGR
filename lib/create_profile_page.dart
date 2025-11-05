@@ -5,6 +5,12 @@ import 'package:multi_dropdown/multi_dropdown.dart';
 abstract class ProfileStyles {
   static const formWidth = 375.0;
   static const textInputWidth = 250.0;
+
+  static BoxDecoration boxDecoration = BoxDecoration(
+      border: Border.all(
+    color: Colors.black,
+    width: 1,
+  ));
 }
 
 class ProfileForm extends StatefulWidget {
@@ -77,81 +83,83 @@ class _ProfileFormState extends State<ProfileForm> {
       DropdownItem(label: 'polyamorous', value: "polyamorous")
     ];
 
-    return (Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            const Text("Name"),
-            SizedBox(
-                width: ProfileStyles.textInputWidth,
-                child: TextFormField(
-                  decoration: const InputDecoration(labelText: "Name"),
-                ))
-          ]),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            const Text("Age"),
-            SizedBox(
-                width: ProfileStyles.textInputWidth,
-                child: TextFormField(
-                  //hope to change this to date picker for birth day eventually
-                  decoration: const InputDecoration(labelText: "Age"),
-                ))
-          ]),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            const Text("Height"),
-            SizedBox(
-                width: ProfileStyles.textInputWidth,
-                child: TextFormField(
-                  decoration: const InputDecoration(labelText: "Height"),
-                ))
-          ]),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            const Text("Sexuality"),
-            SizedBox(
-                width: ProfileStyles.textInputWidth,
-                child: MultiDropdown(
-                  items: sexualities, //need to add scrollable
-                ))
-          ]),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            const Text("Gender Identity"),
-            SizedBox(
-                width: ProfileStyles.textInputWidth,
-                child: MultiDropdown(
-                  items: genders, //need to add scrollable
-                ))
-          ]),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            const Text("Pronouns"),
-            SizedBox(
-                width: ProfileStyles.textInputWidth,
-                child: MultiDropdown(
-                  items: pronouns, //need to add scrollable
-                ))
-          ]),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            const Text("Relationship Status"),
-            SizedBox(
-                width: ProfileStyles.textInputWidth,
-                child: MultiDropdown(
-                  items: relationship_status, //need to add scrollable
-                ))
-          ]),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            const Text("Relationship Style"),
-            SizedBox(
-                width: ProfileStyles.textInputWidth,
-                child: MultiDropdown(
-                  items: relationship_style, //need to add scrollable
-                ))
-          ]),
-          ElevatedButton(
-              onPressed: () {},
-              child: const Text("Next")) //will handle form submit
-        ],
-      ),
-    ));
+    return (Container(
+        decoration: ProfileStyles.boxDecoration,
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                const Text("Name"),
+                SizedBox(
+                    width: ProfileStyles.textInputWidth,
+                    child: TextFormField(
+                      decoration: const InputDecoration(labelText: "Name"),
+                    ))
+              ]),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                const Text("Age"),
+                SizedBox(
+                    width: ProfileStyles.textInputWidth,
+                    child: TextFormField(
+                      //hope to change this to date picker for birth day eventually
+                      decoration: const InputDecoration(labelText: "Age"),
+                    ))
+              ]),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                const Text("Height"),
+                SizedBox(
+                    width: ProfileStyles.textInputWidth,
+                    child: TextFormField(
+                      decoration: const InputDecoration(labelText: "Height"),
+                    ))
+              ]),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                const Text("Sexuality"),
+                SizedBox(
+                    width: ProfileStyles.textInputWidth,
+                    child: MultiDropdown(
+                      items: sexualities, //need to add scrollable
+                    ))
+              ]),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                const Text("Gender Identity"),
+                SizedBox(
+                    width: ProfileStyles.textInputWidth,
+                    child: MultiDropdown(
+                      items: genders, //need to add scrollable
+                    ))
+              ]),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                const Text("Pronouns"),
+                SizedBox(
+                    width: ProfileStyles.textInputWidth,
+                    child: MultiDropdown(
+                      items: pronouns, //need to add scrollable
+                    ))
+              ]),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                const Text("Relationship Status"),
+                SizedBox(
+                    width: ProfileStyles.textInputWidth,
+                    child: MultiDropdown(
+                      items: relationship_status, //need to add scrollable
+                    ))
+              ]),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                const Text("Relationship Style"),
+                SizedBox(
+                    width: ProfileStyles.textInputWidth,
+                    child: MultiDropdown(
+                      items: relationship_style, //need to add scrollable
+                    ))
+              ]),
+              ElevatedButton(
+                  onPressed: () {},
+                  child: const Text("Next")) //will handle form submit
+            ],
+          ),
+        )));
   }
 }
 
@@ -178,6 +186,21 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
           leading:
               const BackButton(), //need to make this actually do something and give it color change for press
         ),
-        body: const ProfileForm());
+        body: const Center(
+          child: Column(
+            children: [Text("Key Info"), ProfileForm()],
+          ),
+        ));
+    //   body: const Center(
+    //     child: Column(
+    //     spacing: 20,
+    //     children: [
+    //       Text("Name, Age"),
+    //       AboutMe(),
+    //       KeyInfo(),
+    //       Preferences(),
+    //       Interests()
+    //     ],
+    // )),
   }
 }
