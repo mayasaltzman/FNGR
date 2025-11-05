@@ -64,14 +64,17 @@ class _UserProfilePageState extends State<UserProfilePage> {
       backgroundColor: Theme.of(context).colorScheme.primary,
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.secondary,
+        leading: const BackButton(), //need to make this actually do something and give it color change for press
+        actions: [
+          TextButton(onPressed: (){}, child: const Text("Message"))
+        ],
       ),
       body: const Center(
           child: Column(
+          spacing: 20,
           children: [
             Text("Name, Age"),
-            SizedBox(height: 20),
             AboutMe(),
-            SizedBox(height: 20),
             KeyInfo(),
           ],
       )),
