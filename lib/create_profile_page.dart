@@ -20,16 +20,25 @@ class _ProfileFormState extends State<ProfileForm> {
 
   //store name entered
   String _name = "";
-  String _age = ""; //this will have to be made integer idk probs convert before submit
+  String _age =
+      ""; //this will have to be made integer idk probs convert before submit
 
   @override
   Widget build(BuildContext context) {
-
+    //list of sexuality fields drop down memebers we can add more LOL
     var sexualities = [
-      DropdownItem(label: 'Nepal', value: User(name: 'Nepal', id: 1)),
-  
+      DropdownItem(label: 'Aromantic', value: "Aromantic"),
+      DropdownItem(label: 'Asexual', value: "Asexual"),
+      DropdownItem(label: 'Bisexual', value: "Bisexual"),
+      DropdownItem(label: 'Demisexual', value: "Demisexual"),
+      DropdownItem(label: 'Gay', value: "Gay"),
+      DropdownItem(label: 'Lesbian', value: "Lesbian"),
+      DropdownItem(label: 'Pansexual', value: "Pansexual"),
+      DropdownItem(label: 'Polysexual', value: "Polysexual"),
+      DropdownItem(label: 'Queer', value: "Queer"),
+      DropdownItem(label: 'Sapphic', value: "Sapphic")
     ];
-    
+
     return (SizedBox(
       width: ProfileStyles.formWidth,
       child: Column(
@@ -51,22 +60,26 @@ class _ProfileFormState extends State<ProfileForm> {
                   decoration: const InputDecoration(labelText: "Age"),
                 ))
           ]),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            const Text("Height"),
+            SizedBox(
+                width: ProfileStyles.textInputWidth,
+                child: TextFormField(
+                  decoration: const InputDecoration(labelText: "Height"),
+                ))
+          ]),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            const Text("Sexuality"),
+            SizedBox(
+                width: ProfileStyles.textInputWidth,
+                child: MultiDropdown(
+                  items: sexualities, //need to add scrollable
+                ))
+          ])
         ],
       ),
     ));
-    //   Scaffold(
-    //     body: Center(
-    //       child: Column(
-    //         children: [
-    //           const Text("Name"),
-    //           TextFormField(
-    //             decoration: const InputDecoration(labelText: "Name"),
-    //           )
-    //         ],
-    //       ),
-    //     ),
-    //   )
-    // );
+
   }
 }
 
