@@ -8,13 +8,18 @@ class AboutMe extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        const Text("About Me"),
-        Text(aboutText)
-      ],
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.black,
+          width: 1,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [const Text("About Me"), Text(aboutText)],
+      ),
     );
-    
   }
 }
 
@@ -34,15 +39,16 @@ class _UserProfilePageState extends State<UserProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Nearby Users'),
-          centerTitle: true,
-        ),
-        body: const Column(
-          children: [
-             AboutMe()
-          ],
-        ),
+      appBar: AppBar(
+        title: const Text('Nearby Users'),
+        centerTitle: true,
+      ),
+      body: const Center(
+        child: Column(
+        children: [
+          AboutMe(),
+        ],
+      )),
     );
   }
 }
