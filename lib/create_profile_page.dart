@@ -66,8 +66,18 @@ class _ProfileFormState extends State<ProfileForm> {
     ];
 
     //relationship status for drop down
+    var relationship_status = [
+      DropdownItem(label: 'single', value: "single"),
+      DropdownItem(label: 'open relationship', value: "open relationship"),
+      DropdownItem(label: 'in a relationship', value: "in a relationship"),
+    ];
 
     //relationship style for drop down
+    var relationship_style = [
+      DropdownItem(label: 'monogamous', value: "monogamous"),
+      DropdownItem(label: 'polyamorous', value: "polyamorous")
+    ];
+
 
     return (SizedBox(
       width: ProfileStyles.formWidth,
@@ -120,6 +130,22 @@ class _ProfileFormState extends State<ProfileForm> {
                 width: ProfileStyles.textInputWidth,
                 child: MultiDropdown(
                   items: pronouns, //need to add scrollable
+                ))
+          ]),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            const Text("Relationship Status"),
+            SizedBox(
+                width: ProfileStyles.textInputWidth,
+                child: MultiDropdown(
+                  items: relationship_status, //need to add scrollable
+                ))
+          ]),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            const Text("Relationship Style"),
+            SizedBox(
+                width: ProfileStyles.textInputWidth,
+                child: MultiDropdown(
+                  items: relationship_style, //need to add scrollable
                 ))
           ])
         ],
