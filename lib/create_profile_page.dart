@@ -10,14 +10,15 @@ abstract class ProfileStyles {
   static const textInputWidth = 250.0;
 }
 
-class ProfileForm extends StatefulWidget {
-  const ProfileForm({super.key});
+//widget for key info form
+class KeyInfoForm extends StatefulWidget {
+  const KeyInfoForm({super.key});
 
   @override
-  State<ProfileForm> createState() => _ProfileFormState();
+  State<KeyInfoForm> createState() => _KeyInfoFormState();
 }
 
-class _ProfileFormState extends State<ProfileForm> {
+class _KeyInfoFormState extends State<KeyInfoForm> {
   //state for managing form
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -40,6 +41,8 @@ class _ProfileFormState extends State<ProfileForm> {
   late List<String> _sexuality;
   late List<String> _genderIdentity;
   late List<String> _pronouns;
+  late String _relationshipStatus;
+  late String _relationshipStyle;
 
   //handles form submission
   void _submitForm() async {
@@ -103,10 +106,15 @@ class _ProfileFormState extends State<ProfileForm> {
     ];
 
     //relationship status for drop down
-    var relationship_status = [
-      DropdownItem(label: 'single', value: "single"),
-      DropdownItem(label: 'open relationship', value: "open relationship"),
-      DropdownItem(label: 'in a relationship', value: "in a relationship"),
+    // var relationship_status = [
+    //   DropdownItem(label: 'single', value: "single"),
+    //   DropdownItem(label: 'open relationship', value: "open relationship"),
+    //   DropdownItem(label: 'in a relationship', value: "in a relationship"),
+    // ];
+    List<String> relationshipStatuses = [
+      'single',
+      'open relationship',
+      'in a relationship'
     ];
 
     //relationship style for drop down
@@ -201,23 +209,42 @@ class _ProfileFormState extends State<ProfileForm> {
                       controller: pronounController,
                     ))
               ]),
+              const SizedBox(height: 15),
+              Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                const SizedBox(
+                  width: 100,
+                  child: Text("Relationship Status"),
+                ),
+                SizedBox(
+                    width: ProfileStyles.textInputWidth,
+                    child: DropdownButton(
+                        hint: const Text("Select"),
+                        value: _relationshipStatus,
+                        items: relationshipStatuses.map((status) {
+                          return DropdownMenuItem(
+                            value: status,
+                            child: Text(status),
+                          );
+                        }).toList(),
+                        onChanged: (newVal) {
+                          setState(() {
+                            _relationshipStatus = newVal!;
+                          });
+                        }))
+              ]),
+              const SizedBox(height: 15),
+              Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                const SizedBox(
+                  width: 100,
+                  child: Text("Relationship Style"),
+                ),
+                SizedBox(
+                    width: ProfileStyles.textInputWidth,
+                    child: MultiDropdown(
+                      items: relationship_style, //need to add scrollable
+                    ))
+              ]),
               const SizedBox(height: 20),
-              // Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-              //   const Text("Relationship Status"),
-              //   SizedBox(
-              //       width: ProfileStyles.textInputWidth,
-              //       child: MultiDropdown(
-              //         items: relationship_status, //need to add scrollable
-              //       ))
-              // ]),
-              // Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-              //   const Text("Relationship Style"),
-              //   SizedBox(
-              //       width: ProfileStyles.textInputWidth,
-              //       child: MultiDropdown(
-              //         items: relationship_style, //need to add scrollable
-              //       ))
-              // ]),
               Align(
                   alignment: Alignment.centerRight,
                   child: ElevatedButton(
@@ -235,6 +262,25 @@ class _ProfileFormState extends State<ProfileForm> {
         )));
   }
 }
+
+//widget for additional info form
+// class AdditionalInfoForm extends StatefulWidget {
+//   const AdditionalInfoForm({super.key});
+
+//   @override
+//   State<AdditionalInfoForm> createState() => _AdditionalInfoFormState();
+// }
+
+// class _AdditionalInfoFormState extends State<AdditionalInfoForm> {
+
+//   //state for managing form
+//   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+//   @override
+//   Widget build(BuildContext context){
+//     return()
+//   }
+// }
 
 //IDEA ALERT!!!
 /*
@@ -279,7 +325,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                   style:
                       TextStyle(color: Theme.of(context).colorScheme.tertiary),
                   textAlign: TextAlign.left),
-              const ProfileForm()
+              const KeyInfoForm()
             ],
           ),
         ));
