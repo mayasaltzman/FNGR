@@ -23,11 +23,25 @@ class ProfileForm extends StatefulWidget {
 class _ProfileFormState extends State<ProfileForm> {
   //state for managing form
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  //controllers for managing multiselect dropdowns
+  final MultiSelectController<String> sexualityController = MultiSelectController<String>();
+  final genderController = MultiSelectController();
+  final pronounController = MultiSelectController();
 
-  //store name entered
-  String _name = "";
-  String _age =
-      ""; //this will have to be made integer idk probs convert before submit
+  //store info entered in form
+  late String _name;
+  late String _age; //this will have to be made integer idk probs convert before submit
+  late String _height;
+  List<String> _sexuality = [];
+  late List<String> _gender_identity;
+  late List<String> _pronouns;
+
+  //handles form submission
+  void _submitForm(){
+     _formKey.currentState!.save();
+     _sexuality = sexualityController.selectedItems.map((e) => e.value).toList(); //convert to list value
+     print(_sexuality);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,8 +107,9 @@ class _ProfileFormState extends State<ProfileForm> {
                 const Text("Name"),
                 SizedBox(
                     width: ProfileStyles.textInputWidth,
-                    child: TextFormField(
+                    child: TextFormField( //add validator
                       decoration: const InputDecoration(labelText: "Name"),
+                      onSaved: (value) => _name = value!,
                     ))
               ]),
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
@@ -104,6 +119,7 @@ class _ProfileFormState extends State<ProfileForm> {
                     child: TextFormField(
                       //hope to change this to date picker for birth day eventually
                       decoration: const InputDecoration(labelText: "Age"),
+                      onSaved: (value) => _age = value!,
                     ))
               ]),
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
@@ -112,6 +128,7 @@ class _ProfileFormState extends State<ProfileForm> {
                     width: ProfileStyles.textInputWidth,
                     child: TextFormField(
                       decoration: const InputDecoration(labelText: "Height"),
+                      onSaved: (value) => _height = value!,
                     ))
               ]),
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
@@ -120,6 +137,12 @@ class _ProfileFormState extends State<ProfileForm> {
                     width: ProfileStyles.textInputWidth,
                     child: MultiDropdown(
                       items: sexualities, //need to add scrollable
+                      controller: sexualityController,
+
+                      // onSelectionChange: (selectedItems) => setState(() {
+                      //   print(selectedItems);
+                      //   _sexuality = selectedItems;
+                      // }),
                     ))
               ]),
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
@@ -128,6 +151,7 @@ class _ProfileFormState extends State<ProfileForm> {
                     width: ProfileStyles.textInputWidth,
                     child: MultiDropdown(
                       items: genders, //need to add scrollable
+                      onSelectionChange: (selectedItems) => _gender_identity = selectedItems,
                     ))
               ]),
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
@@ -136,26 +160,27 @@ class _ProfileFormState extends State<ProfileForm> {
                     width: ProfileStyles.textInputWidth,
                     child: MultiDropdown(
                       items: pronouns, //need to add scrollable
+                      onSelectionChange: (selectedItems) => _pronouns = selectedItems,
                     ))
               ]),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                const Text("Relationship Status"),
-                SizedBox(
-                    width: ProfileStyles.textInputWidth,
-                    child: MultiDropdown(
-                      items: relationship_status, //need to add scrollable
-                    ))
-              ]),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                const Text("Relationship Style"),
-                SizedBox(
-                    width: ProfileStyles.textInputWidth,
-                    child: MultiDropdown(
-                      items: relationship_style, //need to add scrollable
-                    ))
-              ]),
+              // Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+              //   const Text("Relationship Status"),
+              //   SizedBox(
+              //       width: ProfileStyles.textInputWidth,
+              //       child: MultiDropdown(
+              //         items: relationship_status, //need to add scrollable
+              //       ))
+              // ]),
+              // Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+              //   const Text("Relationship Style"),
+              //   SizedBox(
+              //       width: ProfileStyles.textInputWidth,
+              //       child: MultiDropdown(
+              //         items: relationship_style, //need to add scrollable
+              //       ))
+              // ]),
               ElevatedButton(
-                  onPressed: () {},
+                  onPressed: _submitForm,
                   child: const Text("Next")) //will handle form submit
             ],
           ),
@@ -191,16 +216,5 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
             children: [Text("Key Info"), ProfileForm()],
           ),
         ));
-    //   body: const Center(
-    //     child: Column(
-    //     spacing: 20,
-    //     children: [
-    //       Text("Name, Age"),
-    //       AboutMe(),
-    //       KeyInfo(),
-    //       Preferences(),
-    //       Interests()
-    //     ],
-    // )),
   }
 }
