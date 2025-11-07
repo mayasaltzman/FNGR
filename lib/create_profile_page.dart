@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 //styles for profile page
 abstract class ProfileStyles {
@@ -23,24 +24,41 @@ class ProfileForm extends StatefulWidget {
 class _ProfileFormState extends State<ProfileForm> {
   //state for managing form
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   //controllers for managing multiselect dropdowns
   final MultiSelectController<String> sexualityController = MultiSelectController<String>();
-  final genderController = MultiSelectController();
-  final pronounController = MultiSelectController();
+  final MultiSelectController<String> genderController = MultiSelectController<String>();
+  final MultiSelectController<String> pronounController = MultiSelectController<String>();
+
+  //instance of firebase 
+  final firestoreInstance = FirebaseFirestore.instance;
 
   //store info entered in form
   late String _name;
   late String _age; //this will have to be made integer idk probs convert before submit
   late String _height;
-  List<String> _sexuality = [];
-  late List<String> _gender_identity;
+  late List<String> _sexuality;
+  late List<String> _genderIdentity;
   late List<String> _pronouns;
+  
 
   //handles form submission
-  void _submitForm(){
-     _formKey.currentState!.save();
-     _sexuality = sexualityController.selectedItems.map((e) => e.value).toList(); //convert to list value
-     print(_sexuality);
+  void _submitForm() async{
+     _formKey.currentState!.save(); //gets values from text form
+     //get values from multiselect drop down and convert them to type list
+     _sexuality = sexualityController.selectedItems.map((e) => e.value).toList(); 
+     _genderIdentity = genderController.selectedItems.map((e) => e.value).toList();
+     _pronouns = pronounController.selectedItems.map((e) => e.value).toList();
+
+     //insert to database
+     await firestoreInstance.collection('users').add({
+        'name': _name,
+        'age': _age,
+        'sexuality': _sexuality,
+        'gender': _genderIdentity,
+        'pronouns': _pronouns
+     });
+
   }
 
   @override
@@ -138,11 +156,6 @@ class _ProfileFormState extends State<ProfileForm> {
                     child: MultiDropdown(
                       items: sexualities, //need to add scrollable
                       controller: sexualityController,
-
-                      // onSelectionChange: (selectedItems) => setState(() {
-                      //   print(selectedItems);
-                      //   _sexuality = selectedItems;
-                      // }),
                     ))
               ]),
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
@@ -151,7 +164,7 @@ class _ProfileFormState extends State<ProfileForm> {
                     width: ProfileStyles.textInputWidth,
                     child: MultiDropdown(
                       items: genders, //need to add scrollable
-                      onSelectionChange: (selectedItems) => _gender_identity = selectedItems,
+                      controller: genderController,
                     ))
               ]),
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
@@ -160,7 +173,7 @@ class _ProfileFormState extends State<ProfileForm> {
                     width: ProfileStyles.textInputWidth,
                     child: MultiDropdown(
                       items: pronouns, //need to add scrollable
-                      onSelectionChange: (selectedItems) => _pronouns = selectedItems,
+                      controller: pronounController,
                     ))
               ]),
               // Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
