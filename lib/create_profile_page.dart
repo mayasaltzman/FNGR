@@ -41,8 +41,8 @@ class _KeyInfoFormState extends State<KeyInfoForm> {
   late List<String> _sexuality;
   late List<String> _genderIdentity;
   late List<String> _pronouns;
-  late String _relationshipStatus;
-  late String _relationshipStyle;
+  String? _relationshipStatus;
+  String? _relationshipStyle;
 
   //handles form submission
   void _submitForm() async {
@@ -60,7 +60,9 @@ class _KeyInfoFormState extends State<KeyInfoForm> {
       'height': _height,
       'sexuality': _sexuality,
       'gender': _genderIdentity,
-      'pronouns': _pronouns
+      'pronouns': _pronouns,
+      'relationship_status': _relationshipStatus,
+      'relationship_style': _relationshipStyle
     });
   }
 
@@ -106,11 +108,6 @@ class _KeyInfoFormState extends State<KeyInfoForm> {
     ];
 
     //relationship status for drop down
-    // var relationship_status = [
-    //   DropdownItem(label: 'single', value: "single"),
-    //   DropdownItem(label: 'open relationship', value: "open relationship"),
-    //   DropdownItem(label: 'in a relationship', value: "in a relationship"),
-    // ];
     List<String> relationshipStatuses = [
       'single',
       'open relationship',
@@ -118,9 +115,9 @@ class _KeyInfoFormState extends State<KeyInfoForm> {
     ];
 
     //relationship style for drop down
-    var relationship_style = [
-      DropdownItem(label: 'monogamous', value: "monogamous"),
-      DropdownItem(label: 'polyamorous', value: "polyamorous")
+    List<String> relationshipStyles = [
+      'monogamous',
+      'polyamorous',
     ];
 
     return (SizedBox(
@@ -233,16 +230,27 @@ class _KeyInfoFormState extends State<KeyInfoForm> {
                         }))
               ]),
               const SizedBox(height: 15),
-              Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+               Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
                 const SizedBox(
                   width: 100,
                   child: Text("Relationship Style"),
                 ),
                 SizedBox(
                     width: ProfileStyles.textInputWidth,
-                    child: MultiDropdown(
-                      items: relationship_style, //need to add scrollable
-                    ))
+                    child: DropdownButton(
+                        hint: const Text("Select"),
+                        value: _relationshipStyle,
+                        items: relationshipStyles.map((style) {
+                          return DropdownMenuItem(
+                            value: style,
+                            child: Text(style),
+                          );
+                        }).toList(),
+                        onChanged: (newVal) {
+                          setState(() {
+                            _relationshipStyle = newVal!;
+                          });
+                        }))
               ]),
               const SizedBox(height: 20),
               Align(
