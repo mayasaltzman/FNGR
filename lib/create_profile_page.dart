@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,10 +10,11 @@ abstract class ProfileStyles {
   static const textInputWidth = 250.0;
 
   static BoxDecoration boxDecoration = BoxDecoration(
+      color: const Color(0xFFFF9B55),
       border: Border.all(
-    color: Colors.black,
-    width: 1,
-  ));
+        color: const Color(0xFFFFF0E6),
+        width: 1,
+      ));
 }
 
 class ProfileForm extends StatefulWidget {
@@ -26,39 +29,43 @@ class _ProfileFormState extends State<ProfileForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   //controllers for managing multiselect dropdowns
-  final MultiSelectController<String> sexualityController = MultiSelectController<String>();
-  final MultiSelectController<String> genderController = MultiSelectController<String>();
-  final MultiSelectController<String> pronounController = MultiSelectController<String>();
+  final MultiSelectController<String> sexualityController =
+      MultiSelectController<String>();
+  final MultiSelectController<String> genderController =
+      MultiSelectController<String>();
+  final MultiSelectController<String> pronounController =
+      MultiSelectController<String>();
 
-  //instance of firebase 
+  //instance of firebase
   final firestoreInstance = FirebaseFirestore.instance;
 
   //store info entered in form
   late String _name;
-  late String _age; //this will have to be made integer idk probs convert before submit
+  late String
+      _age; //this will have to be made integer idk probs convert before submit
   late String _height;
   late List<String> _sexuality;
   late List<String> _genderIdentity;
   late List<String> _pronouns;
-  
 
   //handles form submission
-  void _submitForm() async{
-     _formKey.currentState!.save(); //gets values from text form
-     //get values from multiselect drop down and convert them to type list
-     _sexuality = sexualityController.selectedItems.map((e) => e.value).toList(); 
-     _genderIdentity = genderController.selectedItems.map((e) => e.value).toList();
-     _pronouns = pronounController.selectedItems.map((e) => e.value).toList();
+  void _submitForm() async {
+    _formKey.currentState!.save(); //gets values from text form
+    //get values from multiselect drop down and convert them to type list
+    _sexuality = sexualityController.selectedItems.map((e) => e.value).toList();
+    _genderIdentity =
+        genderController.selectedItems.map((e) => e.value).toList();
+    _pronouns = pronounController.selectedItems.map((e) => e.value).toList();
 
-     //insert to database
-     await firestoreInstance.collection('users').add({
-        'name': _name,
-        'age': _age,
-        'sexuality': _sexuality,
-        'gender': _genderIdentity,
-        'pronouns': _pronouns
-     });
-
+    //insert to database
+    await firestoreInstance.collection('users').add({
+      'name': _name,
+      'age': _age,
+      'height': _height,
+      'sexuality': _sexuality,
+      'gender': _genderIdentity,
+      'pronouns': _pronouns
+    });
   }
 
   @override
@@ -115,23 +122,32 @@ class _ProfileFormState extends State<ProfileForm> {
       DropdownItem(label: 'polyamorous', value: "polyamorous")
     ];
 
-    return (Container(
-        decoration: ProfileStyles.boxDecoration,
+    return (SizedBox(
+        width: ProfileStyles.formWidth,
         child: Form(
           key: _formKey,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                const Text("Name"),
+              Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                const SizedBox(
+                  width: 100,
+                  child: Text("Name"),
+                ),
                 SizedBox(
                     width: ProfileStyles.textInputWidth,
-                    child: TextFormField( //add validator
+                    child: TextFormField(
+                      //add validator
                       decoration: const InputDecoration(labelText: "Name"),
                       onSaved: (value) => _name = value!,
                     ))
               ]),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                const Text("Age"),
+              const SizedBox(height: 15),
+              Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                const SizedBox(
+                  width: 100,
+                  child: Text("Age"),
+                ),
                 SizedBox(
                     width: ProfileStyles.textInputWidth,
                     child: TextFormField(
@@ -140,8 +156,12 @@ class _ProfileFormState extends State<ProfileForm> {
                       onSaved: (value) => _age = value!,
                     ))
               ]),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                const Text("Height"),
+              const SizedBox(height: 15),
+              Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                const SizedBox(
+                  width: 100,
+                  child: Text("Height"),
+                ),
                 SizedBox(
                     width: ProfileStyles.textInputWidth,
                     child: TextFormField(
@@ -149,8 +169,12 @@ class _ProfileFormState extends State<ProfileForm> {
                       onSaved: (value) => _height = value!,
                     ))
               ]),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                const Text("Sexuality"),
+              const SizedBox(height: 15),
+              Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                const SizedBox(
+                  width: 100,
+                  child: Text("Sexuality"),
+                ),
                 SizedBox(
                     width: ProfileStyles.textInputWidth,
                     child: MultiDropdown(
@@ -158,8 +182,12 @@ class _ProfileFormState extends State<ProfileForm> {
                       controller: sexualityController,
                     ))
               ]),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                const Text("Gender Identity"),
+              const SizedBox(height: 15),
+               Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                const SizedBox(
+                  width: 100,
+                  child: Text("Gender Identity"),
+                ),
                 SizedBox(
                     width: ProfileStyles.textInputWidth,
                     child: MultiDropdown(
@@ -167,8 +195,12 @@ class _ProfileFormState extends State<ProfileForm> {
                       controller: genderController,
                     ))
               ]),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                const Text("Pronouns"),
+              const SizedBox(height: 15),
+               Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                const SizedBox(
+                  width: 100,
+                  child: Text("Pronouns"),
+                ),
                 SizedBox(
                     width: ProfileStyles.textInputWidth,
                     child: MultiDropdown(
@@ -176,6 +208,7 @@ class _ProfileFormState extends State<ProfileForm> {
                       controller: pronounController,
                     ))
               ]),
+              const SizedBox(height: 15),
               // Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
               //   const Text("Relationship Status"),
               //   SizedBox(
@@ -201,6 +234,15 @@ class _ProfileFormState extends State<ProfileForm> {
   }
 }
 
+//IDEA ALERT!!!
+/*
+Current structure of the page is not how I actually want profile creation cause its not Sexy
+instead we do it like we prompt user for name and age with one form
+then another for pics
+then we ask key info questions
+then bio and additional info questions
+this is a good jumping off point
+*/
 class CreateProfilePage extends StatefulWidget {
   const CreateProfilePage({super.key});
 
@@ -226,7 +268,13 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
         ),
         body: const Center(
           child: Column(
-            children: [Text("Key Info"), ProfileForm()],
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Key Info",
+                  style: TextStyle(color: Color(0xFFFF9B55)),
+                  textAlign: TextAlign.left),
+              ProfileForm()
+            ],
           ),
         ));
   }
