@@ -8,13 +8,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 abstract class ProfileStyles {
   static const formWidth = 375.0;
   static const textInputWidth = 250.0;
-
-  static BoxDecoration boxDecoration = BoxDecoration(
-      color: const Color(0xFFFF9B55),
-      border: Border.all(
-        color: const Color(0xFFFFF0E6),
-        width: 1,
-      ));
 }
 
 class ProfileForm extends StatefulWidget {
@@ -183,7 +176,7 @@ class _ProfileFormState extends State<ProfileForm> {
                     ))
               ]),
               const SizedBox(height: 15),
-               Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+              Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
                 const SizedBox(
                   width: 100,
                   child: Text("Gender Identity"),
@@ -196,7 +189,7 @@ class _ProfileFormState extends State<ProfileForm> {
                     ))
               ]),
               const SizedBox(height: 15),
-               Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+              Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
                 const SizedBox(
                   width: 100,
                   child: Text("Pronouns"),
@@ -208,7 +201,7 @@ class _ProfileFormState extends State<ProfileForm> {
                       controller: pronounController,
                     ))
               ]),
-              const SizedBox(height: 15),
+              const SizedBox(height: 20),
               // Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
               //   const Text("Relationship Status"),
               //   SizedBox(
@@ -225,9 +218,18 @@ class _ProfileFormState extends State<ProfileForm> {
               //         items: relationship_style, //need to add scrollable
               //       ))
               // ]),
-              ElevatedButton(
-                  onPressed: _submitForm,
-                  child: const Text("Next")) //will handle form submit
+              Align(
+                  alignment: Alignment.centerRight,
+                  child: ElevatedButton(
+                      onPressed: _submitForm,
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary,
+                          fixedSize: const Size(100, 50),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12))),
+                      child: const Text("Next")) //will handle form submit,
+                  )
             ],
           ),
         )));
@@ -261,19 +263,23 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.primary,
         appBar: AppBar(
-          title: const Text("Create Profile"),
+          title: Text("Create Profile",
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondaryFixed)),
           backgroundColor: Theme.of(context).colorScheme.secondary,
-          leading:
-              const BackButton(), //need to make this actually do something and give it color change for press
+          leading: BackButton(
+            color: Theme.of(context).colorScheme.secondaryFixed,
+          ), //need to make this actually do something and give it color change for press
         ),
-        body: const Center(
+        body: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text("Key Info",
-                  style: TextStyle(color: Color(0xFFFF9B55)),
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.tertiary),
                   textAlign: TextAlign.left),
-              ProfileForm()
+              const ProfileForm()
             ],
           ),
         ));
