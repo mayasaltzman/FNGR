@@ -60,6 +60,8 @@ class _ProfileFormState extends State<ProfileForm> {
 
   //for conditional rendering of steps of the form
   void _updateFormStep() {
+    _formKey.currentState!.save(); //gets values from text form
+
     setState(() {
       additionalInfo = !additionalInfo;
       keyInfo = !keyInfo;
@@ -68,12 +70,16 @@ class _ProfileFormState extends State<ProfileForm> {
 
   //handles form submission
   void _submitForm() async {
-    _formKey.currentState!.save(); //gets values from text form
     //get values from multiselect drop down and convert them to type list
     _sexuality = sexualityController.selectedItems.map((e) => e.value).toList();
     _genderIdentity =
         genderController.selectedItems.map((e) => e.value).toList();
     _pronouns = pronounController.selectedItems.map((e) => e.value).toList();
+    _sexualPref =
+        sexualPrefController.selectedItems.map((e) => e.value).toList();
+    _genderPresentation =
+        genderPresentationController.selectedItems.map((e) => e.value).toList();
+    _interests = interestsController.selectedItems.map((e) => e.value).toList();
 
     //insert to database
     await firestoreInstance.collection('users').add({
@@ -84,7 +90,11 @@ class _ProfileFormState extends State<ProfileForm> {
       'gender': _genderIdentity,
       'pronouns': _pronouns,
       'relationship_status': _relationshipStatus,
-      'relationship_style': _relationshipStyle
+      'relationship_style': _relationshipStyle,
+      'expectations': _lookingFor,
+      'expression': _genderPresentation,
+      'interests': _interests,
+      'sexual_pref': _sexualPref
     });
   }
 
@@ -306,17 +316,17 @@ class _ProfileFormState extends State<ProfileForm> {
                   ]),
                   const SizedBox(height: 20),
                   Align(
-                      alignment: Alignment.centerRight,
-                      child: ElevatedButton(
-                          onPressed: _updateFormStep,
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.secondary,
-                              fixedSize: const Size(100, 50),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12))),
-                          child: const Text("Next")) //will handle form submit,
-                      )
+                    alignment: Alignment.centerRight,
+                    child: ElevatedButton(
+                        onPressed: _updateFormStep,
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.secondary,
+                            fixedSize: const Size(100, 50),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12))),
+                        child: const Text("Next")),
+                  )
                 ],
                 //ADDITIONAL INFO FORM CONTENTS HERE
                 if (additionalInfo) ...[
