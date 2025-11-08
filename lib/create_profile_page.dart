@@ -230,7 +230,7 @@ class _KeyInfoFormState extends State<KeyInfoForm> {
                         }))
               ]),
               const SizedBox(height: 15),
-               Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+              Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
                 const SizedBox(
                   width: 100,
                   child: Text("Relationship Style"),
@@ -272,23 +272,155 @@ class _KeyInfoFormState extends State<KeyInfoForm> {
 }
 
 //widget for additional info form
-// class AdditionalInfoForm extends StatefulWidget {
-//   const AdditionalInfoForm({super.key});
+class AdditionalInfoForm extends StatefulWidget {
+  const AdditionalInfoForm({super.key});
 
-//   @override
-//   State<AdditionalInfoForm> createState() => _AdditionalInfoFormState();
-// }
+  @override
+  State<AdditionalInfoForm> createState() => _AdditionalInfoFormState();
+}
 
-// class _AdditionalInfoFormState extends State<AdditionalInfoForm> {
+class _AdditionalInfoFormState extends State<AdditionalInfoForm> {
+  //state for managing form
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-//   //state for managing form
-//   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final MultiSelectController<String> sexualPrefController =
+      MultiSelectController<String>();
+  final MultiSelectController<String> genderPresentationController =
+      MultiSelectController<String>();
+  final MultiSelectController<String> interestsController =
+      MultiSelectController<String>();
 
-//   @override
-//   Widget build(BuildContext context){
-//     return()
-//   }
-// }
+  //store user input
+  late List<String> _sexualPref;
+  late List<String> _genderPresentation;
+  late List<String> _interests;
+  String? _lookingFor;
+
+  void _submitForm() async {
+    _formKey.currentState!.save(); //gets values from text form
+
+    _sexualPref = sexualPrefController.selectedItems.map((e) => e.value).toList();
+    _genderPresentation = genderPresentationController.selectedItems.map((e) => e.value).toList();
+    _interests = interestsController.selectedItems.map((e) => e.value).toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    //what your looking for types for drop down
+    List<String> expectations = [
+      'hookups',
+      'long term relationship',
+      'short term relationship'
+    ];
+
+    //sexual preferences for drop down
+    var sexualPrefs = [
+      DropdownItem(label: 'top', value: "top"),
+      DropdownItem(label: 'bottom', value: "bottom"),
+      DropdownItem(label: 'switch', value: "switch"),
+    ];
+
+    //gender presentations for drop down
+    var genderPresentations = [
+      DropdownItem(label: 'masc', value: "masc"),
+      DropdownItem(label: 'femme', value: "femme"),
+      DropdownItem(label: 'androgynous', value: "androgynous"),
+    ];
+
+    //interests for drop down
+    var interestOptions = [
+      DropdownItem(label: 'reading', value: "reading"),
+      DropdownItem(label: 'outdoors', value: "outdoors"),
+      DropdownItem(label: 'cooking', value: "cooking"),
+    ];
+
+    return (SizedBox(
+        width: ProfileStyles.formWidth,
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                const SizedBox(
+                  width: 100,
+                  child: Text("Relationship Style"),
+                ),
+                SizedBox(
+                    width: ProfileStyles.textInputWidth,
+                    child: DropdownButton(
+                        hint: const Text("Select"),
+                        value: _lookingFor,
+                        items: expectations.map((exp) {
+                          return DropdownMenuItem(
+                            value: exp,
+                            child: Text(exp),
+                          );
+                        }).toList(),
+                        onChanged: (newVal) {
+                          setState(() {
+                            _lookingFor = newVal!;
+                          });
+                        }))
+              ]),
+              const SizedBox(height: 15),
+              Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                const SizedBox(
+                  width: 100,
+                  child: Text("Sexual Preferences"),
+                ),
+                SizedBox(
+                    width: ProfileStyles.textInputWidth,
+                    child: MultiDropdown(
+                      items: sexualPrefs, //need to add scrollable
+                      controller: sexualPrefController,
+                    ))
+              ]),
+              const SizedBox(height: 15),
+              Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                const SizedBox(
+                  width: 100,
+                  child: Text("Gender Presentation"),
+                ),
+                SizedBox(
+                    width: ProfileStyles.textInputWidth,
+                    child: MultiDropdown(
+                      items: genderPresentations, //need to add scrollable
+                      controller: genderPresentationController,
+                    ))
+              ]),
+              const SizedBox(height: 15),
+              Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                const SizedBox(
+                  width: 100,
+                  child: Text("Interests"),
+                ),
+                SizedBox(
+                    width: ProfileStyles.textInputWidth,
+                    child: MultiDropdown(
+                      items: interestOptions, //need to add scrollable
+                      controller: interestsController,
+                    ))
+              ]),
+              const SizedBox(height: 20),
+              Align(
+                  alignment: Alignment.centerRight,
+                  child: ElevatedButton(
+                      onPressed: _submitForm,
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary,
+                          fixedSize: const Size(100, 50),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12))),
+                      child: const Text(
+                          "Finish")) //will handle form submit THIS ONE DEPENDS ON PREV FORM ID ,
+                  )
+            ],
+          ),
+        )));
+  }
+}
 
 //IDEA ALERT!!!
 /*
@@ -333,7 +465,8 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                   style:
                       TextStyle(color: Theme.of(context).colorScheme.tertiary),
                   textAlign: TextAlign.left),
-              const KeyInfoForm()
+              //const KeyInfoForm()
+              const AdditionalInfoForm()
             ],
           ),
         ));
