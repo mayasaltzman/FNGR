@@ -439,6 +439,11 @@ class CreateProfilePage extends StatefulWidget {
 }
 
 class _CreateProfilePageState extends State<CreateProfilePage> {
+
+  //conditions to set which process of profile creation the user is on
+  bool keyInfo = true;
+  bool additionalInfo = false;
+
   @override
   void initState() {
     super.initState();
@@ -461,12 +466,20 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Key Info",
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.tertiary),
-                  textAlign: TextAlign.left),
-              //const KeyInfoForm()
-              const AdditionalInfoForm()
+              if(keyInfo) ... [ 
+                Text("Key Info",
+                    style:
+                        TextStyle(color: Theme.of(context).colorScheme.tertiary),
+                    textAlign: TextAlign.left),
+                const KeyInfoForm(),
+              ],
+              if(additionalInfo) ... [
+                 Text("Additional Info",
+                    style:
+                        TextStyle(color: Theme.of(context).colorScheme.tertiary),
+                    textAlign: TextAlign.left),
+                const AdditionalInfoForm(),
+              ]
             ],
           ),
         ));
