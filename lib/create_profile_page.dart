@@ -57,11 +57,11 @@ class _ProfileFormState extends State<ProfileForm> {
   late List<String> _genderPresentation;
   late List<String> _interests;
   String? _lookingFor;
+  String? _bio;
 
   //for conditional rendering of steps of the form
   void _updateFormStep() {
     _formKey.currentState!.save(); //gets values from text form
-
     setState(() {
       additionalInfo = !additionalInfo;
       keyInfo = !keyInfo;
@@ -70,6 +70,7 @@ class _ProfileFormState extends State<ProfileForm> {
 
   //handles form submission
   void _submitForm() async {
+    _formKey.currentState!.save();
     //get values from multiselect drop down and convert them to type list
     _sexuality = sexualityController.selectedItems.map((e) => e.value).toList();
     _genderIdentity =
@@ -94,7 +95,8 @@ class _ProfileFormState extends State<ProfileForm> {
       'expectations': _lookingFor,
       'expression': _genderPresentation,
       'interests': _interests,
-      'sexual_pref': _sexualPref
+      'sexual_pref': _sexualPref,
+      'bio': _bio
     });
   }
 
@@ -351,6 +353,23 @@ class _ProfileFormState extends State<ProfileForm> {
                                 _lookingFor = newVal!;
                               });
                             }))
+                  ]),
+                  const SizedBox(height: 15),
+                  const Text("About me"),
+                  const SizedBox(height: 15),
+                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                    SizedBox(
+                        width: 350,
+                        child: TextFormField(
+                          //add validator
+                          keyboardType: TextInputType.multiline,
+                          minLines: 3,
+                          maxLines: null,
+                          decoration: const InputDecoration(
+                              labelText: "Tell us about yourself!",
+                              border: OutlineInputBorder()),
+                          onSaved: (value) => _bio = value!,
+                        ))
                   ]),
                   const SizedBox(height: 15),
                   Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
