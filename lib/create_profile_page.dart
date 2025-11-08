@@ -11,14 +11,14 @@ abstract class ProfileStyles {
 }
 
 //widget for key info form
-class KeyInfoForm extends StatefulWidget {
-  const KeyInfoForm({super.key});
+class ProfileForm extends StatefulWidget {
+  const ProfileForm({super.key});
 
   @override
-  State<KeyInfoForm> createState() => _KeyInfoFormState();
+  State<ProfileForm> createState() => _ProfileFormState();
 }
 
-class _KeyInfoFormState extends State<KeyInfoForm> {
+class _ProfileFormState extends State<ProfileForm> {
   //state for managing form
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -59,10 +59,10 @@ class _KeyInfoFormState extends State<KeyInfoForm> {
   String? _lookingFor;
 
   //for conditional rendering of steps of the form
-  void _updateFormStep(){
+  void _updateFormStep() {
     setState(() {
-      additionalInfo = true;
-      keyInfo = false;
+      additionalInfo = !additionalInfo;
+      keyInfo = !keyInfo;
     });
   }
 
@@ -323,7 +323,7 @@ class _KeyInfoFormState extends State<KeyInfoForm> {
                   Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
                     const SizedBox(
                       width: 100,
-                      child: Text("Relationship Style"),
+                      child: Text("Looking For"),
                     ),
                     SizedBox(
                         width: ProfileStyles.textInputWidth,
@@ -382,25 +382,34 @@ class _KeyInfoFormState extends State<KeyInfoForm> {
                         ))
                   ]),
                   const SizedBox(height: 20),
-                  Align(
-                      alignment: Alignment.centerRight,
-                      child: ElevatedButton(
-                          onPressed: _submitForm,
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.secondary,
-                              fixedSize: const Size(100, 50),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12))),
-                          child: const Text(
-                              "Finish")) //will handle form submit THIS ONE DEPENDS ON PREV FORM ID ,
-                      )
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ElevatedButton(
+                            onPressed: _updateFormStep,
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.secondary,
+                                fixedSize: const Size(110, 50),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12))),
+                            child: const Text("Previous")),
+                        ElevatedButton(
+                            onPressed: _submitForm,
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.secondary,
+                                fixedSize: const Size(100, 50),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12))),
+                            child: const Text(
+                                "Finish")) //will handle form submit THIS ONE DEPENDS ON PREV FORM ID ,
+                      ]),
                 ]
               ],
             ))));
   }
 }
-
 
 //IDEA ALERT!!!
 /*
@@ -445,7 +454,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                   style:
                       TextStyle(color: Theme.of(context).colorScheme.tertiary),
                   textAlign: TextAlign.left),
-              const KeyInfoForm(),
+              const ProfileForm(),
             ],
           ),
         ));
