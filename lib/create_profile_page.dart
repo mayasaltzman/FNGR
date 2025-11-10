@@ -208,13 +208,12 @@ class _ProfileFormState extends State<ProfileForm> {
                 if (keyInfo) ...[
                   Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
                     SizedBox(
+                        width: 200,
                         child: _image != null
                             ? Image.file(_image!)
-                            : const Text("Test")),
-                    SizedBox(
-                      child: FloatingActionButton(
-                          onPressed: _pickImage, child: const Icon(Icons.add)),
-                    )
+                            : FloatingActionButton(
+                                onPressed: _pickImage,
+                                child: const Icon(Icons.add))),
                   ]),
                   Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
                     const SizedBox(
@@ -243,6 +242,38 @@ class _ProfileFormState extends State<ProfileForm> {
                           onSaved: (value) => _age = value!,
                         ))
                   ]),
+                   const Text("About me"),
+                  const SizedBox(height: 15),
+                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                    SizedBox(
+                        width: 350,
+                        child: TextFormField(
+                          //add validator
+                          keyboardType: TextInputType.multiline,
+                          minLines: 3,
+                          maxLines: null,
+                          decoration: const InputDecoration(
+                              labelText: "Tell us about yourself!",
+                              border: OutlineInputBorder()),
+                          onSaved: (value) => _bio = value!,
+                        ))
+                  ]),
+                  const SizedBox(height: 20),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: ElevatedButton(
+                        onPressed: _updateFormStep,
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.secondary,
+                            fixedSize: const Size(100, 50),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12))),
+                        child: const Text("Next")),
+                  )
+                ],
+                //ADDITIONAL INFO FORM CONTENTS HERE
+                if (additionalInfo) ...[
                   const SizedBox(height: 15),
                   Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
                     const SizedBox(
@@ -342,22 +373,6 @@ class _ProfileFormState extends State<ProfileForm> {
                               });
                             }))
                   ]),
-                  const SizedBox(height: 20),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: ElevatedButton(
-                        onPressed: _updateFormStep,
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                Theme.of(context).colorScheme.secondary,
-                            fixedSize: const Size(100, 50),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12))),
-                        child: const Text("Next")),
-                  )
-                ],
-                //ADDITIONAL INFO FORM CONTENTS HERE
-                if (additionalInfo) ...[
                   Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
                     const SizedBox(
                       width: 100,
@@ -379,23 +394,6 @@ class _ProfileFormState extends State<ProfileForm> {
                                 _lookingFor = newVal!;
                               });
                             }))
-                  ]),
-                  const SizedBox(height: 15),
-                  const Text("About me"),
-                  const SizedBox(height: 15),
-                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                    SizedBox(
-                        width: 350,
-                        child: TextFormField(
-                          //add validator
-                          keyboardType: TextInputType.multiline,
-                          minLines: 3,
-                          maxLines: null,
-                          decoration: const InputDecoration(
-                              labelText: "Tell us about yourself!",
-                              border: OutlineInputBorder()),
-                          onSaved: (value) => _bio = value!,
-                        ))
                   ]),
                   const SizedBox(height: 15),
                   Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
