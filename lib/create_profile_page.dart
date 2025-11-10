@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:image_picker/image_picker.dart';
 
 //styles for profile page
 abstract class ProfileStyles {
@@ -58,6 +59,21 @@ class _ProfileFormState extends State<ProfileForm> {
   late List<String> _interests;
   String? _lookingFor;
   String? _bio;
+
+  File? _image;
+  final _picker = ImagePicker(); //create instance of image picker
+
+  //method for image picking
+  void _pickImage() async {
+    final pickedImage = await _picker.pickImage(
+        source: ImageSource.gallery); //pick image from gallery
+
+    //check that image was actually picked
+    if (pickedImage != null) {
+      _image = File(pickedImage.path); //convert from xfile to image fromat
+      setState(() {});
+    }
+  }
 
   //for conditional rendering of steps of the form
   void _updateFormStep() {
@@ -190,6 +206,16 @@ class _ProfileFormState extends State<ProfileForm> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (keyInfo) ...[
+                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                    SizedBox(
+                        child: _image != null
+                            ? Image.file(_image!)
+                            : const Text("Test")),
+                    SizedBox(
+                      child: FloatingActionButton(
+                          onPressed: _pickImage, child: const Icon(Icons.add)),
+                    )
+                  ]),
                   Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
                     const SizedBox(
                       width: 100,
