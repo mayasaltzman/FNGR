@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
+import 'dart:convert';
 
 //styles for profile page
 abstract class ProfileStyles {
@@ -59,19 +60,38 @@ class _ProfileFormState extends State<ProfileForm> {
   late List<String> _interests;
   String? _lookingFor;
   String? _bio;
+  final List<File> _images = [];
 
-  File? _image;
+  File? _image1, _image2, _image3, _image4, _image5;
   final _picker = ImagePicker(); //create instance of image picker
 
   //method for image picking
-  void _pickImage() async {
+  //NEED TO CONVERT IMAGE TO STRING FORMAT BUT IM NOT SURE WHAT FORMAT TO USE TBH 
+  void _pickImage(int imageNum) async {
     final pickedImage = await _picker.pickImage(
         source: ImageSource.gallery); //pick image from gallery
 
     //check that image was actually picked
+    //would love to get rid of this conditional logic :)))
     if (pickedImage != null) {
-      _image = File(pickedImage.path); //convert from xfile to image fromat
-      setState(() {});
+      setState(() {
+        if (imageNum == 1) {
+          _image1 = File(pickedImage.path); //convert from xfile to image fromat
+          _images.add(_image1!);
+        } else if (imageNum == 2) {
+          _image2 = File(pickedImage.path);
+          _images.add(_image2!);
+        } else if (imageNum == 3) {
+          _image3 = File(pickedImage.path);
+          _images.add(_image3!);
+        } else if (imageNum == 4) {
+          _image4 = File(pickedImage.path);
+          _images.add(_image4!);
+        } else if (imageNum == 5) {
+          _image5 = File(pickedImage.path);
+          _images.add(_image5!);
+        }
+      });
     }
   }
 
@@ -112,7 +132,8 @@ class _ProfileFormState extends State<ProfileForm> {
       'expression': _genderPresentation,
       'interests': _interests,
       'sexual_pref': _sexualPref,
-      'bio': _bio
+      'bio': _bio//,
+      // 'photoURL': _images
     });
   }
 
@@ -206,15 +227,63 @@ class _ProfileFormState extends State<ProfileForm> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (keyInfo) ...[
-                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                    SizedBox(
-                        width: 200,
-                        child: _image != null
-                            ? Image.file(_image!)
-                            : FloatingActionButton(
-                                onPressed: _pickImage,
-                                child: const Icon(Icons.add))),
-                  ]),
+                  Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Column(children: [
+                          SizedBox(
+                              width: 200,
+                              height: 400,
+                              child: _image1 != null
+                                  ? Image.file(_image1!)
+                                  : FloatingActionButton(
+                                      onPressed: () => _pickImage(1),
+                                      child: const Icon(Icons.add))),
+                        ]),
+                        Column(
+                          children: [
+                            SizedBox(
+                                width: 80,
+                                height: 190,
+                                child: _image2 != null
+                                    ? Image.file(_image2!)
+                                    : FloatingActionButton(
+                                        onPressed: () => _pickImage(2),
+                                        child: const Icon(Icons.add))),
+                            const SizedBox(height: 15),
+                            SizedBox(
+                                width: 80,
+                                height: 190,
+                                child: _image3 != null
+                                    ? Image.file(_image3!)
+                                    : FloatingActionButton(
+                                        onPressed: () => _pickImage(3),
+                                        child: const Icon(Icons.add))),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            SizedBox(
+                                width: 80,
+                                height: 190,
+                                child: _image4 != null
+                                    ? Image.file(_image4!)
+                                    : FloatingActionButton(
+                                        onPressed: () => _pickImage(4),
+                                        child: const Icon(Icons.add))),
+                            const SizedBox(height: 15),
+                            SizedBox(
+                                width: 80,
+                                height: 190,
+                                child: _image5 != null
+                                    ? Image.file(_image5!)
+                                    : FloatingActionButton(
+                                        onPressed: () => _pickImage(5),
+                                        child: const Icon(Icons.add))),
+                          ],
+                        )
+                      ]),
                   Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
                     const SizedBox(
                       width: 100,
@@ -242,7 +311,8 @@ class _ProfileFormState extends State<ProfileForm> {
                           onSaved: (value) => _age = value!,
                         ))
                   ]),
-                   const Text("About me"),
+                  const SizedBox(height: 15),
+                  const Text("About me"),
                   const SizedBox(height: 15),
                   Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
                     SizedBox(
@@ -464,15 +534,6 @@ class _ProfileFormState extends State<ProfileForm> {
   }
 }
 
-//IDEA ALERT!!!
-/*
-Current structure of the page is not how I actually want profile creation cause its not Sexy
-instead we do it like we prompt user for name and age with one form
-then another for pics
-then we ask key info questions
-then bio and additional info questions
-this is a good jumping off point
-*/
 class CreateProfilePage extends StatefulWidget {
   const CreateProfilePage({super.key});
 
