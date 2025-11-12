@@ -39,8 +39,8 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       // home: const HomePage(),
-      //home: const UserProfilePage(),
-      home: const CreateProfilePage(),
+      home: const UserProfilePage(),
+      //home: const CreateProfilePage(),
       );
      
   }
