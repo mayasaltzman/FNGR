@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'home_page.dart'; // we’ll define this next
 import 'user_profile_page.dart';
+import 'create_profile_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,6 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
+        fontFamily: "Gilroy-bold",
         colorScheme: const ColorScheme.light(
           primary:  Color(0xFFFBEFF6), //app background
           primaryContainer: Color(0xFFF9E7F2), //to distinguish from background
@@ -36,8 +38,9 @@ class MyApp extends StatelessWidget {
         )
       ),
       debugShowCheckedModeBanner: false,
-      // home: HomePage(),
-      home: const UserProfilePage(),
+      // home: const HomePage(),
+      //home: const UserProfilePage(),
+      home: const CreateProfilePage(),
       );
      
   }
