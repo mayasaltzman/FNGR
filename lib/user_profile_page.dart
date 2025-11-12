@@ -102,11 +102,12 @@ class KeyInfo extends StatefulWidget {
 }
 
 class _KeyInfoState extends State<KeyInfo> {
-  //sexuality, pronouns, height, looking for, relationship style
-
   @override
   Widget build(BuildContext context) {
+    //list of fields in key info
     final List<Map<String, dynamic>> fields = [
+      {'label': 'Distance', 'value': 'Distance soon'},
+      {'label': 'Location', 'value': 'Location soon'},
       {
         'label': 'Sexuality',
         'value': widget.sexuality.join(', '),
@@ -144,7 +145,6 @@ class _KeyInfoState extends State<KeyInfo> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Title
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
@@ -152,9 +152,7 @@ class _KeyInfoState extends State<KeyInfo> {
               style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
-
           const SizedBox(height: 8),
-
           // List of key info rows with dividers
           ListView.separated(
             physics: const NeverScrollableScrollPhysics(), // let parent scroll
@@ -168,7 +166,7 @@ class _KeyInfoState extends State<KeyInfo> {
             itemBuilder: (context, index) {
               final field = fields[index];
 
-              // Optional conditional rendering (skip empty fields)
+              // skip empty fields
               if (field['value'] == null || field['value'].toString().isEmpty) {
                 return const SizedBox.shrink();
               }
@@ -176,11 +174,12 @@ class _KeyInfoState extends State<KeyInfo> {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(field['label'] ?? ''),
+                  Text(field['label'] ?? '',
+                      style: Theme.of(context).textTheme.bodyMedium),
                   Flexible(
                     child: Text(
                       field['value'] ?? '',
-                      style: Theme.of(context).textTheme.bodySmall,
+                      style: Theme.of(context).textTheme.bodyMedium,
                       textAlign: TextAlign.right,
                       overflow: TextOverflow.ellipsis,
                     ),
