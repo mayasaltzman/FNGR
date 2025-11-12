@@ -4,12 +4,105 @@ import 'package:flutter/material.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:convert';
 
 //styles for profile page
 abstract class ProfileStyles {
   static const formWidth = 375.0;
   static const textInputWidth = 250.0;
+}
+
+//custom text input field for our form currently unused
+class TextInputField extends StatelessWidget {
+  final TextEditingController controller;
+  final String labelText;
+  final FormFieldValidator<String>? validator;
+
+  const TextInputField({
+    super.key,
+    required this.controller,
+    required this.labelText,
+    this.validator,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: TextFormField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: labelText,
+          border: const OutlineInputBorder(),
+        ),
+        validator: validator,
+      ),
+    );
+  }
+}
+
+class ImageButton extends StatefulWidget {
+  final File? image;
+  final double width;
+  final double height;
+  final int imageIndex;
+
+  const ImageButton(
+      {super.key,
+      required this.image,
+      required this.width,
+      required this.height,
+      required this.imageIndex});
+
+  @override
+  State<ImageButton> createState() => _ImageButtonState();
+}
+
+class _ImageButtonState extends State<ImageButton> {
+  final _picker = ImagePicker(); //create instance of image picker
+
+  //method for image picking
+  //NEED TO CONVERT IMAGE TO STRING FORMAT BUT IM NOT SURE WHAT FORMAT TO USE TBH
+  void _pickImage(int imageNum) async {
+    final pickedImage = await _picker.pickImage(
+        source: ImageSource.gallery); //pick image from gallery
+
+    //check that image was actually picked
+    //would love to get rid of this conditional logic :)))
+    if (pickedImage != null) {
+      setState(() {
+        //if (widget.imageIndex == 1) {
+        // widget.image = File(pickedImage.path); //convert from xfile to image fromat
+        // _images.add(_image1!);
+        // } else if (widget.imageIndex  == 2) {
+        //   _image2 = File(pickedImage.path);
+        //   _images.add(_image2!);
+        // } else if (widget.imageIndex == 3) {
+        //   _image3 = File(pickedImage.path);
+        //   _images.add(_image3!);
+        // } else if (widget.imageIndex  == 4) {
+        //   _image4 = File(pickedImage.path);
+        //   _images.add(_image4!);
+        // } else if (imageNum == 5) {
+        //   _image5 = File(pickedImage.path);
+        //   _images.add(_image5!);
+        // }
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
+      SizedBox(
+          width: widget.width,
+          height: widget.height,
+          child: widget.image != null
+              ? Image.file(widget.image!)
+              : FloatingActionButton(
+                  onPressed: () => _pickImage(widget.imageIndex),
+                  child: const Icon(Icons.add))),
+    ]);
+  }
 }
 
 //widget for key info form
@@ -27,6 +120,8 @@ class _ProfileFormState extends State<ProfileForm> {
   //conditions to set which process of profile creation the user is on
   bool keyInfo = true;
   bool additionalInfo = false;
+
+  //final TextEditingController _nameController = TextEditingController();
 
   //controllers for managing multiselect dropdowns
   final MultiSelectController<String> sexualityController =
@@ -65,35 +160,35 @@ class _ProfileFormState extends State<ProfileForm> {
   File? _image1, _image2, _image3, _image4, _image5;
   final _picker = ImagePicker(); //create instance of image picker
 
-  //method for image picking
-  //NEED TO CONVERT IMAGE TO STRING FORMAT BUT IM NOT SURE WHAT FORMAT TO USE TBH 
-  void _pickImage(int imageNum) async {
-    final pickedImage = await _picker.pickImage(
-        source: ImageSource.gallery); //pick image from gallery
+  // //method for image picking
+  // //NEED TO CONVERT IMAGE TO STRING FORMAT BUT IM NOT SURE WHAT FORMAT TO USE TBH
+  // void _pickImage(int imageNum) async {
+  //   final pickedImage = await _picker.pickImage(
+  //       source: ImageSource.gallery); //pick image from gallery
 
-    //check that image was actually picked
-    //would love to get rid of this conditional logic :)))
-    if (pickedImage != null) {
-      setState(() {
-        if (imageNum == 1) {
-          _image1 = File(pickedImage.path); //convert from xfile to image fromat
-          _images.add(_image1!);
-        } else if (imageNum == 2) {
-          _image2 = File(pickedImage.path);
-          _images.add(_image2!);
-        } else if (imageNum == 3) {
-          _image3 = File(pickedImage.path);
-          _images.add(_image3!);
-        } else if (imageNum == 4) {
-          _image4 = File(pickedImage.path);
-          _images.add(_image4!);
-        } else if (imageNum == 5) {
-          _image5 = File(pickedImage.path);
-          _images.add(_image5!);
-        }
-      });
-    }
-  }
+  //   //check that image was actually picked
+  //   //would love to get rid of this conditional logic :)))
+  //   if (pickedImage != null) {
+  //     setState(() {
+  //       if (imageNum == 1) {
+  //         _image1 = File(pickedImage.path); //convert from xfile to image fromat
+  //         _images.add(_image1!);
+  //       } else if (imageNum == 2) {
+  //         _image2 = File(pickedImage.path);
+  //         _images.add(_image2!);
+  //       } else if (imageNum == 3) {
+  //         _image3 = File(pickedImage.path);
+  //         _images.add(_image3!);
+  //       } else if (imageNum == 4) {
+  //         _image4 = File(pickedImage.path);
+  //         _images.add(_image4!);
+  //       } else if (imageNum == 5) {
+  //         _image5 = File(pickedImage.path);
+  //         _images.add(_image5!);
+  //       }
+  //     });
+  //   }
+  // }
 
   //for conditional rendering of steps of the form
   void _updateFormStep() {
@@ -132,7 +227,7 @@ class _ProfileFormState extends State<ProfileForm> {
       'expression': _genderPresentation,
       'interests': _interests,
       'sexual_pref': _sexualPref,
-      'bio': _bio//,
+      'bio': _bio //,
       // 'photoURL': _images
     });
   }
@@ -231,58 +326,39 @@ class _ProfileFormState extends State<ProfileForm> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Column(children: [
-                          SizedBox(
-                              width: 200,
-                              height: 400,
-                              child: _image1 != null
-                                  ? Image.file(_image1!)
-                                  : FloatingActionButton(
-                                      onPressed: () => _pickImage(1),
-                                      child: const Icon(Icons.add))),
-                        ]),
+                        ImageButton(
+                            image: _image1,
+                            width: 200,
+                            height: 400,
+                            imageIndex: 1),
                         Column(
                           children: [
-                            SizedBox(
+                            ImageButton(
+                                image: _image2,
                                 width: 80,
                                 height: 190,
-                                child: _image2 != null
-                                    ? Image.file(_image2!)
-                                    : FloatingActionButton(
-                                        onPressed: () => _pickImage(2),
-                                        child: const Icon(Icons.add))),
-                            const SizedBox(height: 15),
-                            SizedBox(
+                                imageIndex: 2),
+                            ImageButton(
+                                image: _image3,
                                 width: 80,
                                 height: 190,
-                                child: _image3 != null
-                                    ? Image.file(_image3!)
-                                    : FloatingActionButton(
-                                        onPressed: () => _pickImage(3),
-                                        child: const Icon(Icons.add))),
+                                imageIndex: 3),
                           ],
                         ),
                         Column(
                           children: [
-                            SizedBox(
+                            ImageButton(
+                                image: _image4,
                                 width: 80,
                                 height: 190,
-                                child: _image4 != null
-                                    ? Image.file(_image4!)
-                                    : FloatingActionButton(
-                                        onPressed: () => _pickImage(4),
-                                        child: const Icon(Icons.add))),
-                            const SizedBox(height: 15),
-                            SizedBox(
+                                imageIndex: 4),
+                            ImageButton(
+                                image: _image5,
                                 width: 80,
                                 height: 190,
-                                child: _image5 != null
-                                    ? Image.file(_image5!)
-                                    : FloatingActionButton(
-                                        onPressed: () => _pickImage(5),
-                                        child: const Icon(Icons.add))),
+                                imageIndex: 5),
                           ],
-                        )
+                        ),
                       ]),
                   Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
                     const SizedBox(
@@ -560,15 +636,11 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
             color: Theme.of(context).colorScheme.secondaryFixed,
           ), //need to make this actually do something and give it color change for press
         ),
-        body: Center(
+        body: const Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Key Info",
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.tertiary),
-                  textAlign: TextAlign.left),
-              const ProfileForm(),
+              ProfileForm(),
             ],
           ),
         ));
