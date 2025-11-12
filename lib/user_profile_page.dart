@@ -4,14 +4,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 //styles for the page
 abstract class ProfileStyles {
   static BoxDecoration boxDecoration = BoxDecoration(
-      color: Colors.white,
+      color: const Color(0xFFFFF0E6),
       borderRadius: BorderRadius.circular(15.0),
       border: Border.all(
-        color: Colors.black,
+        color: const Color(0xFFFF9B55),
         width: 1,
       ));
 
   static const containerWidth = 375.0;
+
+  static const boxPadding = EdgeInsets.all(8.0);
 }
 
 //image box
@@ -141,7 +143,7 @@ class _KeyInfoState extends State<KeyInfo> {
     return Container(
       width: ProfileStyles.containerWidth,
       decoration: ProfileStyles.boxDecoration,
-      padding: const EdgeInsets.all(8.0),
+      padding: ProfileStyles.boxPadding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -161,7 +163,7 @@ class _KeyInfoState extends State<KeyInfo> {
             separatorBuilder: (context, index) => const Divider(
               height: 20,
               thickness: 1,
-              color: Colors.grey,
+              color: const Color(0xFFD461A6),
             ),
             itemBuilder: (context, index) {
               final field = fields[index];
@@ -211,6 +213,7 @@ class _PreferencesState extends State<Preferences> {
     return Container(
       width: ProfileStyles.containerWidth,
       decoration: ProfileStyles.boxDecoration,
+      padding: ProfileStyles.boxPadding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -218,7 +221,7 @@ class _PreferencesState extends State<Preferences> {
             child: Column(
               children: [
                 Align(
-                  alignment: Alignment.centerLeft, // right-align only this text
+                  alignment: Alignment.centerLeft,
                   child: Text(
                     "Sexual Preferences",
                     style: Theme.of(context).textTheme.bodyMedium,
@@ -226,7 +229,9 @@ class _PreferencesState extends State<Preferences> {
                 ),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [...widget.preferences.map((p) => Text(p))]),
+                    children: [
+                      ...widget.preferences.map((p) => Container( decoration: ProfileStyles.boxDecoration,child: Text(p)))
+                    ]),
               ],
             ),
           ) // render nothing if no bio
@@ -249,10 +254,10 @@ class Interests extends StatefulWidget {
 class _InterestsState extends State<Interests> {
   @override
   Widget build(BuildContext context) {
-    //need to update the container to have conditional rendering if the info isn't there
     return Container(
       width: ProfileStyles.containerWidth,
       decoration: ProfileStyles.boxDecoration,
+      padding: ProfileStyles.boxPadding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -260,7 +265,7 @@ class _InterestsState extends State<Interests> {
             child: Column(
               children: [
                 Align(
-                  alignment: Alignment.centerLeft, // right-align only this text
+                  alignment: Alignment.centerLeft,
                   child: Text(
                     "Interests",
                     style: Theme.of(context).textTheme.bodyMedium,
@@ -332,7 +337,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         snapshot!['name'] != null && snapshot!['age'] != null
                             ? SizedBox(
                                 child: Text(
-                                    "${snapshot!['name']}, ${snapshot!['age']}",
+                                    "${snapshot!['name']}- ${snapshot!['age']}",
                                     style:
                                         Theme.of(context).textTheme.bodyLarge))
                             : const SizedBox(),
