@@ -52,6 +52,9 @@ class KeyInfo extends StatefulWidget {
   final List<dynamic> sexuality;
   final List<dynamic> genderIdentity;
   final List<dynamic> pronouns;
+  final String relationshipStatus;
+  final List<dynamic> genderExpression;
+
   const KeyInfo(
       {super.key,
       required this.lookingFor,
@@ -59,7 +62,9 @@ class KeyInfo extends StatefulWidget {
       required this.height,
       required this.sexuality,
       required this.genderIdentity,
-      required this.pronouns});
+      required this.pronouns,
+      required this.relationshipStatus,
+      required this.genderExpression});
 
   @override
   State<KeyInfo> createState() => _KeyInfoState();
@@ -70,7 +75,7 @@ class _KeyInfoState extends State<KeyInfo> {
 
   @override
   Widget build(BuildContext context) {
-    //doesn't render until data is loaded
+    //need to update the container to have conditional rendering if the info isn't there
     return Container(
       width: ProfileStyles.containerWidth,
       decoration: ProfileStyles.boxDecoration,
@@ -81,14 +86,55 @@ class _KeyInfoState extends State<KeyInfo> {
             child: Column(
               children: [
                 Text("Key Info", style: Theme.of(context).textTheme.bodyMedium),
-                Text(widget.lookingFor,
-                    style: Theme.of(context).textTheme.bodySmall),
-                Text(widget.relationshipStyle,
-                    style: Theme.of(context).textTheme.bodySmall),
-                Text(widget.height,
-                    style: Theme.of(context).textTheme.bodySmall),
-                Text(widget.sexuality,
-                    style: Theme.of(context).textTheme.bodySmall)
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text("Sexuality"),
+                      ...widget.sexuality.map((s) => Text(s))
+                    ]),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text("Pronouns"),
+                      ...widget.pronouns.map((p) => Text(p))
+                    ]),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text("Height"),
+                      Text(widget.height,
+                          style: Theme.of(context).textTheme.bodySmall),
+                    ]),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text("Looking For"),
+                    Text(widget.lookingFor,
+                        style: Theme.of(context).textTheme.bodySmall),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text("Relationship Style"),
+                    Text(widget.relationshipStyle,
+                        style: Theme.of(context).textTheme.bodySmall),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text("Relationship Status"),
+                    Text(widget.relationshipStatus,
+                        style: Theme.of(context).textTheme.bodySmall),
+                  ],
+                ),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text("Gender Expression"),
+                      ...widget.genderExpression.map((ge) => Text(ge))
+                    ]),
               ],
             ),
           ) // render nothing if no bio
@@ -196,7 +242,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         height: snapshot!['height'],
                         sexuality: snapshot!['sexuality'],
                         genderIdentity: snapshot!['gender'],
-                        pronouns: snapshot!['pronouns']),
+                        pronouns: snapshot!['pronouns'],
+                        relationshipStatus: snapshot!['relationship_status'],
+                        genderExpression: snapshot!['expression']),
                     // Preferences(),
                     // Interests()
                   ],
