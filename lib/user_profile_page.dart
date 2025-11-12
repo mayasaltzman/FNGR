@@ -4,10 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 //styles for the page
 abstract class ProfileStyles {
   static BoxDecoration boxDecoration = BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(15.0),
       border: Border.all(
-    color: Colors.black,
-    width: 1,
-  ));
+        color: Colors.black,
+        width: 1,
+      ));
 
   static const containerWidth = 375.0;
 }
@@ -25,13 +27,13 @@ class _ProfileImageState extends State<ProfileImage> {
   Widget build(BuildContext context) {
     //doesn't render until data is loaded
     return Container(
+      height: 500,
       width: ProfileStyles.containerWidth,
       decoration: ProfileStyles.boxDecoration,
       child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: 500,
             child: Text("Beautiful photos of women here"),
           ) // render nothing if no bio
         ],
@@ -104,75 +106,89 @@ class _KeyInfoState extends State<KeyInfo> {
 
   @override
   Widget build(BuildContext context) {
-    //need to update the container to have conditional rendering if the info isn't there
+    final List<Map<String, dynamic>> fields = [
+      {
+        'label': 'Sexuality',
+        'value': widget.sexuality.join(', '),
+      },
+      {
+        'label': 'Pronouns',
+        'value': widget.pronouns.join(', '),
+      },
+      {
+        'label': 'Height',
+        'value': widget.height,
+      },
+      {
+        'label': 'Looking For',
+        'value': widget.lookingFor,
+      },
+      {
+        'label': 'Relationship Style',
+        'value': widget.relationshipStyle,
+      },
+      {
+        'label': 'Relationship Status',
+        'value': widget.relationshipStatus,
+      },
+      {
+        'label': 'Gender Expression',
+        'value': widget.genderExpression.join(', '),
+      },
+    ];
+
     return Container(
       width: ProfileStyles.containerWidth,
       decoration: ProfileStyles.boxDecoration,
+      padding: const EdgeInsets.all(8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            child: Column(
-              children: [
-                Align(
-                  alignment: Alignment.centerLeft, // right-align only this text
-                  child: Text(
-                    "Key Info",
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text("Sexuality"),
-                      ...widget.sexuality.map((s) => Text(s))
-                    ]),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text("Pronouns"),
-                      ...widget.pronouns.map((p) => Text(p))
-                    ]),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text("Height"),
-                      Text(widget.height,
-                          style: Theme.of(context).textTheme.bodySmall),
-                    ]),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text("Looking For"),
-                    Text(widget.lookingFor,
-                        style: Theme.of(context).textTheme.bodySmall),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text("Relationship Style"),
-                    Text(widget.relationshipStyle,
-                        style: Theme.of(context).textTheme.bodySmall),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text("Relationship Status"),
-                    Text(widget.relationshipStatus,
-                        style: Theme.of(context).textTheme.bodySmall),
-                  ],
-                ),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text("Gender Expression"),
-                      ...widget.genderExpression.map((ge) => Text(ge))
-                    ]),
-              ],
+          // Title
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "Key Info",
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
-          ) // render nothing if no bio
+          ),
+
+          const SizedBox(height: 8),
+
+          // List of key info rows with dividers
+          ListView.separated(
+            physics: const NeverScrollableScrollPhysics(), // let parent scroll
+            shrinkWrap: true, // important so it fits inside the column
+            itemCount: fields.length,
+            separatorBuilder: (context, index) => const Divider(
+              height: 20,
+              thickness: 1,
+              color: Colors.grey,
+            ),
+            itemBuilder: (context, index) {
+              final field = fields[index];
+
+              // Optional conditional rendering (skip empty fields)
+              if (field['value'] == null || field['value'].toString().isEmpty) {
+                return const SizedBox.shrink();
+              }
+
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(field['label'] ?? ''),
+                  Flexible(
+                    child: Text(
+                      field['value'] ?? '',
+                      style: Theme.of(context).textTheme.bodySmall,
+                      textAlign: TextAlign.right,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
         ],
       ),
     );
