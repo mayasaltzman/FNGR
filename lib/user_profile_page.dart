@@ -12,6 +12,33 @@ abstract class ProfileStyles {
   static const containerWidth = 375.0;
 }
 
+//image box
+class ProfileImage extends StatefulWidget {
+  const ProfileImage({super.key});
+
+  @override
+  State<ProfileImage> createState() => _ProfileImageState();
+}
+
+class _ProfileImageState extends State<ProfileImage> {
+  @override
+  Widget build(BuildContext context) {
+    //doesn't render until data is loaded
+    return Container(
+      width: ProfileStyles.containerWidth,
+      decoration: ProfileStyles.boxDecoration,
+      child: const Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            child: Text("Beautiful photos of women here"),
+          ) // render nothing if no bio
+        ],
+      ),
+    );
+  }
+}
+
 class AboutMe extends StatefulWidget {
   final String bio;
   const AboutMe({super.key, required this.bio});
@@ -20,7 +47,7 @@ class AboutMe extends StatefulWidget {
   State<AboutMe> createState() => _AboutMeState();
 }
 
-// //about me box
+//about me box
 class _AboutMeState extends State<AboutMe> {
   @override
   Widget build(BuildContext context) {
@@ -45,6 +72,7 @@ class _AboutMeState extends State<AboutMe> {
   }
 }
 
+//key info box
 class KeyInfo extends StatefulWidget {
   final String lookingFor;
   final String relationshipStyle;
@@ -144,39 +172,96 @@ class _KeyInfoState extends State<KeyInfo> {
   }
 }
 
-//preferences box
-class Preferences extends StatelessWidget {
-  const Preferences({super.key});
+//sexual preferences box
+class Preferences extends StatefulWidget {
+  final List<dynamic> preferences;
+
+  const Preferences({super.key, required this.preferences});
 
   @override
+  State<Preferences> createState() => _PreferencesState();
+}
+
+class _PreferencesState extends State<Preferences> {
+  @override
   Widget build(BuildContext context) {
+    //need to update the container to have conditional rendering if the info isn't there
     return Container(
       width: ProfileStyles.containerWidth,
       decoration: ProfileStyles.boxDecoration,
-      child: const Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [Text("Preferences")],
+        children: [
+          SizedBox(
+            child: Column(
+              children: [
+                Text("Sexual Preferences",
+                    style: Theme.of(context).textTheme.bodyMedium),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [...widget.preferences.map((p) => Text(p))]),
+              ],
+            ),
+          ) // render nothing if no bio
+        ],
       ),
     );
   }
 }
 
-//interests box
-class Interests extends StatelessWidget {
-  const Interests({super.key});
+//sexual preferences box
+class Interests extends StatefulWidget {
+  final List<dynamic> interests;
+
+  const Interests({super.key, required this.interests});
 
   @override
+  State<Interests> createState() => _InterestsState();
+}
+
+class _InterestsState extends State<Interests> {
+  @override
   Widget build(BuildContext context) {
+    //need to update the container to have conditional rendering if the info isn't there
     return Container(
       width: ProfileStyles.containerWidth,
       decoration: ProfileStyles.boxDecoration,
-      child: const Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [Text("Interests")],
+        children: [
+          SizedBox(
+            child: Column(
+              children: [
+                Text("Interests",
+                    style: Theme.of(context).textTheme.bodyMedium),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [...widget.interests.map((i) => Text(i))]),
+              ],
+            ),
+          ) // render nothing if no bio
+        ],
       ),
     );
   }
 }
+
+// //interests box
+// class Interests extends StatelessWidget {
+//   const Interests({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       width: ProfileStyles.containerWidth,
+//       decoration: ProfileStyles.boxDecoration,
+//       child: const Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [Text("Interests")],
+//       ),
+//     );
+//   }
+// }
 
 class UserProfilePage extends StatefulWidget {
   const UserProfilePage({super.key});
@@ -233,6 +318,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                             child: Text(
                                 "${snapshot!['name']}, ${snapshot!['age']}"))
                         : const SizedBox(),
+                    const ProfileImage(),
                     snapshot!['bio'] != null
                         ? AboutMe(bio: snapshot!['bio'])
                         : const SizedBox(),
@@ -245,8 +331,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         pronouns: snapshot!['pronouns'],
                         relationshipStatus: snapshot!['relationship_status'],
                         genderExpression: snapshot!['expression']),
-                    // Preferences(),
-                    // Interests()
+                    Preferences(
+                      preferences: snapshot!['sexual_pref'],
+                    ),
+                    Interests(interests: snapshot!['interests'])
                   ],
                 )),
     );
