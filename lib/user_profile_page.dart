@@ -31,6 +31,7 @@ class _ProfileImageState extends State<ProfileImage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
+            height: 500,
             child: Text("Beautiful photos of women here"),
           ) // render nothing if no bio
         ],
@@ -246,23 +247,6 @@ class _InterestsState extends State<Interests> {
   }
 }
 
-// //interests box
-// class Interests extends StatelessWidget {
-//   const Interests({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       width: ProfileStyles.containerWidth,
-//       decoration: ProfileStyles.boxDecoration,
-//       child: const Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [Text("Interests")],
-//       ),
-//     );
-//   }
-// }
-
 class UserProfilePage extends StatefulWidget {
   const UserProfilePage({super.key});
 
@@ -307,36 +291,40 @@ class _UserProfilePageState extends State<UserProfilePage> {
             const BackButton(), //need to make this actually do something and give it color change for press
         actions: [TextButton(onPressed: () {}, child: const Text("Message"))],
       ),
-      body: Center(
-          child: _isLoading
-              ? const CircularProgressIndicator()
-              : Column(
-                  spacing: 20,
-                  children: [
-                    snapshot!['name'] != null && snapshot!['age'] != null
-                        ? SizedBox(
-                            child: Text(
-                                "${snapshot!['name']}, ${snapshot!['age']}"))
-                        : const SizedBox(),
-                    const ProfileImage(),
-                    snapshot!['bio'] != null
-                        ? AboutMe(bio: snapshot!['bio'])
-                        : const SizedBox(),
-                    KeyInfo(
-                        lookingFor: snapshot!['expectations'],
-                        relationshipStyle: snapshot!['relationship_style'],
-                        height: snapshot!['height'],
-                        sexuality: snapshot!['sexuality'],
-                        genderIdentity: snapshot!['gender'],
-                        pronouns: snapshot!['pronouns'],
-                        relationshipStatus: snapshot!['relationship_status'],
-                        genderExpression: snapshot!['expression']),
-                    Preferences(
-                      preferences: snapshot!['sexual_pref'],
-                    ),
-                    Interests(interests: snapshot!['interests'])
-                  ],
-                )),
+      body: SingleChildScrollView(
+          child: Center(
+              child: _isLoading
+                  ? const CircularProgressIndicator()
+                  : Column(
+                      spacing: 20,
+                      children: [
+                        snapshot!['name'] != null && snapshot!['age'] != null
+                            ? SizedBox(
+                                child: Text(
+                                    "${snapshot!['name']}, ${snapshot!['age']}",
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge))
+                            : const SizedBox(),
+                        const ProfileImage(),
+                        snapshot!['bio'] != null
+                            ? AboutMe(bio: snapshot!['bio'])
+                            : const SizedBox(),
+                        KeyInfo(
+                            lookingFor: snapshot!['expectations'],
+                            relationshipStyle: snapshot!['relationship_style'],
+                            height: snapshot!['height'],
+                            sexuality: snapshot!['sexuality'],
+                            genderIdentity: snapshot!['gender'],
+                            pronouns: snapshot!['pronouns'],
+                            relationshipStatus:
+                                snapshot!['relationship_status'],
+                            genderExpression: snapshot!['expression']),
+                        Preferences(
+                          preferences: snapshot!['sexual_pref'],
+                        ),
+                        Interests(interests: snapshot!['interests'])
+                      ],
+                    ))),
     );
   }
 }
