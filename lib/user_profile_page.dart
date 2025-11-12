@@ -12,17 +12,16 @@ abstract class ProfileStyles {
   static const containerWidth = 375.0;
 }
 
-class ProfileInfo extends StatefulWidget {
+class AboutMe extends StatefulWidget {
   final String bio;
-  const ProfileInfo({super.key, required this.bio});
-  // const ProfileInfo({super.key});
+  const AboutMe({super.key, required this.bio});
 
   @override
-  State<ProfileInfo> createState() => _ProfileInfoState();
+  State<AboutMe> createState() => _AboutMeState();
 }
 
 // //about me box
-class _ProfileInfoState extends State<ProfileInfo> {
+class _AboutMeState extends State<AboutMe> {
   @override
   Widget build(BuildContext context) {
     //doesn't render until data is loaded
@@ -46,18 +45,54 @@ class _ProfileInfoState extends State<ProfileInfo> {
   }
 }
 
-//key info box
-class KeyInfo extends StatelessWidget {
-  const KeyInfo({super.key});
+class KeyInfo extends StatefulWidget {
+  final String lookingFor;
+  final String relationshipStyle;
+  final String height;
+  final List<dynamic> sexuality;
+  final List<dynamic> genderIdentity;
+  final List<dynamic> pronouns;
+  const KeyInfo(
+      {super.key,
+      required this.lookingFor,
+      required this.relationshipStyle,
+      required this.height,
+      required this.sexuality,
+      required this.genderIdentity,
+      required this.pronouns});
+
+  @override
+  State<KeyInfo> createState() => _KeyInfoState();
+}
+
+class _KeyInfoState extends State<KeyInfo> {
+  //sexuality, pronouns, height, looking for, relationship style
 
   @override
   Widget build(BuildContext context) {
+    //doesn't render until data is loaded
     return Container(
       width: ProfileStyles.containerWidth,
       decoration: ProfileStyles.boxDecoration,
-      child: const Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [Text("Key Info")],
+        children: [
+          SizedBox(
+            child: Column(
+              children: [
+                Text("Key Info", style: Theme.of(context).textTheme.bodyMedium),
+                Text(widget.lookingFor,
+                    style: Theme.of(context).textTheme.bodySmall),
+                Text(widget.relationshipStyle,
+                    style: Theme.of(context).textTheme.bodySmall),
+                Text(widget.height,
+                    style: Theme.of(context).textTheme.bodySmall),
+                Text(widget.sexuality,
+                    style: Theme.of(context).textTheme.bodySmall)
+              ],
+            ),
+          ) // render nothing if no bio
+        ],
       ),
     );
   }
@@ -153,9 +188,15 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                 "${snapshot!['name']}, ${snapshot!['age']}"))
                         : const SizedBox(),
                     snapshot!['bio'] != null
-                        ? ProfileInfo(bio: snapshot!['bio'])
-                        : const SizedBox()
-                    // KeyInfo(),
+                        ? AboutMe(bio: snapshot!['bio'])
+                        : const SizedBox(),
+                    KeyInfo(
+                        lookingFor: snapshot!['expectations'],
+                        relationshipStyle: snapshot!['relationship_style'],
+                        height: snapshot!['height'],
+                        sexuality: snapshot!['sexuality'],
+                        genderIdentity: snapshot!['gender'],
+                        pronouns: snapshot!['pronouns']),
                     // Preferences(),
                     // Interests()
                   ],
