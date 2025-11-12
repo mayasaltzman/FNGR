@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 //styles for the page
 abstract class ProfileStyles {
+  //styles for boxes that store profile info
   static BoxDecoration boxDecoration = BoxDecoration(
       color: const Color(0xFFFFF0E6),
       borderRadius: BorderRadius.circular(15.0),
@@ -10,6 +11,23 @@ abstract class ProfileStyles {
         color: const Color(0xFFFF9B55),
         width: 1,
       ));
+
+  //styles for boxes that are individual items in sexual preferences and interests
+  static BoxDecoration itemBoxDecoration = BoxDecoration(
+      color: const Color(0xFFF9E7F2),
+      borderRadius: BorderRadius.circular(15.0),
+      border: Border.all(
+        color: const Color(0xFFAA4E85),
+        width: 1,
+      ));
+
+  //text styles for headings in boxes
+  static TextStyle boxHeader = const TextStyle(
+      fontWeight: FontWeight.bold, color: Color(0xFFFF9B55), fontSize: 16);
+
+  //text styles for text in boxes
+  static TextStyle boxText = const TextStyle(
+      fontWeight: FontWeight.normal, color: Color(0xFFAA4E85), fontSize: 16);
 
   static const containerWidth = 375.0;
 
@@ -60,14 +78,15 @@ class _AboutMeState extends State<AboutMe> {
     return Container(
       width: ProfileStyles.containerWidth,
       decoration: ProfileStyles.boxDecoration,
+      padding: ProfileStyles.boxPadding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
             child: Column(
               children: [
-                Text("About Me", style: Theme.of(context).textTheme.bodyMedium),
-                Text(widget.bio, style: Theme.of(context).textTheme.bodySmall)
+                Text("About Me", style: ProfileStyles.boxHeader),
+                Text(widget.bio, style: ProfileStyles.boxText)
               ],
             ),
           ) // render nothing if no bio
@@ -151,7 +170,7 @@ class _KeyInfoState extends State<KeyInfo> {
             alignment: Alignment.centerLeft,
             child: Text(
               "Key Info",
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: ProfileStyles.boxHeader,
             ),
           ),
           const SizedBox(height: 8),
@@ -162,8 +181,8 @@ class _KeyInfoState extends State<KeyInfo> {
             itemCount: fields.length,
             separatorBuilder: (context, index) => const Divider(
               height: 20,
-              thickness: 1,
-              color: const Color(0xFFD461A6),
+              thickness: 2,
+              color: Color(0xFFD461A6),
             ),
             itemBuilder: (context, index) {
               final field = fields[index];
@@ -176,12 +195,11 @@ class _KeyInfoState extends State<KeyInfo> {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(field['label'] ?? '',
-                      style: Theme.of(context).textTheme.bodyMedium),
+                  Text(field['label'] ?? '', style: ProfileStyles.boxText),
                   Flexible(
                     child: Text(
                       field['value'] ?? '',
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      style: ProfileStyles.boxText,
                       textAlign: TextAlign.right,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -219,18 +237,23 @@ class _PreferencesState extends State<Preferences> {
         children: [
           SizedBox(
             child: Column(
+              spacing: 5,
               children: [
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
                     "Sexual Preferences",
-                    style: Theme.of(context).textTheme.bodyMedium,
+                    style: ProfileStyles.boxHeader,
                   ),
                 ),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ...widget.preferences.map((p) => Container( decoration: ProfileStyles.boxDecoration,child: Text(p)))
+                      ...widget.preferences.map((p) => Container(
+                          alignment: Alignment.center,
+                          width: 75,
+                          decoration: ProfileStyles.itemBoxDecoration,
+                          child: Text(p, style: ProfileStyles.boxText)))
                     ]),
               ],
             ),
@@ -268,12 +291,18 @@ class _InterestsState extends State<Interests> {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     "Interests",
-                    style: Theme.of(context).textTheme.bodyMedium,
+                    style: ProfileStyles.boxHeader,
                   ),
                 ),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [...widget.interests.map((i) => Text(i))]),
+                    children: [
+                      ...widget.interests.map((i) => Container(
+                          alignment: Alignment.center,
+                          width: 75,
+                          decoration: ProfileStyles.itemBoxDecoration,
+                          child: Text(i, style: ProfileStyles.boxText)))
+                    ]),
               ],
             ),
           ) // render nothing if no bio
@@ -323,8 +352,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
       backgroundColor: Theme.of(context).colorScheme.primary,
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.secondary,
-        leading:
-            const BackButton(), //need to make this actually do something and give it color change for press
+        leading: BackButton(
+            color: Theme.of(context)
+                .colorScheme
+                .secondaryFixed), //need to make this actually do something and give it color change for press
         actions: [TextButton(onPressed: () {}, child: const Text("Message"))],
       ),
       body: SingleChildScrollView(
@@ -334,12 +365,15 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   : Column(
                       spacing: 20,
                       children: [
+                        const SizedBox(height: 5),
                         snapshot!['name'] != null && snapshot!['age'] != null
                             ? SizedBox(
                                 child: Text(
                                     "${snapshot!['name']}- ${snapshot!['age']}",
-                                    style:
-                                        Theme.of(context).textTheme.bodyLarge))
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFFAA4E85),
+                                        fontSize: 22)))
                             : const SizedBox(),
                         const ProfileImage(),
                         snapshot!['bio'] != null
@@ -358,7 +392,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         Preferences(
                           preferences: snapshot!['sexual_pref'],
                         ),
-                        Interests(interests: snapshot!['interests'])
+                        Interests(interests: snapshot!['interests']),
+                        const SizedBox(height: 10)
                       ],
                     ))),
     );
