@@ -114,7 +114,13 @@ class _KeyInfoState extends State<KeyInfo> {
           SizedBox(
             child: Column(
               children: [
-                Text("Key Info", style: Theme.of(context).textTheme.bodyMedium),
+                Align(
+                  alignment: Alignment.centerLeft, // right-align only this text
+                  child: Text(
+                    "Key Info",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -196,8 +202,13 @@ class _PreferencesState extends State<Preferences> {
           SizedBox(
             child: Column(
               children: [
-                Text("Sexual Preferences",
-                    style: Theme.of(context).textTheme.bodyMedium),
+                Align(
+                  alignment: Alignment.centerLeft, // right-align only this text
+                  child: Text(
+                    "Sexual Preferences",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [...widget.preferences.map((p) => Text(p))]),
@@ -233,8 +244,13 @@ class _InterestsState extends State<Interests> {
           SizedBox(
             child: Column(
               children: [
-                Text("Interests",
-                    style: Theme.of(context).textTheme.bodyMedium),
+                Align(
+                  alignment: Alignment.centerLeft, // right-align only this text
+                  child: Text(
+                    "Interests",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [...widget.interests.map((i) => Text(i))]),
