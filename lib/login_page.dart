@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'main.dart'; // Import NavMenu
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -25,6 +25,11 @@ class _LoginState extends State<LoginPage> {
         password: password.text.trim(),
       );
       print("Logged in as ${user.user?.email}");
+      if (mounted) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const NavMenu()),
+        );
+      }
     }on FirebaseAuthException catch (e) {
       print("Login failed: ${e.message}");
     }
