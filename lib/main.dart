@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:test_milestone/login_page.dart';
 import 'home_page.dart'; // we’ll define this next
 import 'user_profile_page.dart';
+import 'create_account.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       // home: HomePage(),
       // home: const UserProfilePage(),
-      home: const LoginPage(),
+      home:  CreateAccount(),
       );
      
   }
