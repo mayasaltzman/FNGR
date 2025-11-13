@@ -40,6 +40,7 @@ class TextInputField extends StatelessWidget {
   }
 }
 
+//custom image button widget to get images from user
 class ImageButton extends StatefulWidget {
   final File? image;
   final double width;
@@ -88,6 +89,35 @@ class _ImageButtonState extends State<ImageButton> {
               ? Image.file(_selectedImage!)
               : FloatingActionButton(
                   onPressed: () => _pickImage(), child: const Icon(Icons.add))),
+    ]);
+  }
+}
+
+class MultiSelectDropdown extends StatelessWidget {
+  final MultiSelectController<String> controller;
+  final String labelText;
+  final List<DropdownItem<String>> items;
+
+  const MultiSelectDropdown({
+    super.key,
+    required this.controller,
+    required this.labelText,
+    required this.items,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+      SizedBox(
+        width: 100,
+        child: Text(labelText),
+      ),
+      SizedBox(
+          width: ProfileStyles.textInputWidth,
+          child: MultiDropdown(
+            items: items, //need to add scrollable
+            controller: controller,
+          ))
     ]);
   }
 }
@@ -343,6 +373,8 @@ class _ProfileFormState extends State<ProfileForm> {
                         ))
                   ]),
                   const SizedBox(height: 20),
+
+                  //button to navigate to next part of the form
                   Align(
                     alignment: Alignment.centerRight,
                     child: ElevatedButton(
@@ -356,6 +388,7 @@ class _ProfileFormState extends State<ProfileForm> {
                         child: const Text("Next")),
                   )
                 ],
+
                 //ADDITIONAL INFO FORM CONTENTS HERE
                 if (additionalInfo) ...[
                   const SizedBox(height: 15),
@@ -373,44 +406,20 @@ class _ProfileFormState extends State<ProfileForm> {
                         ))
                   ]),
                   const SizedBox(height: 15),
-                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                    const SizedBox(
-                      width: 100,
-                      child: Text("Sexuality"),
-                    ),
-                    SizedBox(
-                        width: ProfileStyles.textInputWidth,
-                        child: MultiDropdown(
-                          items: sexualities, //need to add scrollable
-                          controller: sexualityController,
-                        ))
-                  ]),
+                  MultiSelectDropdown(
+                      controller: sexualityController,
+                      labelText: "Sexuality",
+                      items: sexualities),
                   const SizedBox(height: 15),
-                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                    const SizedBox(
-                      width: 100,
-                      child: Text("Gender Identity"),
-                    ),
-                    SizedBox(
-                        width: ProfileStyles.textInputWidth,
-                        child: MultiDropdown(
-                          items: genders, //need to add scrollable
-                          controller: genderController,
-                        ))
-                  ]),
+                  MultiSelectDropdown(
+                      controller: genderController,
+                      labelText: "Gender Identity",
+                      items: genders),
                   const SizedBox(height: 15),
-                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                    const SizedBox(
-                      width: 100,
-                      child: Text("Pronouns"),
-                    ),
-                    SizedBox(
-                        width: ProfileStyles.textInputWidth,
-                        child: MultiDropdown(
-                          items: pronouns, //need to add scrollable
-                          controller: pronounController,
-                        ))
-                  ]),
+                  MultiSelectDropdown(
+                      controller: pronounController,
+                      labelText: "Pronouns",
+                      items: pronouns),
                   const SizedBox(height: 15),
                   Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
                     const SizedBox(
@@ -480,44 +489,20 @@ class _ProfileFormState extends State<ProfileForm> {
                             }))
                   ]),
                   const SizedBox(height: 15),
-                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                    const SizedBox(
-                      width: 100,
-                      child: Text("Sexual Preferences"),
-                    ),
-                    SizedBox(
-                        width: ProfileStyles.textInputWidth,
-                        child: MultiDropdown(
-                          items: sexualPrefs, //need to add scrollable
-                          controller: sexualPrefController,
-                        ))
-                  ]),
+                  MultiSelectDropdown(
+                      controller: sexualPrefController,
+                      labelText: "Sexual Preferences",
+                      items: sexualPrefs),
                   const SizedBox(height: 15),
-                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                    const SizedBox(
-                      width: 100,
-                      child: Text("Gender Presentation"),
-                    ),
-                    SizedBox(
-                        width: ProfileStyles.textInputWidth,
-                        child: MultiDropdown(
-                          items: genderPresentations, //need to add scrollable
-                          controller: genderPresentationController,
-                        ))
-                  ]),
+                  MultiSelectDropdown(
+                      controller: genderPresentationController,
+                      labelText: "Gender Presentation",
+                      items: genderPresentations),
                   const SizedBox(height: 15),
-                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                    const SizedBox(
-                      width: 100,
-                      child: Text("Interests"),
-                    ),
-                    SizedBox(
-                        width: ProfileStyles.textInputWidth,
-                        child: MultiDropdown(
-                          items: interestOptions, //need to add scrollable
-                          controller: interestsController,
-                        ))
-                  ]),
+                  MultiSelectDropdown(
+                      controller: interestsController,
+                      labelText: "Interests",
+                      items: interestOptions),
                   const SizedBox(height: 20),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -539,8 +524,7 @@ class _ProfileFormState extends State<ProfileForm> {
                                 fixedSize: const Size(100, 50),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12))),
-                            child: const Text(
-                                "Finish")) //will handle form submit THIS ONE DEPENDS ON PREV FORM ID ,
+                            child: const Text("Finish"))
                       ]),
                 ]
               ],
