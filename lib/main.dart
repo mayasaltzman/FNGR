@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'home_page.dart'; // we’ll define this next
 import 'user_profile_page.dart';
 import 'create_profile_page.dart';
+import 'login_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
               bodySmall: TextStyle(fontSize: 14))),
       debugShowCheckedModeBanner: false,
       // home: const HomePage(),
-      home: const NavMenu(),
+      home: const LoginPage(),
       // home: const CreateProfilePage(),
     );
   }
