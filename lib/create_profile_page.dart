@@ -41,6 +41,8 @@ class TextInputField extends StatelessWidget {
           height: 50,
           child: TextFormField(
             controller: controller,
+            style: const TextStyle(
+                                color: Color(0xFFAA4E85), fontSize: 16),
             decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
@@ -54,7 +56,8 @@ class TextInputField extends StatelessWidget {
                 filled: true,
                 fillColor: const Color(0xFFFFF0E6),
                 labelText: labelText,
-                labelStyle: const TextStyle(color: Colors.grey, fontSize: 16)),
+                labelStyle:
+                    const TextStyle(color: Color(0xFFAA4E85), fontSize: 16)),
             validator: validator,
           ))
     ]);
@@ -111,7 +114,11 @@ class _ImageButtonState extends State<ImageButton> {
               : FloatingActionButton(
                   onPressed: () => _pickImage(),
                   elevation: 0,
-                  child: const Icon(Icons.add))),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                      side: const BorderSide(color: Color(0xFFAA4E85))),
+                  child: const Icon(Icons.add),
+                )),
     ]);
   }
 }
@@ -182,6 +189,9 @@ class SingleSelectDropDown extends StatelessWidget {
                     ))
                 .toList(),
             onChanged: onChanged,
+            dropdownColor: const Color(0xFFFFF0E6),
+            style: const TextStyle(color: Color(0xFFAA4E85), fontSize: 16),
+            
           ),
         ),
       ],
@@ -404,6 +414,7 @@ class _ProfileFormState extends State<ProfileForm> {
                           ],
                         ),
                       ]),
+                  const SizedBox(height: 15),
                   TextInputField(
                       controller: _nameController,
                       labelText: "Name",
@@ -424,10 +435,25 @@ class _ProfileFormState extends State<ProfileForm> {
                           keyboardType: TextInputType.multiline,
                           minLines: 3,
                           maxLines: null,
-                          decoration: const InputDecoration(
-                              labelText: "Tell us about yourself!",
-                              filled: true,
-                              border: OutlineInputBorder()),
+                          style: const TextStyle(
+                              color: Color(0xFFAA4E85), fontSize: 16),
+                          decoration: InputDecoration(
+                            labelText: "Tell us about yourself!",
+                            labelStyle: const TextStyle(
+                                color: Color(0xFFAA4E85), fontSize: 16),
+                            filled: true,
+                            fillColor: const Color(0xFFFFF0E6),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide:
+                                  const BorderSide(color: Color(0xFFFFA96C)),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: const BorderSide(
+                                  color: Color(0xFFFFA96C), width: 2),
+                            ),
+                          ),
 
                           onSaved: (value) => _bio = value!,
                         ))
@@ -577,6 +603,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              SizedBox(height: 5),
               ProfileForm(),
             ],
           ),
