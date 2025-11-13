@@ -37,9 +37,9 @@ class MyApp extends StatelessWidget {
               ),
               bodySmall: TextStyle(fontSize: 14))),
       debugShowCheckedModeBanner: false,
-      // home: const HomePage(),
+      home: const HomePage(),
       //home: const UserProfilePage(),
-      home: const CreateProfilePage(),
+      //home: const CreateProfilePage(),
     );
   }
 }
