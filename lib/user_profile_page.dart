@@ -361,7 +361,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
       body: SingleChildScrollView(
           child: Center(
               child: _isLoading
-                  ? const CircularProgressIndicator()
+                  ? const Center(child: CircularProgressIndicator())
                   : Column(
                       spacing: 20,
                       children: [
