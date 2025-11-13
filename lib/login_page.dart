@@ -44,7 +44,8 @@ class _LoginState extends State<LoginPage> {
             ),
             
             const SizedBox(height: 30),
-            const TextField(
+            TextField(
+              controller: username,
               style: TextStyle(color:Colors.pink),
               decoration: InputDecoration(
                 labelText: 'Enter your username (email)',
@@ -59,7 +60,8 @@ class _LoginState extends State<LoginPage> {
             ), 
             
             const SizedBox(height: 10),
-            const TextField(
+            TextField(
+              controller: password,
               style: TextStyle(color:Colors.pink),
               obscureText: true,
               decoration: InputDecoration(
