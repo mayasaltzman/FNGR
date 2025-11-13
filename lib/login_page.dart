@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-//import 'firebase_options.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -10,9 +9,24 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginState extends State<LoginPage> {
+  final FirebaseAuth fireAuth = FirebaseAuth.instance;
+  final TextEditingController username = TextEditingController();
+  final TextEditingController password = TextEditingController();
   @override
   void initState() {
     super.initState();
+  }
+
+  Future<void> signIn() async {
+    try {
+      UserCredential user = await fireAuth.signInWithEmailAndPassword(
+        email: username.text.trim(),
+        password: password.text.trim(),
+      );
+      print("Logged in as ${user.user?.email}");
+    }on FirebaseAuthException catch (e) {
+      print("Login failed: ${e.message}");
+    }
   }
 
   @override
@@ -32,7 +46,7 @@ class _LoginState extends State<LoginPage> {
             const TextField(
               style: TextStyle(color:Colors.pink),
               decoration: InputDecoration(
-                labelText: 'Enter your username',
+                labelText: 'Enter your username (email)',
                 labelStyle: TextStyle(color:Colors.pink),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.orange, width: 1.0),
@@ -62,7 +76,7 @@ class _LoginState extends State<LoginPage> {
             const SizedBox(height: 30),
             ElevatedButton(
               onPressed: (){
-                print("go to login");
+                signIn();
             },
               child: const Text(
                 "Login",

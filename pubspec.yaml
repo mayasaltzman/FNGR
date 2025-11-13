@@ -14,6 +14,7 @@ dependencies:
   # Firebase core + Firestore
   firebase_core: ^4.2.0
   cloud_firestore: ^6.0.3
+  firebase_auth: ^6.1.1
 
   # Geolocation and geo queries
   geolocator: ^11.1.0
