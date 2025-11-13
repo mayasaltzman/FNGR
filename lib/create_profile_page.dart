@@ -41,8 +41,7 @@ class TextInputField extends StatelessWidget {
           height: 50,
           child: TextFormField(
             controller: controller,
-            style: const TextStyle(
-                                color: Color(0xFFAA4E85), fontSize: 16),
+            style: const TextStyle(color: Color(0xFFAA4E85), fontSize: 16),
             decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
@@ -191,7 +190,6 @@ class SingleSelectDropDown extends StatelessWidget {
             onChanged: onChanged,
             dropdownColor: const Color(0xFFFFF0E6),
             style: const TextStyle(color: Color(0xFFAA4E85), fontSize: 16),
-            
           ),
         ),
       ],
@@ -331,6 +329,8 @@ class _ProfileFormState extends State<ProfileForm> {
       DropdownItem(label: 'Transgender', value: "Transgender"),
       DropdownItem(label: 'Trans Man', value: "Trans Man"),
       DropdownItem(label: 'Trans Woman', value: "Trans Woman"),
+      DropdownItem(label: 'Trans Masculine', value: "Trans Masculine"),
+      DropdownItem(label: 'Trans Feminine', value: "Trans Feminine"),
       DropdownItem(label: 'Two-Spirit', value: "Two-Spirit"),
       DropdownItem(label: 'Woman', value: "Woman")
     ];
@@ -341,26 +341,37 @@ class _ProfileFormState extends State<ProfileForm> {
       DropdownItem(label: 'they/them', value: "they/them"),
       DropdownItem(label: 'he/him', value: "he/him"),
       DropdownItem(label: 'ze/zir', value: "ze/zir"),
+      DropdownItem(label: 'fae/faer', value: "fae/faer"),
+      DropdownItem(label: 'ae/aer', value: "ae/aer"),
+      DropdownItem(label: 'xe/xem', value: "xe/xem"),
+      DropdownItem(label: 'it/its', value: "it/its"),
+      DropdownItem(label: 'ask me', value: "ask me"),
     ];
 
     //relationship status for drop down
     List<String> relationshipStatuses = [
       'single',
       'open relationship',
-      'in a relationship'
+      'in a relationship',
     ];
 
     //relationship style for drop down
     List<String> relationshipStyles = [
       'monogamous',
       'polyamorous',
+      'ethical non monagamy',
+      'relationship anarachy',
+      'swinging',
+      'exploring'
     ];
 
     //what your looking for types for drop down
     List<String> expectations = [
       'hookups',
       'long term relationship',
-      'short term relationship'
+      'short term relationship',
+      'casual dating',
+      'figuring it out'
     ];
 
     //sexual preferences for drop down
@@ -372,9 +383,16 @@ class _ProfileFormState extends State<ProfileForm> {
 
     //gender presentations for drop down
     var genderPresentations = [
-      DropdownItem(label: 'masc', value: "masc"),
-      DropdownItem(label: 'femme', value: "femme"),
       DropdownItem(label: 'androgynous', value: "androgynous"),
+      DropdownItem(label: 'alien', value: "alien"),
+      DropdownItem(label: 'chapstick', value: "chapstick"),
+      DropdownItem(label: 'femme', value: "femme"),
+      DropdownItem(label: 'futch', value: "futch"),
+      DropdownItem(label: 'butch', value: "butch"),
+      DropdownItem(label: 'lipstick', value: "lipstick"),
+      DropdownItem(label: 'masc', value: "masc"),
+      DropdownItem(label: 'stud', value: "stud"),
+      DropdownItem(label: 'stemme', value: "stemme"),
     ];
 
     //interests for drop down
@@ -382,6 +400,7 @@ class _ProfileFormState extends State<ProfileForm> {
       DropdownItem(label: 'reading', value: "reading"),
       DropdownItem(label: 'outdoors', value: "outdoors"),
       DropdownItem(label: 'cooking', value: "cooking"),
+      DropdownItem(label: 'emo femmes', value: "emo femmes"),
     ];
 
     return (SizedBox(
