@@ -27,6 +27,7 @@ class _LoginState extends State<LoginPage> {
               "Login page baddies", 
               style: TextStyle(color: Colors.pink),
             ),
+            
             const SizedBox(height: 30),
             const TextField(
               style: TextStyle(color:Colors.pink),
@@ -41,9 +42,11 @@ class _LoginState extends State<LoginPage> {
                 ),
               ),
             ), 
+            
             const SizedBox(height: 10),
             const TextField(
               style: TextStyle(color:Colors.pink),
+              obscureText: true,
               decoration: InputDecoration(
                 labelText: 'Enter your password',
                 labelStyle: TextStyle(color:Colors.pink),
@@ -55,6 +58,7 @@ class _LoginState extends State<LoginPage> {
                 ),
               ),
             ), 
+            
             const SizedBox(height: 30),
             ElevatedButton(
               onPressed: (){
@@ -65,6 +69,7 @@ class _LoginState extends State<LoginPage> {
                 style: TextStyle(color: Colors.pink),
               ),
             ),
+            
             ElevatedButton(
               onPressed: (){
                 print("go to create account");
