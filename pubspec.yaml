@@ -1,11 +1,11 @@
 name: test_milestone
 description: "A new Flutter project."
 
-publish_to: 'none'
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -23,6 +23,13 @@ dependencies:
   # State management (simple example uses Provider)
   provider: ^6.1.2
   cupertino_icons: ^1.0.2
+
+  #multi select drop down
+  multi_dropdown: ^3.0.1
+
+  #to pick image from gallery/camera
+  #NOTE FOR IOS THIS NEEDS SPECIAL PERMISSIONS IN info.plist
+  image_picker: ^1.2.0
 
 dev_dependencies:
   flutter_test:
