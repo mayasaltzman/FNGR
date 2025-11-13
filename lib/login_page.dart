@@ -12,6 +12,7 @@ class _LoginState extends State<LoginPage> {
   final FirebaseAuth fireAuth = FirebaseAuth.instance;
   final TextEditingController username = TextEditingController();
   final TextEditingController password = TextEditingController();
+  
   @override
   void initState() {
     super.initState();
@@ -75,7 +76,7 @@ class _LoginState extends State<LoginPage> {
             
             const SizedBox(height: 30),
             ElevatedButton(
-              onPressed: (){
+              onPressed: () {
                 signIn();
             },
               child: const Text(
@@ -85,7 +86,7 @@ class _LoginState extends State<LoginPage> {
             ),
             
             ElevatedButton(
-              onPressed: (){
+              onPressed: () {
                 print("go to create account");
             },
               child: const Text(
