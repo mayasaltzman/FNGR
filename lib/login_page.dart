@@ -19,32 +19,63 @@ class _LoginState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        //leading: const BackButton(), //need to make this actually do something and give it color change for press
-        //actions: [
-          //TextButton(onPressed: (){}, child: const Text("Message"))
-        //],
-      ),
-      body: const Center(
-          child: Column(
-          spacing: 20,
+      body: Center(
+        child: Column(
           children: [
-            Text("Login page baddies"),
-            TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Enter your username',
+            const SizedBox(height: 300),
+            const Text(
+              "Login page baddies", 
+              style: TextStyle(color: Colors.pink),
+            ),
+            const SizedBox(height: 30),
+            const TextField(
+              style: TextStyle(color:Colors.pink),
+              decoration: InputDecoration(
+                labelText: 'Enter your username',
+                labelStyle: TextStyle(color:Colors.pink),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.orange, width: 1.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.orange, width: 2.0),
+                ),
+              ),
+            ), 
+            const SizedBox(height: 10),
+            const TextField(
+              style: TextStyle(color:Colors.pink),
+              decoration: InputDecoration(
+                labelText: 'Enter your password',
+                labelStyle: TextStyle(color:Colors.pink),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.orange, width: 1.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.orange, width: 2.0),
+                ),
+              ),
+            ), 
+            const SizedBox(height: 30),
+            ElevatedButton(
+              onPressed: (){
+                print("go to login");
+            },
+              child: const Text(
+                "Login",
+                style: TextStyle(color: Colors.pink),
               ),
             ),
-            TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Enter your password',
+            ElevatedButton(
+              onPressed: (){
+                print("go to create account");
+            },
+              child: const Text(
+                "Create account", 
+                style: TextStyle(color: Colors.pink),
               ),
-            )
+            ),
           ],
-      )
+        )
       ),
     );
   }
