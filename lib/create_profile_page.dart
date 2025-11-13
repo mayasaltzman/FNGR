@@ -93,6 +93,7 @@ class _ImageButtonState extends State<ImageButton> {
   }
 }
 
+//custom multiselect dropdown widget
 class MultiSelectDropdown extends StatelessWidget {
   final MultiSelectController<String> controller;
   final String labelText;
@@ -119,6 +120,49 @@ class MultiSelectDropdown extends StatelessWidget {
             controller: controller,
           ))
     ]);
+  }
+}
+
+//custom single dropdown widget
+class SingleSelectDropDown extends StatelessWidget {
+  final String? value;
+  final List<String> items;
+  final String label;
+  final ValueChanged<String?> onChanged;
+
+  const SingleSelectDropDown({
+    super.key,
+    required this.value,
+    required this.label,
+    required this.items,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 100,
+          child: Text(label),
+        ),
+        SizedBox(
+          width: ProfileStyles.textInputWidth,
+          child: DropdownButton<String>(
+            hint: const Text("Select"),
+            value: value,
+            items: items
+                .map((status) => DropdownMenuItem<String>(
+                      value: status,
+                      child: Text(status),
+                    ))
+                .toList(),
+            onChanged: onChanged,
+          ),
+        ),
+      ],
+    );
   }
 }
 
@@ -421,73 +465,37 @@ class _ProfileFormState extends State<ProfileForm> {
                       labelText: "Pronouns",
                       items: pronouns),
                   const SizedBox(height: 15),
-                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                    const SizedBox(
-                      width: 100,
-                      child: Text("Relationship Status"),
-                    ),
-                    SizedBox(
-                        width: ProfileStyles.textInputWidth,
-                        child: DropdownButton(
-                            hint: const Text("Select"),
-                            value: _relationshipStatus,
-                            items: relationshipStatuses.map((status) {
-                              return DropdownMenuItem(
-                                value: status,
-                                child: Text(status),
-                              );
-                            }).toList(),
-                            onChanged: (newVal) {
-                              setState(() {
-                                _relationshipStatus = newVal!;
-                              });
-                            }))
-                  ]),
+                  SingleSelectDropDown(
+                    value: _relationshipStatus,
+                    label: "Relationship Status",
+                    items: relationshipStatuses,
+                    onChanged: (newVal) {
+                      setState(() {
+                        _relationshipStatus = newVal;
+                      });
+                    },
+                  ),
                   const SizedBox(height: 15),
-                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                    const SizedBox(
-                      width: 100,
-                      child: Text("Relationship Style"),
-                    ),
-                    SizedBox(
-                        width: ProfileStyles.textInputWidth,
-                        child: DropdownButton(
-                            hint: const Text("Select"),
-                            value: _relationshipStyle,
-                            items: relationshipStyles.map((style) {
-                              return DropdownMenuItem(
-                                value: style,
-                                child: Text(style),
-                              );
-                            }).toList(),
-                            onChanged: (newVal) {
-                              setState(() {
-                                _relationshipStyle = newVal!;
-                              });
-                            }))
-                  ]),
-                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                    const SizedBox(
-                      width: 100,
-                      child: Text("Looking For"),
-                    ),
-                    SizedBox(
-                        width: ProfileStyles.textInputWidth,
-                        child: DropdownButton(
-                            hint: const Text("Select"),
-                            value: _lookingFor,
-                            items: expectations.map((exp) {
-                              return DropdownMenuItem(
-                                value: exp,
-                                child: Text(exp),
-                              );
-                            }).toList(),
-                            onChanged: (newVal) {
-                              setState(() {
-                                _lookingFor = newVal!;
-                              });
-                            }))
-                  ]),
+                  SingleSelectDropDown(
+                    value: _relationshipStyle,
+                    label: "Relationship Style",
+                    items: relationshipStyles,
+                    onChanged: (newVal) {
+                      setState(() {
+                        _relationshipStyle = newVal;
+                      });
+                    },
+                  ),
+                  SingleSelectDropDown(
+                    value: _lookingFor,
+                    label: "Looking For",
+                    items: expectations,
+                    onChanged: (newVal) {
+                      setState(() {
+                        _lookingFor = newVal;
+                      });
+                    },
+                  ),
                   const SizedBox(height: 15),
                   MultiSelectDropdown(
                       controller: sexualPrefController,
