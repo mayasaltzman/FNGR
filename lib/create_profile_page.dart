@@ -44,14 +44,12 @@ class ImageButton extends StatefulWidget {
   final File? image;
   final double width;
   final double height;
-  final int imageIndex;
 
   const ImageButton(
       {super.key,
       required this.image,
       required this.width,
-      required this.height,
-      required this.imageIndex});
+      required this.height});
 
   @override
   State<ImageButton> createState() => _ImageButtonState();
@@ -59,35 +57,25 @@ class ImageButton extends StatefulWidget {
 
 class _ImageButtonState extends State<ImageButton> {
   final _picker = ImagePicker(); //create instance of image picker
+  File? _selectedImage;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedImage = widget.image;
+  }
 
   //method for image picking
   //NEED TO CONVERT IMAGE TO STRING FORMAT BUT IM NOT SURE WHAT FORMAT TO USE TBH
-  void _pickImage(int imageNum) async {
-    final pickedImage = await _picker.pickImage(
-        source: ImageSource.gallery); //pick image from gallery
+  Future<void> _pickImage() async {
+    final pickedImage = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedImage == null) return;
 
-    //check that image was actually picked
-    //would love to get rid of this conditional logic :)))
-    if (pickedImage != null) {
-      setState(() {
-        //if (widget.imageIndex == 1) {
-        // widget.image = File(pickedImage.path); //convert from xfile to image fromat
-        // _images.add(_image1!);
-        // } else if (widget.imageIndex  == 2) {
-        //   _image2 = File(pickedImage.path);
-        //   _images.add(_image2!);
-        // } else if (widget.imageIndex == 3) {
-        //   _image3 = File(pickedImage.path);
-        //   _images.add(_image3!);
-        // } else if (widget.imageIndex  == 4) {
-        //   _image4 = File(pickedImage.path);
-        //   _images.add(_image4!);
-        // } else if (imageNum == 5) {
-        //   _image5 = File(pickedImage.path);
-        //   _images.add(_image5!);
-        // }
-      });
-    }
+    final imageFile = File(pickedImage.path);
+
+    setState(() {
+      _selectedImage = imageFile;
+    });
   }
 
   @override
@@ -96,11 +84,10 @@ class _ImageButtonState extends State<ImageButton> {
       SizedBox(
           width: widget.width,
           height: widget.height,
-          child: widget.image != null
-              ? Image.file(widget.image!)
+          child: _selectedImage != null
+              ? Image.file(_selectedImage!)
               : FloatingActionButton(
-                  onPressed: () => _pickImage(widget.imageIndex),
-                  child: const Icon(Icons.add))),
+                  onPressed: () => _pickImage(), child: const Icon(Icons.add))),
     ]);
   }
 }
@@ -155,40 +142,11 @@ class _ProfileFormState extends State<ProfileForm> {
   late List<String> _interests;
   String? _lookingFor;
   String? _bio;
+
+  //need to figure out how to add to this from the seperate image picker thing
   final List<File> _images = [];
 
   File? _image1, _image2, _image3, _image4, _image5;
-  final _picker = ImagePicker(); //create instance of image picker
-
-  // //method for image picking
-  // //NEED TO CONVERT IMAGE TO STRING FORMAT BUT IM NOT SURE WHAT FORMAT TO USE TBH
-  // void _pickImage(int imageNum) async {
-  //   final pickedImage = await _picker.pickImage(
-  //       source: ImageSource.gallery); //pick image from gallery
-
-  //   //check that image was actually picked
-  //   //would love to get rid of this conditional logic :)))
-  //   if (pickedImage != null) {
-  //     setState(() {
-  //       if (imageNum == 1) {
-  //         _image1 = File(pickedImage.path); //convert from xfile to image fromat
-  //         _images.add(_image1!);
-  //       } else if (imageNum == 2) {
-  //         _image2 = File(pickedImage.path);
-  //         _images.add(_image2!);
-  //       } else if (imageNum == 3) {
-  //         _image3 = File(pickedImage.path);
-  //         _images.add(_image3!);
-  //       } else if (imageNum == 4) {
-  //         _image4 = File(pickedImage.path);
-  //         _images.add(_image4!);
-  //       } else if (imageNum == 5) {
-  //         _image5 = File(pickedImage.path);
-  //         _images.add(_image5!);
-  //       }
-  //     });
-  //   }
-  // }
 
   //for conditional rendering of steps of the form
   void _updateFormStep() {
@@ -326,37 +284,17 @@ class _ProfileFormState extends State<ProfileForm> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        ImageButton(
-                            image: _image1,
-                            width: 200,
-                            height: 400,
-                            imageIndex: 1),
+                        ImageButton(image: _image1, width: 200, height: 400),
                         Column(
                           children: [
-                            ImageButton(
-                                image: _image2,
-                                width: 80,
-                                height: 190,
-                                imageIndex: 2),
-                            ImageButton(
-                                image: _image3,
-                                width: 80,
-                                height: 190,
-                                imageIndex: 3),
+                            ImageButton(image: _image2, width: 80, height: 190),
+                            ImageButton(image: _image3, width: 80, height: 190),
                           ],
                         ),
                         Column(
                           children: [
-                            ImageButton(
-                                image: _image4,
-                                width: 80,
-                                height: 190,
-                                imageIndex: 4),
-                            ImageButton(
-                                image: _image5,
-                                width: 80,
-                                height: 190,
-                                imageIndex: 5),
+                            ImageButton(image: _image4, width: 80, height: 190),
+                            ImageButton(image: _image5, width: 80, height: 190),
                           ],
                         ),
                       ]),
