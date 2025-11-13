@@ -16,28 +16,48 @@ class TextInputField extends StatelessWidget {
   final TextEditingController controller;
   final String labelText;
   final FormFieldValidator<String>? validator;
+  final String textType;
 
   const TextInputField({
     super.key,
     required this.controller,
     required this.labelText,
+    required this.textType,
     this.validator,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: TextFormField(
-        controller: controller,
-        decoration: InputDecoration(
-          labelText: labelText,
-          border: const OutlineInputBorder(),
-        ),
-        validator: validator,
+    return Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+      SizedBox(
+        width: 100,
+        child: Text(textType),
       ),
-    );
+      SizedBox(
+          width: ProfileStyles.textInputWidth,
+          child: TextFormField(
+            controller: controller,
+            decoration: InputDecoration(labelText: labelText),
+            validator: validator,
+          ))
+    ]);
   }
+
+  // Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+  //                   const SizedBox(
+  //                     width: 100,
+  //                     child: Text("Name"),
+  //                   ),
+  //                   SizedBox(
+  //                       width: ProfileStyles.textInputWidth,
+  //                       child: TextFormField(
+  // controller: controller,
+  // decoration: InputDecoration(
+  //   labelText: labelText,
+  //   border: const OutlineInputBorder(),
+  // ),
+  // validator: validator,
+  //                 ]),
 }
 
 //custom image button widget to get images from user
@@ -182,7 +202,9 @@ class _ProfileFormState extends State<ProfileForm> {
   bool keyInfo = true;
   bool additionalInfo = false;
 
-  //final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _ageController = TextEditingController();
+  final TextEditingController _heightController = TextEditingController();
 
   //controllers for managing multiselect dropdowns
   final MultiSelectController<String> sexualityController =
@@ -235,6 +257,9 @@ class _ProfileFormState extends State<ProfileForm> {
   void _submitForm() async {
     _formKey.currentState!.save();
     //get values from multiselect drop down and convert them to type list
+    _name = _nameController.text;
+    _age = _ageController.text;
+    _height = _heightController.text;
     _sexuality = sexualityController.selectedItems.map((e) => e.value).toList();
     _genderIdentity =
         genderController.selectedItems.map((e) => e.value).toList();
@@ -372,33 +397,15 @@ class _ProfileFormState extends State<ProfileForm> {
                           ],
                         ),
                       ]),
-                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                    const SizedBox(
-                      width: 100,
-                      child: Text("Name"),
-                    ),
-                    SizedBox(
-                        width: ProfileStyles.textInputWidth,
-                        child: TextFormField(
-                          //add validator
-                          decoration: const InputDecoration(labelText: "Name"),
-                          onSaved: (value) => _name = value!,
-                        ))
-                  ]),
+                  TextInputField(
+                      controller: _nameController,
+                      labelText: "Name",
+                      textType: "Name"),
                   const SizedBox(height: 15),
-                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                    const SizedBox(
-                      width: 100,
-                      child: Text("Age"),
-                    ),
-                    SizedBox(
-                        width: ProfileStyles.textInputWidth,
-                        child: TextFormField(
-                          //hope to change this to date picker for birth day eventually
-                          decoration: const InputDecoration(labelText: "Age"),
-                          onSaved: (value) => _age = value!,
-                        ))
-                  ]),
+                  TextInputField(
+                      controller: _ageController,
+                      labelText: "Age",
+                      textType: "Age"),
                   const SizedBox(height: 15),
                   const Text("About me"),
                   const SizedBox(height: 15),
@@ -436,19 +443,10 @@ class _ProfileFormState extends State<ProfileForm> {
                 //ADDITIONAL INFO FORM CONTENTS HERE
                 if (additionalInfo) ...[
                   const SizedBox(height: 15),
-                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                    const SizedBox(
-                      width: 100,
-                      child: Text("Height"),
-                    ),
-                    SizedBox(
-                        width: ProfileStyles.textInputWidth,
-                        child: TextFormField(
-                          decoration:
-                              const InputDecoration(labelText: "Height"),
-                          onSaved: (value) => _height = value!,
-                        ))
-                  ]),
+                  TextInputField(
+                      controller: _heightController,
+                      labelText: "Height",
+                      textType: "Height"),
                   const SizedBox(height: 15),
                   MultiSelectDropdown(
                       controller: sexualityController,
