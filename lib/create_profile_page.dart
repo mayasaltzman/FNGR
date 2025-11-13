@@ -9,6 +9,9 @@ import 'package:image_picker/image_picker.dart';
 abstract class ProfileStyles {
   static const formWidth = 375.0;
   static const textInputWidth = 250.0;
+
+  static TextStyle inputHeader = const TextStyle(
+      fontWeight: FontWeight.bold, color: Color(0xFFAA4E85), fontSize: 16);
 }
 
 //custom text input field for our form currently unused
@@ -31,33 +34,31 @@ class TextInputField extends StatelessWidget {
     return Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
       SizedBox(
         width: 100,
-        child: Text(textType),
+        child: Text(textType, style: ProfileStyles.inputHeader),
       ),
       SizedBox(
           width: ProfileStyles.textInputWidth,
+          height: 50,
           child: TextFormField(
             controller: controller,
-            decoration: InputDecoration(labelText: labelText),
+            decoration: InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: const BorderSide(color: Color(0xFFFFA96C)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide:
+                      const BorderSide(color: Color(0xFFFFA96C), width: 2),
+                ),
+                filled: true,
+                fillColor: const Color(0xFFFFF0E6),
+                labelText: labelText,
+                labelStyle: const TextStyle(color: Colors.grey, fontSize: 16)),
             validator: validator,
           ))
     ]);
   }
-
-  // Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-  //                   const SizedBox(
-  //                     width: 100,
-  //                     child: Text("Name"),
-  //                   ),
-  //                   SizedBox(
-  //                       width: ProfileStyles.textInputWidth,
-  //                       child: TextFormField(
-  // controller: controller,
-  // decoration: InputDecoration(
-  //   labelText: labelText,
-  //   border: const OutlineInputBorder(),
-  // ),
-  // validator: validator,
-  //                 ]),
 }
 
 //custom image button widget to get images from user
@@ -108,7 +109,9 @@ class _ImageButtonState extends State<ImageButton> {
           child: _selectedImage != null
               ? Image.file(_selectedImage!)
               : FloatingActionButton(
-                  onPressed: () => _pickImage(), child: const Icon(Icons.add))),
+                  onPressed: () => _pickImage(),
+                  elevation: 0,
+                  child: const Icon(Icons.add))),
     ]);
   }
 }
@@ -131,7 +134,7 @@ class MultiSelectDropdown extends StatelessWidget {
     return Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
       SizedBox(
         width: 100,
-        child: Text(labelText),
+        child: Text(labelText, style: ProfileStyles.inputHeader),
       ),
       SizedBox(
           width: ProfileStyles.textInputWidth,
@@ -165,7 +168,7 @@ class SingleSelectDropDown extends StatelessWidget {
       children: [
         SizedBox(
           width: 100,
-          child: Text(label),
+          child: Text(label, style: ProfileStyles.inputHeader),
         ),
         SizedBox(
           width: ProfileStyles.textInputWidth,
@@ -384,15 +387,19 @@ class _ProfileFormState extends State<ProfileForm> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         ImageButton(image: _image1, width: 200, height: 400),
+                        const SizedBox(width: 5),
                         Column(
                           children: [
                             ImageButton(image: _image2, width: 80, height: 190),
+                            const SizedBox(height: 10),
                             ImageButton(image: _image3, width: 80, height: 190),
                           ],
                         ),
+                        const SizedBox(width: 5),
                         Column(
                           children: [
                             ImageButton(image: _image4, width: 80, height: 190),
+                            const SizedBox(height: 10),
                             ImageButton(image: _image5, width: 80, height: 190),
                           ],
                         ),
@@ -407,7 +414,7 @@ class _ProfileFormState extends State<ProfileForm> {
                       labelText: "Age",
                       textType: "Age"),
                   const SizedBox(height: 15),
-                  const Text("About me"),
+                  Text("About me", style: ProfileStyles.inputHeader),
                   const SizedBox(height: 15),
                   Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
                     SizedBox(
@@ -419,7 +426,9 @@ class _ProfileFormState extends State<ProfileForm> {
                           maxLines: null,
                           decoration: const InputDecoration(
                               labelText: "Tell us about yourself!",
+                              filled: true,
                               border: OutlineInputBorder()),
+
                           onSaved: (value) => _bio = value!,
                         ))
                   ]),
