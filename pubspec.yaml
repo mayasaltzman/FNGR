@@ -34,6 +34,9 @@ dependencies:
   #chat user interface
   flutter_chat_ui: ^2.9.1
 
+  #lets user send messages with chat
+  flutter_chat_core: ^2.8.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

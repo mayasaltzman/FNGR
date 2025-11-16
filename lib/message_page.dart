@@ -1,5 +1,48 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
+import 'package:flutter_chat_core/flutter_chat_core.dart';
+import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 
+class MessageWidget extends StatefulWidget {
+  const MessageWidget({super.key});
+
+  @override
+  MessageWidgetState createState() => MessageWidgetState();
+}
+
+class MessageWidgetState extends State<MessageWidget> {
+  final _chatController = InMemoryChatController();
+
+  @override
+  void dispose() {
+    _chatController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Chat(
+        chatController: _chatController,
+        currentUserId: 'user1',
+        onMessageSend: (text) {
+          _chatController.insertMessage(
+            TextMessage(
+              // Better to use UUID or similar for the ID - IDs must be unique
+              id: '${Random().nextInt(1000) + 1}',
+              authorId: 'user1',
+              createdAt: DateTime.now().toUtc(),
+              text: text,
+            ),
+          );
+        },
+        resolveUser: (UserID id) async {
+          return User(id: id, name: 'John Doe');
+        },
+      ),
+    );
+  }
+}
 
 class MessagePage extends StatefulWidget {
   const MessagePage({super.key});
@@ -27,8 +70,10 @@ class _MessagePageState extends State<MessagePage> {
                   backgroundImage: NetworkImage(
                     "https://randomuser.me/api/portraits/women/2.jpg",
                   )),
-              Text("Name", style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondaryFixed))
-              
+              Text("Name",
+                  style: TextStyle(
+                      fontSize: 12,
+                      color: Theme.of(context).colorScheme.secondaryFixed))
             ],
           ),
           actions: [
