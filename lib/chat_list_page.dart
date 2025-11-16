@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'message_page.dart';
 
 //widget for the list of chats
 class ChatList extends StatefulWidget {
@@ -27,8 +28,16 @@ class _ChatListState extends State<ChatList> {
         return ListTile(
             title: const Text("Test"),
             subtitle: const Text("message"),
-            trailing: Icon(Icons.arrow_forward,
-                color: Theme.of(context).colorScheme.tertiary),
+            trailing: IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const MessagePage()),
+                  );
+                },
+                icon: Icon(Icons.arrow_forward,
+                    color: Theme.of(context).colorScheme.tertiary)),
             leading: const CircleAvatar(
               radius: 30,
               backgroundImage: NetworkImage(
