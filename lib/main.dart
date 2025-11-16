@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'home_page.dart'; // we’ll define this next
 import 'user_profile_page.dart';
 import 'create_profile_page.dart';
+import 'chat_list_page.dart';
 import 'login_page.dart';
 
 void main() async {
@@ -58,6 +59,8 @@ class _NavMenuState extends State<NavMenu> {
   final List<Widget> _pages = [
     const HomePage(),
     const UserProfilePage(),
+    const ChatListPage(),
+
   ];
 
   void _onItemTapped(int index) {
@@ -85,6 +88,10 @@ class _NavMenuState extends State<NavMenu> {
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',
+          ),
+           BottomNavigationBarItem(
+            icon: Icon(Icons.chat_bubble_rounded),
+            label: 'Chat',
           ),
         ],
       ),
