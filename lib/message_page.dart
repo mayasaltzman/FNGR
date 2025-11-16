@@ -22,6 +22,7 @@ class MessageWidgetState extends State<MessageWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //this is from https://pub.dev/packages/flutter_chat_core/example
       body: Chat(
         chatController: _chatController,
         currentUserId: 'user1',
@@ -87,10 +88,8 @@ class _MessagePageState extends State<MessagePage> {
                 icon: const Icon(Icons.more_horiz),
                 color: Theme.of(context).colorScheme.secondaryFixed),
           ],
-        ));
-    // body: const SingleChildScrollView(
-    //     child: Center(
-    //   child: ChatList(),
-    // )));
+        ),
+        body: const MessageWidget()
+        );
   }
 }
