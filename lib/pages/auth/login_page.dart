@@ -63,7 +63,6 @@ class _LoginState extends State<LoginPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const SizedBox(height: 300),
               const Text(
                 "Login page baddies", 
                 style: TextStyle(color: Colors.pink),

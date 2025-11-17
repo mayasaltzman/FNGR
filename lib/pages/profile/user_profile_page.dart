@@ -295,6 +295,14 @@ class _UserProfilePageState extends State<UserProfilePage> {
     _firebaseService = FirebaseService();
     _locationService = LocationService();
     userId = widget.userId ?? _firebaseService.currentUserId!;
+    _ensureLocationReady();
+  }
+
+  Future<void> _ensureLocationReady() async {
+    if (_locationService.currentPosition == null) {
+      await _locationService.initLocation();
+      setState(() {});
+    }
   }
 
   @override
@@ -336,15 +344,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
           final data = snapshot.data!.data() as Map<String, dynamic>;
 
           double distance = double.infinity;
-          print('User Data: $data'); // Debug print to check data structure
           final lat = data['lat'] as double? ?? 0.0;
           final lng = data['long'] as double? ?? 0.0;
-          print('User Location: lat=$lat, long=$lng');
-          print('Current LocationService lat=${_locationService.latitude}, long=${_locationService.longitude}');
-
+       
           if (lat != 0.0 && lng != 0.0 && _locationService.latitude != null && _locationService.longitude != null) {
             distance = _locationService.calculateDistance(_locationService.latitude!,_locationService.longitude!,lat,lng);
-            print('Distance calculated: $distance km');
           }
           return SingleChildScrollView(
             child: Center(
