@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'home_page.dart'; // we’ll define this next
-import 'user_profile_page.dart';
-import 'create_profile_page.dart';
-import 'chat_list_page.dart';
-import 'login_page.dart';
+import 'package:test_milestone/services/firebase_service.dart';
+import 'package:test_milestone/services/location_service.dart';
+import 'pages/home/home_page.dart'; // we’ll define this next
+import 'pages/profile/user_profile_page.dart';
+import 'pages/profile/create_profile_page.dart';
+import 'pages/chat/chat_list_page.dart';
+import 'pages/auth/login_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  final LocationService _locationService = LocationService();
+  await _locationService.initLocation();
+  _locationService.startLocationUpdates();
   runApp(const MyApp());
 }
 
@@ -55,13 +61,19 @@ class NavMenu extends StatefulWidget {
 
 class _NavMenuState extends State<NavMenu> {
   int _selectedIndex = 0;
+  late List<Widget> _pages;
 
-  final List<Widget> _pages = [
-    const HomePage(),
-    const UserProfilePage(),
-    const ChatListPage(),
-
-  ];
+  @override
+  void initState() {
+    super.initState();
+    final FirebaseService _firebaseService = FirebaseService();
+    final currentUserId = _firebaseService.currentUserId ?? '';
+    _pages = [
+      const HomePage(),
+      UserProfilePage(userId: currentUserId),
+      const ChatListPage(),
+    ];
+  }
 
   void _onItemTapped(int index) {
     setState(() {

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../services/firebase_service.dart';
+import '../../services/location_service.dart';
+import '../chat/message_page.dart';
 
 //styles for the page
 abstract class ProfileStyles {
@@ -35,14 +38,11 @@ abstract class ProfileStyles {
 }
 
 //image box
-class ProfileImage extends StatefulWidget {
-  const ProfileImage({super.key});
+class ProfileImage extends StatelessWidget {
+  final String? imageUrl;
+  const ProfileImage({super.key, this.imageUrl});
 
-  @override
-  State<ProfileImage> createState() => _ProfileImageState();
-}
 
-class _ProfileImageState extends State<ProfileImage> {
   @override
   Widget build(BuildContext context) {
     //doesn't render until data is loaded
@@ -50,28 +50,19 @@ class _ProfileImageState extends State<ProfileImage> {
       height: 500,
       width: ProfileStyles.containerWidth,
       decoration: ProfileStyles.boxDecoration,
-      child: const Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            child: Text("Beautiful photos of women here"),
-          ) // render nothing if no bio
-        ],
-      ),
+      child: imageUrl != null && imageUrl!.isNotEmpty
+          ? Image.network(imageUrl!,fit: BoxFit.cover, errorBuilder: (context, error, stackTrace) => 
+                  const Icon(Icons.person, size: 100),
+            )
+            : const Center( child: Icon(Icons.person, size: 100)),
     );
   }
 }
 
-class AboutMe extends StatefulWidget {
+class AboutMe extends StatelessWidget {
   final String bio;
   const AboutMe({super.key, required this.bio});
 
-  @override
-  State<AboutMe> createState() => _AboutMeState();
-}
-
-//about me box
-class _AboutMeState extends State<AboutMe> {
   @override
   Widget build(BuildContext context) {
     //doesn't render until data is loaded
@@ -86,7 +77,7 @@ class _AboutMeState extends State<AboutMe> {
             child: Column(
               children: [
                 Text("About Me", style: ProfileStyles.boxHeader),
-                Text(widget.bio, style: ProfileStyles.boxText)
+                Text(bio, style: ProfileStyles.boxText)
               ],
             ),
           ) // render nothing if no bio
@@ -97,10 +88,11 @@ class _AboutMeState extends State<AboutMe> {
 }
 
 //key info box
-class KeyInfo extends StatefulWidget {
+class KeyInfo extends StatelessWidget {
   final String lookingFor;
   final String relationshipStyle;
   final String height;
+  final double? distance;
   final List<dynamic> sexuality;
   final List<dynamic> genderIdentity;
   final List<dynamic> pronouns;
@@ -112,51 +104,28 @@ class KeyInfo extends StatefulWidget {
       required this.lookingFor,
       required this.relationshipStyle,
       required this.height,
+      required this.distance,
       required this.sexuality,
       required this.genderIdentity,
       required this.pronouns,
       required this.relationshipStatus,
       required this.genderExpression});
 
-  @override
-  State<KeyInfo> createState() => _KeyInfoState();
-}
+ 
 
-class _KeyInfoState extends State<KeyInfo> {
   @override
   Widget build(BuildContext context) {
     //list of fields in key info
     final List<Map<String, dynamic>> fields = [
-      {'label': 'Distance', 'value': 'Distance soon'},
+      {'label': 'Distance', 'value': distance != null ? '${distance!.toStringAsFixed(1)} km away' : 'Unknown'},
       {'label': 'Location', 'value': 'Location soon'},
-      {
-        'label': 'Sexuality',
-        'value': widget.sexuality.join(', '),
-      },
-      {
-        'label': 'Pronouns',
-        'value': widget.pronouns.join(', '),
-      },
-      {
-        'label': 'Height',
-        'value': widget.height,
-      },
-      {
-        'label': 'Looking For',
-        'value': widget.lookingFor,
-      },
-      {
-        'label': 'Relationship Style',
-        'value': widget.relationshipStyle,
-      },
-      {
-        'label': 'Relationship Status',
-        'value': widget.relationshipStatus,
-      },
-      {
-        'label': 'Gender Expression',
-        'value': widget.genderExpression.join(', '),
-      },
+      {'label': 'Sexuality','value': sexuality.join(', ')},
+      {'label': 'Pronouns','value': pronouns.join(', ')},
+      {'label': 'Height','value': height},
+      {'label': 'Looking For','value': lookingFor},
+      {'label': 'Relationship Style','value': relationshipStyle},
+      {'label': 'Relationship Status','value': relationshipStatus},
+      {'label': 'Gender Expression','value': genderExpression.join(', ')},
     ];
 
     return Container(
@@ -215,19 +184,15 @@ class _KeyInfoState extends State<KeyInfo> {
 }
 
 //sexual preferences box
-class Preferences extends StatefulWidget {
+class Preferences extends StatelessWidget {
   final List<dynamic> preferences;
 
   const Preferences({super.key, required this.preferences});
 
-  @override
-  State<Preferences> createState() => _PreferencesState();
-}
-
-class _PreferencesState extends State<Preferences> {
+  
   @override
   Widget build(BuildContext context) {
-    //need to update the container to have conditional rendering if the info isn't there
+    if (preferences.isEmpty) return const SizedBox();
     return Container(
       width: ProfileStyles.containerWidth,
       decoration: ProfileStyles.boxDecoration,
@@ -249,7 +214,7 @@ class _PreferencesState extends State<Preferences> {
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ...widget.preferences.map((p) => Container(
+                      ...preferences.map((p) => Container(
                           alignment: Alignment.center,
                           width: 75,
                           decoration: ProfileStyles.itemBoxDecoration,
@@ -265,16 +230,11 @@ class _PreferencesState extends State<Preferences> {
 }
 
 //sexual preferences box
-class Interests extends StatefulWidget {
+class Interests extends StatelessWidget {
   final List<dynamic> interests;
 
   const Interests({super.key, required this.interests});
 
-  @override
-  State<Interests> createState() => _InterestsState();
-}
-
-class _InterestsState extends State<Interests> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -297,7 +257,7 @@ class _InterestsState extends State<Interests> {
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ...widget.interests.map((i) => Container(
+                      ...interests.map((i) => Container(
                           alignment: Alignment.center,
                           width: 75,
                           decoration: ProfileStyles.itemBoxDecoration,
@@ -313,7 +273,9 @@ class _InterestsState extends State<Interests> {
 }
 
 class UserProfilePage extends StatefulWidget {
-  const UserProfilePage({super.key});
+  final String userId;
+
+  const UserProfilePage({super.key, required this.userId});
 
   @override
   State<UserProfilePage> createState() => _UserProfilePageState();
@@ -322,32 +284,22 @@ class UserProfilePage extends StatefulWidget {
 class _UserProfilePageState extends State<UserProfilePage> {
   //to display loading state until data loads
   bool _isLoading = true;
-  //instance of firebase
-  final firestoreInstance = FirebaseFirestore.instance;
-  DocumentSnapshot? snapshot; //Define snapshot
+  late final LocationService _locationService;
+  late FirebaseService _firebaseService;
+  late String userId;
 
   //get data from firestore
-  void _getData() async {
-    final data = await firestoreInstance
-        .collection("users")
-        .doc(
-            '1a4dZXRtA80tkguo1REw') //needs to be passed as ID based on user that was clicked this is just for testing
-        .get(); //get the data
-    snapshot = data;
-
-    setState(() {
-      _isLoading = false;
-    });
-  }
-
   @override
   void initState() {
     super.initState();
-    _getData(); //loads data as soon as page opens
+    _firebaseService = FirebaseService();
+    _locationService = LocationService();
+    userId = widget.userId ?? _firebaseService.currentUserId!;
   }
 
   @override
   Widget build(BuildContext context) {
+    final isUserProfile = userId == _firebaseService.currentUserId;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
       appBar: AppBar(
@@ -356,46 +308,84 @@ class _UserProfilePageState extends State<UserProfilePage> {
             color: Theme.of(context)
                 .colorScheme
                 .secondaryFixed), //need to make this actually do something and give it color change for press
-        actions: [TextButton(onPressed: () {}, child: const Text("Message"))],
+        actions: [
+          if (!isUserProfile)
+            TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const MessagePage(),
+                    ),
+                  );
+                },
+                child: const Text("Message"))
+        ],
       ),
-      body: SingleChildScrollView(
-          child: Center(
-              child: _isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : Column(
-                      spacing: 20,
-                      children: [
-                        const SizedBox(height: 5),
-                        snapshot!['name'] != null && snapshot!['age'] != null
-                            ? SizedBox(
-                                child: Text(
-                                    "${snapshot!['name']}- ${snapshot!['age']}",
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFFAA4E85),
-                                        fontSize: 22)))
-                            : const SizedBox(),
-                        const ProfileImage(),
-                        snapshot!['bio'] != null
-                            ? AboutMe(bio: snapshot!['bio'])
-                            : const SizedBox(),
-                        KeyInfo(
-                            lookingFor: snapshot!['expectations'],
-                            relationshipStyle: snapshot!['relationship_style'],
-                            height: snapshot!['height'],
-                            sexuality: snapshot!['sexuality'],
-                            genderIdentity: snapshot!['gender'],
-                            pronouns: snapshot!['pronouns'],
-                            relationshipStatus:
-                                snapshot!['relationship_status'],
-                            genderExpression: snapshot!['expression']),
-                        Preferences(
-                          preferences: snapshot!['sexual_pref'],
-                        ),
-                        Interests(interests: snapshot!['interests']),
-                        const SizedBox(height: 10)
-                      ],
-                    ))),
+      body: FutureBuilder<DocumentSnapshot>(
+        future: _firebaseService.getUserProfile(userId),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (!snapshot.hasData || !snapshot.data!.exists) {
+            return const Center(child: Text('User not found'));
+          }
+
+          final data = snapshot.data!.data() as Map<String, dynamic>;
+
+          double distance = double.infinity;
+          print('User Data: $data'); // Debug print to check data structure
+          final lat = data['lat'] as double? ?? 0.0;
+          final lng = data['long'] as double? ?? 0.0;
+          print('User Location: lat=$lat, long=$lng');
+          print('Current LocationService lat=${_locationService.latitude}, long=${_locationService.longitude}');
+
+          if (lat != 0.0 && lng != 0.0 && _locationService.latitude != null && _locationService.longitude != null) {
+            distance = _locationService.calculateDistance(_locationService.latitude!,_locationService.longitude!,lat,lng);
+            print('Distance calculated: $distance km');
+          }
+          return SingleChildScrollView(
+            child: Center(
+              child: Column(
+                spacing: 20,
+                children: [
+                  const SizedBox(height: 5),
+                  //username and age
+                  Text(
+                    //if no name or age, dont show the comma
+                    '${(data['name'] ?? '')}${(((data['name'] ?? '').toString().isNotEmpty && (data['age'] ?? '').toString().isNotEmpty) ? ', ' : '')}${(data['age'] ?? '')}',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.tertiary,
+                    ),
+                  ),
+                  ProfileImage(imageUrl: data['photoURL'] ?? ''),
+                  AboutMe(bio: data['bio'] ?? 'No bio available.'),
+                  KeyInfo(
+                    distance: distance.isFinite ? distance : null,
+                    lookingFor: data['lookingFor'] ?? '',
+                    relationshipStyle: data['relationshipStyle'] ?? '',
+                    height: data['height'] ?? '',
+                    sexuality: data['sexuality'] ?? [],
+                    genderIdentity: data['genderIdentity'] ?? [],
+                    pronouns: data['pronouns'] ?? [],
+                    relationshipStatus: data['relationshipStatus'] ?? '',
+                    genderExpression: data['genderExpression'] ?? [],
+                  ),
+                  Preferences(
+                      preferences: data['sexualPreferences'] ?? []),
+                  Interests(interests: data['interests'] ?? []),
+                  const SizedBox(height: 16),
+                ],
+              ),
+            ),
+          );
+        },
+      )
+
     );
   }
 }
