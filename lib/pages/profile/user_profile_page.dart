@@ -37,6 +37,76 @@ abstract class ProfileStyles {
   static const boxPadding = EdgeInsets.all(8.0);
 }
 
+class HeaderElements extends StatelessWidget {
+  final String name;
+  final String age;
+  final bool isUser;
+  final String userId;
+  final String photoURL;
+  const HeaderElements({
+    super.key,
+    required this.name,
+    required this.age,
+    required this.isUser,
+    required this.userId,
+    required this.photoURL,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: ProfileStyles.containerWidth,
+      padding: ProfileStyles.boxPadding,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // Name and age on the left
+          Flexible(
+            child: Text(
+              '${name}${(name.isNotEmpty && age.isNotEmpty ? ', ' : '')}$age',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.tertiary,
+              ),
+            ),
+          ),
+
+          // Message button on the right with icon
+          if (!isUser)
+            ElevatedButton.icon(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MessagePage(
+                      recipientUid: userId,
+                      recipientName: name,
+                      recipientImage: photoURL,
+                    ),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.chat_bubble_outline),
+              label: const Text("Message"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.secondary,
+                foregroundColor: Theme.of(context).colorScheme.secondaryFixed,
+                elevation: 3,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
 //image box
 class ProfileImage extends StatelessWidget {
   final String? imageUrl;
@@ -316,19 +386,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
             color: Theme.of(context)
                 .colorScheme
                 .secondaryFixed), //need to make this actually do something and give it color change for press
-        actions: [
-          if (!isUserProfile)
-            TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const MessagePage(),
-                    ),
-                  );
-                },
-                child: const Text("Message"))
-        ],
+        centerTitle: true,
+        title: Text(
+          'FNGR',
+          style:
+              TextStyle(color: Theme.of(context).colorScheme.secondaryFixed),
+        ),
       ),
       body: FutureBuilder<DocumentSnapshot>(
         future: _firebaseService.getUserProfile(userId),
@@ -355,16 +418,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
               child: Column(
                 spacing: 20,
                 children: [
-                  const SizedBox(height: 5),
-                  //username and age
-                  Text(
-                    //if no name or age, dont show the comma
-                    '${(data['name'] ?? '')}${(((data['name'] ?? '').toString().isNotEmpty && (data['age'] ?? '').toString().isNotEmpty) ? ', ' : '')}${(data['age'] ?? '')}',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.tertiary,
-                    ),
+                  HeaderElements(
+                    name: data['name'] ?? 'Unknown',
+                    age: data['age']?.toString() ?? 'N/A',
+                    isUser: isUserProfile,
+                    userId: userId,
+                    photoURL: data['photoURL'] ?? '',
                   ),
                   ProfileImage(imageUrl: data['photoURL'] ?? ''),
                   AboutMe(bio: data['bio'] ?? 'No bio available.'),
@@ -389,7 +448,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
           );
         },
       )
-
     );
   }
 }

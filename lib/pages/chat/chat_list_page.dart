@@ -26,9 +26,12 @@ class _ChatListState extends State<ChatList> {
         if (!snapshot.hasData || snapshot.data!.docs.isEmpty){
           return const Center(child: Text("No chats available"));
         }
-        final chats = snapshot.data!.docs;
+        final chats = snapshot.data!.docs.where((chatDoc) {
+          final chatData = chatDoc.data() as Map<String, dynamic>;
+          final lastMessage = chatData['lastMessage'];
+          return lastMessage != null && (lastMessage as String).trim().isNotEmpty;
+        }).toList();
         return ListView.separated(
-            //this list view builder will go inside future builder the will fetch the chats associated with this user
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             separatorBuilder: (context, index) => Padding(
@@ -53,8 +56,16 @@ class _ChatListState extends State<ChatList> {
                       title: Text('Loading...'),
                     );
                   }
-                  final userData =
-                      userSnapshot.data!.data() as Map<String, dynamic>;
+                  print("user snapshot data: ${userSnapshot.data!.data()}");
+                  final data =
+                      userSnapshot.data!.data();
+                  if (data == null) {
+                    return const ListTile(
+                      title: Text('Unknown User'),
+                    );    
+                  }
+                  final userData = data as Map<String, dynamic>;
+
                   final userName = userData['name'] ?? 'Unknown';
                   final lastMessage = chatData['lastMessage'] ?? '';
                   final userPhoto = userData['photoURL'] ?? '';
@@ -69,7 +80,7 @@ class _ChatListState extends State<ChatList> {
                     title: Text(
                       userName,
                       style: TextStyle(
-                          color: Theme.of(context).colorScheme.onPrimary),
+                          color: Theme.of(context).colorScheme.tertiary),
                     ),
                     trailing: const Icon(
                       Icons.chevron_right,
@@ -79,12 +90,11 @@ class _ChatListState extends State<ChatList> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const MessagePage(),
-                          // builder: (context) => MessagePage(
-                          //   recipientUid: otherUserId,
-                          //   recipientName: userName,
-                          //   recipientPhotoURL: userPhoto,
-                          // ),
+                          builder: (context) => MessagePage(
+                            recipientUid: otherUserId,
+                            recipientName: userName,
+                            recipientImage: userPhoto,
+                          ),
                         ),
                       );
                     },
@@ -97,7 +107,6 @@ class _ChatListState extends State<ChatList> {
     );
   }
 }
-
   
 class ChatListPage extends StatefulWidget {
   const ChatListPage({super.key});

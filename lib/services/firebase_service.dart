@@ -206,10 +206,10 @@ class FirebaseService {
     if (currentUserId == null) {
       throw Exception('No user logged in');
     }
+    print('Fetching chats for user: $currentUserId');
     return _firestore
         .collection('chats')
         .where('participants', arrayContains: currentUserId)
-        .orderBy('lastMessageTime', descending: true)
         .snapshots();
   }
 
@@ -219,7 +219,7 @@ class FirebaseService {
         .collection('chats')
         .doc(chatId)
         .collection('messages')
-        .orderBy('createdAt', descending: true)
+        .orderBy('createdAt', descending: false)
         .snapshots();
   }
 
