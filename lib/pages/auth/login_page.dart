@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:test_milestone/pages/auth/create_account.dart';
+import '../../pages/auth/create_account.dart';
 import '../../services/firebase_service.dart';
 import '../../main.dart'; // Import NavMenu
 class LoginPage extends StatefulWidget {

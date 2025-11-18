@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:test_milestone/services/firebase_service.dart';
-import 'package:test_milestone/services/location_service.dart';
+import '/../services/firebase_service.dart';
+import '../services/location_service.dart';
 import 'pages/home/home_page.dart'; // we’ll define this next
 import 'pages/profile/user_profile_page.dart';
-import 'pages/profile/create_profile_page.dart';
 import 'pages/chat/chat_list_page.dart';
 import 'pages/auth/login_page.dart';
 
