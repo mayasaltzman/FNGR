@@ -79,7 +79,6 @@ class _CreateAccountState extends State<CreateAccount> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const SizedBox(height: 300),
               const Text(
                 "Create account baddies", 
                 style: TextStyle(color: Colors.pink),
