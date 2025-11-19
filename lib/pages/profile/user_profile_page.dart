@@ -143,14 +143,8 @@ class AboutMe extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            child: Column(
-              children: [
-                Text("About Me", style: ProfileStyles.boxHeader),
-                Text(bio, style: ProfileStyles.boxText)
-              ],
-            ),
-          ) // render nothing if no bio
+          Text("About Me", style: ProfileStyles.boxHeader),
+          Text(bio, style: ProfileStyles.boxText)
         ],
       ),
     );
@@ -163,6 +157,7 @@ class KeyInfo extends StatelessWidget {
   final String relationshipStyle;
   final String height;
   final double? distance;
+  final String? location;
   final List<dynamic> sexuality;
   final List<dynamic> genderIdentity;
   final List<dynamic> pronouns;
@@ -175,6 +170,7 @@ class KeyInfo extends StatelessWidget {
       required this.relationshipStyle,
       required this.height,
       required this.distance,
+      required this.location,
       required this.sexuality,
       required this.genderIdentity,
       required this.pronouns,
@@ -188,7 +184,7 @@ class KeyInfo extends StatelessWidget {
     //list of fields in key info
     final List<Map<String, dynamic>> fields = [
       {'label': 'Distance', 'value': distance != null ? '${distance!.toStringAsFixed(1)} km away' : 'Unknown'},
-      {'label': 'Location', 'value': 'Location soon'},
+      {'label': 'Location', 'value': location},
       {'label': 'Sexuality','value': sexuality.join(', ')},
       {'label': 'Pronouns','value': pronouns.join(', ')},
       {'label': 'Height','value': height},
@@ -413,38 +409,46 @@ class _UserProfilePageState extends State<UserProfilePage> {
           if (lat != 0.0 && lng != 0.0 && _locationService.latitude != null && _locationService.longitude != null) {
             distance = _locationService.calculateDistance(_locationService.latitude!,_locationService.longitude!,lat,lng);
           }
-          return SingleChildScrollView(
-            child: Center(
-              child: Column(
-                spacing: 20,
-                children: [
-                  HeaderElements(
-                    name: data['name'] ?? 'Unknown',
-                    age: data['age']?.toString() ?? 'N/A',
-                    isUser: isUserProfile,
-                    userId: userId,
-                    photoURL: data['photoURL'] ?? '',
+          return FutureBuilder<String?>(
+              future: _locationService.getCityFromCoordinates(lat, lng),
+              builder: (context, citySnapshot) {
+                final city = citySnapshot.data;
+
+              return SingleChildScrollView(
+                child: Center(
+                  child: Column(
+                    spacing: 20,
+                    children: [
+                      HeaderElements(
+                        name: data['name'] ?? 'Unknown',
+                        age: data['age']?.toString() ?? 'N/A',
+                        isUser: isUserProfile,
+                        userId: userId,
+                        photoURL: data['photoURL'] ?? '',
+                      ),
+                      ProfileImage(imageUrl: data['photoURL'] ?? ''),
+                      AboutMe(bio: data['bio'] ?? 'No bio available.'),
+                      KeyInfo(
+                        distance: distance.isFinite ? distance : null,
+                        location: city ?? 'Unknown',
+                        lookingFor: data['lookingFor'] ?? 'Unknown',
+                        relationshipStyle: data['relationshipStyle'] ?? 'Unknown',
+                        height: data['height'] ?? 'Unknown',
+                        sexuality: data['sexuality'] ?? ['Unknown'],
+                        genderIdentity: data['genderIdentity'] ?? ['Unknown'],
+                        pronouns: data['pronouns'] ?? ['Unknown'],
+                        relationshipStatus: data['relationshipStatus'] ?? 'Unknown',
+                        genderExpression: data['genderExpression'] ?? ['Unknown'],
+                      ),
+                      Preferences(
+                          preferences: data['sexualPreferences'] ?? []),
+                      Interests(interests: data['interests'] ?? []),
+                      const SizedBox(height: 16),
+                    ],
                   ),
-                  ProfileImage(imageUrl: data['photoURL'] ?? ''),
-                  AboutMe(bio: data['bio'] ?? 'No bio available.'),
-                  KeyInfo(
-                    distance: distance.isFinite ? distance : null,
-                    lookingFor: data['lookingFor'] ?? '',
-                    relationshipStyle: data['relationshipStyle'] ?? '',
-                    height: data['height'] ?? '',
-                    sexuality: data['sexuality'] ?? [],
-                    genderIdentity: data['genderIdentity'] ?? [],
-                    pronouns: data['pronouns'] ?? [],
-                    relationshipStatus: data['relationshipStatus'] ?? '',
-                    genderExpression: data['genderExpression'] ?? [],
-                  ),
-                  Preferences(
-                      preferences: data['sexualPreferences'] ?? []),
-                  Interests(interests: data['interests'] ?? []),
-                  const SizedBox(height: 16),
-                ],
-              ),
-            ),
+                ),
+              );
+            },
           );
         },
       )

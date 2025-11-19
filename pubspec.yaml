@@ -19,6 +19,7 @@ dependencies:
   # Geolocation and geo queries
   geolocator: ^11.1.0
   geoflutterfire_plus: ^0.0.33
+  geocoding: ^4.0.0
 
   # State management (simple example uses Provider)
   provider: ^6.1.2
