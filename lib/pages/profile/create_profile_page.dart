@@ -224,6 +224,7 @@ class SingleSelectDropDown extends StatelessWidget {
           width: ProfileStyles.textInputWidth,
           child: DropdownButton<String>(
             hint: const Text("Select"),
+            isExpanded: true,
             value: value,
             items: items
                 .map((status) => DropdownMenuItem<String>(
@@ -236,6 +237,11 @@ class SingleSelectDropDown extends StatelessWidget {
             style: TextStyle(
                 color: Theme.of(context).colorScheme.primaryFixed,
                 fontSize: 16),
+            icon: Icon(Icons.arrow_drop_down,
+                color: Theme.of(context).colorScheme.primaryFixed),
+            menuWidth: 280,
+            elevation: 1,
+            borderRadius: BorderRadius.circular(10),
           ),
         ),
       ],
