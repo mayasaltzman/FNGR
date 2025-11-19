@@ -14,7 +14,7 @@ abstract class ProfileStyles {
       fontWeight: FontWeight.bold, color: Color(0xFFAA4E85), fontSize: 16);
 }
 
-//custom text input field for our form currently unused
+//custom text input field for our form
 class TextInputField extends StatelessWidget {
   final TextEditingController controller;
   final String labelText;
@@ -36,27 +36,32 @@ class TextInputField extends StatelessWidget {
         width: 100,
         child: Text(textType, style: ProfileStyles.inputHeader),
       ),
+      const SizedBox(width: 20),
       SizedBox(
           width: ProfileStyles.textInputWidth,
           height: 50,
           child: TextFormField(
             controller: controller,
-            style: const TextStyle(color: Color(0xFFAA4E85), fontSize: 16),
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.primaryFixed,
+                fontSize: 16),
             decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
-                  borderSide: const BorderSide(color: Color(0xFFFFA96C)),
+                  borderSide:
+                      BorderSide(color: Theme.of(context).colorScheme.tertiary),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
-                  borderSide:
-                      const BorderSide(color: Color(0xFFFFA96C), width: 2),
+                  borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.tertiary, width: 2),
                 ),
                 filled: true,
-                fillColor: const Color(0xFFFFF0E6),
+                fillColor: Theme.of(context).colorScheme.tertiaryContainer,
                 labelText: labelText,
-                labelStyle:
-                    const TextStyle(color: Color(0xFFAA4E85), fontSize: 16)),
+                labelStyle: TextStyle(
+                    color: Theme.of(context).colorScheme.primaryFixed,
+                    fontSize: 16)),
             validator: validator,
           ))
     ]);
@@ -91,6 +96,7 @@ class _ImageButtonState extends State<ImageButton> {
 
   //method for image picking
   //NEED TO CONVERT IMAGE TO STRING FORMAT BUT IM NOT SURE WHAT FORMAT TO USE TBH
+  //also right now when you go to next of the form and then back the images don't save
   Future<void> _pickImage() async {
     final pickedImage = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedImage == null) return;
@@ -108,16 +114,23 @@ class _ImageButtonState extends State<ImageButton> {
       SizedBox(
           width: widget.width,
           height: widget.height,
-          child: _selectedImage != null
-              ? Image.file(_selectedImage!)
-              : FloatingActionButton(
-                  onPressed: () => _pickImage(),
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                      side: const BorderSide(color: Color(0xFFAA4E85))),
-                  child: const Icon(Icons.add),
-                )),
+          child: FloatingActionButton(
+            onPressed: () => _pickImage(),
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+                side: BorderSide(
+                    color: Theme.of(context).colorScheme.primaryFixed)),
+            child: _selectedImage != null
+                ? Image.file(
+                    _selectedImage!,
+                    width: double
+                        .infinity, //this stretch out the image lol Im so confused
+                    height: double.infinity,
+                    fit: BoxFit.fill,
+                  )
+                : const Icon(Icons.add),
+          )),
     ]);
   }
 }
@@ -142,11 +155,41 @@ class MultiSelectDropdown extends StatelessWidget {
         width: 100,
         child: Text(labelText, style: ProfileStyles.inputHeader),
       ),
+      const SizedBox(width: 20),
       SizedBox(
           width: ProfileStyles.textInputWidth,
           child: MultiDropdown(
             items: items, //need to add scrollable
             controller: controller,
+            dropdownDecoration: DropdownDecoration(
+                backgroundColor:
+                    Theme.of(context).colorScheme.primaryContainer),
+            dropdownItemDecoration: DropdownItemDecoration(
+                textColor: Theme.of(context).colorScheme.primaryFixed,
+                selectedBackgroundColor: Theme.of(context).colorScheme.primary,
+                selectedTextColor: Theme.of(context).colorScheme.primaryFixed),
+            fieldDecoration: FieldDecoration(
+                showClearIcon: false,
+                labelStyle: TextStyle(
+                    color: Theme.of(context).colorScheme.primaryFixed),
+                backgroundColor:
+                    Theme.of(context).colorScheme.tertiaryContainer,
+                hintStyle: TextStyle(
+                    color: Theme.of(context).colorScheme.primaryFixed,
+                    fontSize: 18),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.tertiary),
+                    borderRadius: BorderRadius.circular(10)),
+                suffixIcon: Icon(Icons.arrow_drop_down,
+                    color: Theme.of(context).colorScheme.primaryFixed)),
+            chipDecoration: ChipDecoration(
+                backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                labelStyle: TextStyle(
+                    color: Theme.of(context).colorScheme.primaryFixed),
+                deleteIcon: Icon(Icons.close,
+                    color: Theme.of(context).colorScheme.primaryFixed,
+                    size: 15)),
           ))
     ]);
   }
@@ -176,10 +219,12 @@ class SingleSelectDropDown extends StatelessWidget {
           width: 100,
           child: Text(label, style: ProfileStyles.inputHeader),
         ),
+        const SizedBox(width: 20),
         SizedBox(
           width: ProfileStyles.textInputWidth,
           child: DropdownButton<String>(
             hint: const Text("Select"),
+            isExpanded: true,
             value: value,
             items: items
                 .map((status) => DropdownMenuItem<String>(
@@ -188,8 +233,15 @@ class SingleSelectDropDown extends StatelessWidget {
                     ))
                 .toList(),
             onChanged: onChanged,
-            dropdownColor: const Color(0xFFFFF0E6),
-            style: const TextStyle(color: Color(0xFFAA4E85), fontSize: 16),
+            dropdownColor: Theme.of(context).colorScheme.primaryContainer,
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.primaryFixed,
+                fontSize: 16),
+            icon: Icon(Icons.arrow_drop_down,
+                color: Theme.of(context).colorScheme.primaryFixed),
+            menuWidth: 280,
+            elevation: 1,
+            borderRadius: BorderRadius.circular(10),
           ),
         ),
       ],
@@ -454,23 +506,29 @@ class _ProfileFormState extends State<ProfileForm> {
                           keyboardType: TextInputType.multiline,
                           minLines: 3,
                           maxLines: null,
-                          style: const TextStyle(
-                              color: Color(0xFFAA4E85), fontSize: 16),
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.primaryFixed,
+                              fontSize: 16),
                           decoration: InputDecoration(
                             labelText: "Tell us about yourself!",
-                            labelStyle: const TextStyle(
-                                color: Color(0xFFAA4E85), fontSize: 16),
+                            labelStyle: TextStyle(
+                                color:
+                                    Theme.of(context).colorScheme.primaryFixed,
+                                fontSize: 16),
                             filled: true,
-                            fillColor: const Color(0xFFFFF0E6),
+                            fillColor:
+                                Theme.of(context).colorScheme.tertiaryContainer,
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
-                              borderSide:
-                                  const BorderSide(color: Color(0xFFFFA96C)),
+                              borderSide: BorderSide(
+                                  color:
+                                      Theme.of(context).colorScheme.tertiary),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
-                              borderSide: const BorderSide(
-                                  color: Color(0xFFFFA96C), width: 2),
+                              borderSide: BorderSide(
+                                  color: Theme.of(context).colorScheme.tertiary,
+                                  width: 2),
                             ),
                           ),
 
@@ -517,6 +575,21 @@ class _ProfileFormState extends State<ProfileForm> {
                       labelText: "Pronouns",
                       items: pronouns),
                   const SizedBox(height: 15),
+                  MultiSelectDropdown(
+                      controller: sexualPrefController,
+                      labelText: "Sexual Preferences",
+                      items: sexualPrefs),
+                  const SizedBox(height: 15),
+                  MultiSelectDropdown(
+                      controller: genderPresentationController,
+                      labelText: "Gender Presentation",
+                      items: genderPresentations),
+                  const SizedBox(height: 15),
+                  MultiSelectDropdown(
+                      controller: interestsController,
+                      labelText: "Interests",
+                      items: interestOptions),
+                  const SizedBox(height: 70),
                   SingleSelectDropDown(
                     value: _relationshipStatus,
                     label: "Relationship Status",
@@ -548,22 +621,7 @@ class _ProfileFormState extends State<ProfileForm> {
                       });
                     },
                   ),
-                  const SizedBox(height: 15),
-                  MultiSelectDropdown(
-                      controller: sexualPrefController,
-                      labelText: "Sexual Preferences",
-                      items: sexualPrefs),
-                  const SizedBox(height: 15),
-                  MultiSelectDropdown(
-                      controller: genderPresentationController,
-                      labelText: "Gender Presentation",
-                      items: genderPresentations),
-                  const SizedBox(height: 15),
-                  MultiSelectDropdown(
-                      controller: interestsController,
-                      labelText: "Interests",
-                      items: interestOptions),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 50),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -616,16 +674,18 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
           backgroundColor: Theme.of(context).colorScheme.secondary,
           leading: BackButton(
             color: Theme.of(context).colorScheme.secondaryFixed,
-          ), //need to make this actually do something and give it color change for press
+          ),
         ),
         body: const Center(
-          child: Column(
+          child: SingleChildScrollView(
+              child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 5),
               ProfileForm(),
+              SizedBox(height: 30)
             ],
-          ),
+          )),
         ));
   }
 }
