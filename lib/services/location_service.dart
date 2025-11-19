@@ -1,11 +1,13 @@
 // lib/services/location_service.dart
 import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 import 'firebase_service.dart';
 import 'dart:math';
 
 class LocationService {
   static final LocationService _instance = LocationService._internal();
   Position? _currentPosition;
+  String? _currentCity;
   final FirebaseService _firebaseService = FirebaseService();
 
   factory LocationService() {
@@ -17,6 +19,7 @@ class LocationService {
   Position? get currentPosition => _currentPosition;
   double? get latitude => _currentPosition?.latitude;
   double? get longitude => _currentPosition?.longitude;
+  String? get currentCity => _currentCity;
 
   // ============ LOCATION INITIALIZATION ============
 
@@ -47,6 +50,8 @@ class LocationService {
         desiredAccuracy: LocationAccuracy.high,
       );
 
+      await _getLocationCity(_currentPosition!.latitude, _currentPosition!.longitude);
+
       // Update location in Firebase
       if (_firebaseService.isUserAuthenticated()) {
         await _firebaseService.updateUserLocation(
@@ -61,6 +66,55 @@ class LocationService {
       print('Location error: $e');
       return false;
     }
+  }
+
+  // ============ CITY/AREA DETECTION ============
+  Future<void> _getLocationCity(double lat, double long) async {
+    try{
+      List<Placemark> placemark = await placemarkFromCoordinates(lat, long);
+
+      if (placemark.isNotEmpty){
+        final location = placemark.first;
+        
+        _currentCity = _getCityName(location);
+      }
+    } catch (e) {
+      print('Error getting city from coordinates: $e');
+      _currentCity = null;
+    }
+  }
+
+  String _getCityName(Placemark location) {
+    final fullLocation = <String>[];
+
+    if (location.locality != null && location.locality!.isNotEmpty) {
+      fullLocation.add(location.locality!);
+    }
+    if (location.administrativeArea != null && location.administrativeArea!.isNotEmpty) {
+      fullLocation.add(location.administrativeArea!);
+    }
+    if (location.country != null && location.country!.isNotEmpty) {
+      fullLocation.add(location.country!);
+    }
+    
+    return fullLocation.isNotEmpty ? fullLocation.join(', ') : 'Unknown Location';
+  }
+
+    Future<String?> getCityFromCoordinates(double lat, double long) async {
+    try {
+      // Return "Unknown Location" if coordinates are 0,0
+      if (lat == 0.0 && long == 0.0) {
+        return null;
+      }
+      
+      List<Placemark> location = await placemarkFromCoordinates(lat, long);
+      if (location.isNotEmpty) {
+        return _getCityName(location.first);
+      }
+    } catch (e) {
+      print('Error getting city: $e');
+    }
+    return null;
   }
 
   // ============ LOCATION UPDATES ============
