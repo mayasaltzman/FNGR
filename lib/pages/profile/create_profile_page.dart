@@ -175,7 +175,8 @@ class MultiSelectDropdown extends StatelessWidget {
                 backgroundColor:
                     Theme.of(context).colorScheme.tertiaryContainer,
                 hintStyle: TextStyle(
-                    color: Theme.of(context).colorScheme.primaryFixed, fontSize: 18),
+                    color: Theme.of(context).colorScheme.primaryFixed,
+                    fontSize: 18),
                 border: OutlineInputBorder(
                     borderSide: BorderSide(
                         color: Theme.of(context).colorScheme.tertiary),
@@ -231,7 +232,7 @@ class SingleSelectDropDown extends StatelessWidget {
                     ))
                 .toList(),
             onChanged: onChanged,
-            dropdownColor: Theme.of(context).colorScheme.tertiaryContainer,
+            dropdownColor: Theme.of(context).colorScheme.primaryContainer,
             style: TextStyle(
                 color: Theme.of(context).colorScheme.primaryFixed,
                 fontSize: 16),
@@ -568,6 +569,21 @@ class _ProfileFormState extends State<ProfileForm> {
                       labelText: "Pronouns",
                       items: pronouns),
                   const SizedBox(height: 15),
+                  MultiSelectDropdown(
+                      controller: sexualPrefController,
+                      labelText: "Sexual Preferences",
+                      items: sexualPrefs),
+                  const SizedBox(height: 15),
+                  MultiSelectDropdown(
+                      controller: genderPresentationController,
+                      labelText: "Gender Presentation",
+                      items: genderPresentations),
+                  const SizedBox(height: 15),
+                  MultiSelectDropdown(
+                      controller: interestsController,
+                      labelText: "Interests",
+                      items: interestOptions),
+                  const SizedBox(height: 70),
                   SingleSelectDropDown(
                     value: _relationshipStatus,
                     label: "Relationship Status",
@@ -599,22 +615,7 @@ class _ProfileFormState extends State<ProfileForm> {
                       });
                     },
                   ),
-                  const SizedBox(height: 15),
-                  MultiSelectDropdown(
-                      controller: sexualPrefController,
-                      labelText: "Sexual Preferences",
-                      items: sexualPrefs),
-                  const SizedBox(height: 15),
-                  MultiSelectDropdown(
-                      controller: genderPresentationController,
-                      labelText: "Gender Presentation",
-                      items: genderPresentations),
-                  const SizedBox(height: 15),
-                  MultiSelectDropdown(
-                      controller: interestsController,
-                      labelText: "Interests",
-                      items: interestOptions),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 80),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
