@@ -99,7 +99,7 @@ class MessageWidgetState extends State<MessageWidget> {
   Future<void> _initializeChat() async {
     try {
       final existingChatId = await _firebaseService.getExistingChat(widget.recipientUid);
-      print ('existingChatID is $existingChatId');
+      
       if (existingChatId != null){
         _chatId = existingChatId;
         _isAccepted = await _firebaseService.isChatAccepted(_chatId);
@@ -196,7 +196,7 @@ class MessageWidgetState extends State<MessageWidget> {
 }
 
 /// LoadChat: Encapsulates the StreamBuilder and message handling logic
-class LoadChat extends StatelessWidget {
+class LoadChat extends StatefulWidget {
   final String chatId;
   final InMemoryChatController chatController;
   final FirebaseService firebaseService;
@@ -213,11 +213,18 @@ class LoadChat extends StatelessWidget {
   });
 
   @override
+  State<LoadChat> createState() => _LoadChatState();
+}
+
+class _LoadChatState extends State<LoadChat> {
+  bool _initialLoadComplete = false;
+
+  @override
   Widget build(BuildContext context) {
-    if (isNewChat) {
+    if (widget.isNewChat) {
       return Chat(
-        chatController: chatController,
-        currentUserId: firebaseService.currentUserId!,
+        chatController: widget.chatController,
+        currentUserId: widget.firebaseService.currentUserId!,
         backgroundColor: Theme.of(context).colorScheme.primary,
         builders: Builders(
           textMessageBuilder: (context, message, index,
@@ -231,10 +238,10 @@ class LoadChat extends StatelessWidget {
             );
           },
         ),
-        onMessageSend: sendMessage,
+        onMessageSend: widget.sendMessage,
         resolveUser: (userId) async {
           try {
-            final userDoc = await firebaseService.getUserProfile(userId);
+            final userDoc = await widget.firebaseService.getUserProfile(userId);
             final userData = userDoc.data() as Map<String, dynamic>?;
             return User(
               id: userId,
@@ -247,8 +254,15 @@ class LoadChat extends StatelessWidget {
       );
     }
     return StreamBuilder<QuerySnapshot>(
-      stream: firebaseService.getMessagesStream(chatId),
+      stream: widget.firebaseService.getMessagesStream(widget.chatId),
       builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting && !_initialLoadComplete) {
+          return Center(
+            child: CircularProgressIndicator(
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+          );
+        }
         if (snapshot.hasError) {
           return Center(child: Text('Error loading messages'));
         }
@@ -265,15 +279,15 @@ class LoadChat extends StatelessWidget {
             );
 
             // Avoid duplicates
-            if (!chatController.messages.any((m) => m.id == message.id)) {
-              chatController.insertMessage(message);
+            if (!widget.chatController.messages.any((m) => m.id == message.id)) {
+              widget.chatController.insertMessage(message);
             }
           }
         }
 
         return Chat(
-          chatController: chatController,
-          currentUserId: firebaseService.currentUserId!,
+          chatController: widget.chatController,
+          currentUserId: widget.firebaseService.currentUserId!,
           backgroundColor: Theme.of(context).colorScheme.primary,
           builders: Builders(
             textMessageBuilder: (context, message, index,
@@ -287,10 +301,10 @@ class LoadChat extends StatelessWidget {
               );
             },
           ),
-          onMessageSend: sendMessage,
+          onMessageSend: widget.sendMessage,
           resolveUser: (userId) async {
             try {
-              final userDoc = await firebaseService.getUserProfile(userId);
+              final userDoc = await widget.firebaseService.getUserProfile(userId);
               final userData = userDoc.data() as Map<String, dynamic>?;
               return User(
                 id: userId,

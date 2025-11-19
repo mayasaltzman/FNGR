@@ -18,10 +18,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +39,10 @@ class _HomePageState extends State<HomePage> {
           }
 
           final docs = snapshot.data!.docs.where((doc) => doc.id != _firebaseService.currentUserId).toList();
-
+          if (docs.isEmpty) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          
           return GridView.builder(
             padding: const EdgeInsets.all(8),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
