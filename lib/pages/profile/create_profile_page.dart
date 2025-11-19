@@ -36,6 +36,7 @@ class TextInputField extends StatelessWidget {
         width: 100,
         child: Text(textType, style: ProfileStyles.inputHeader),
       ),
+      const SizedBox(width: 20),
       SizedBox(
           width: ProfileStyles.textInputWidth,
           height: 50,
@@ -154,6 +155,7 @@ class MultiSelectDropdown extends StatelessWidget {
         width: 100,
         child: Text(labelText, style: ProfileStyles.inputHeader),
       ),
+      const SizedBox(width: 20),
       SizedBox(
           width: ProfileStyles.textInputWidth,
           child: MultiDropdown(
@@ -173,7 +175,7 @@ class MultiSelectDropdown extends StatelessWidget {
                 backgroundColor:
                     Theme.of(context).colorScheme.tertiaryContainer,
                 hintStyle: TextStyle(
-                    color: Theme.of(context).colorScheme.primaryFixed),
+                    color: Theme.of(context).colorScheme.primaryFixed, fontSize: 18),
                 border: OutlineInputBorder(
                     borderSide: BorderSide(
                         color: Theme.of(context).colorScheme.tertiary),
@@ -216,6 +218,7 @@ class SingleSelectDropDown extends StatelessWidget {
           width: 100,
           child: Text(label, style: ProfileStyles.inputHeader),
         ),
+        const SizedBox(width: 20),
         SizedBox(
           width: ProfileStyles.textInputWidth,
           child: DropdownButton<String>(
