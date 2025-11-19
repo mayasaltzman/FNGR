@@ -621,7 +621,7 @@ class _ProfileFormState extends State<ProfileForm> {
                       });
                     },
                   ),
-                  const SizedBox(height: 80),
+                  const SizedBox(height: 50),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -677,13 +677,15 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
           ),
         ),
         body: const Center(
-          child: Column(
+          child: SingleChildScrollView(
+              child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 5),
               ProfileForm(),
+              SizedBox(height: 30)
             ],
-          ),
+          )),
         ));
   }
 }
