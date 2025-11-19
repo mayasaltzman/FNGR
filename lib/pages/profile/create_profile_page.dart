@@ -41,22 +41,26 @@ class TextInputField extends StatelessWidget {
           height: 50,
           child: TextFormField(
             controller: controller,
-            style: const TextStyle(color: Color(0xFFAA4E85), fontSize: 16),
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.primaryFixed,
+                fontSize: 16),
             decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
-                  borderSide: const BorderSide(color: Color(0xFFFFA96C)),
+                  borderSide:
+                      BorderSide(color: Theme.of(context).colorScheme.tertiary),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
-                  borderSide:
-                      const BorderSide(color: Color(0xFFFFA96C), width: 2),
+                  borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.tertiary, width: 2),
                 ),
                 filled: true,
-                fillColor: const Color(0xFFFFF0E6),
+                fillColor: Theme.of(context).colorScheme.tertiaryContainer,
                 labelText: labelText,
-                labelStyle:
-                    const TextStyle(color: Color(0xFFAA4E85), fontSize: 16)),
+                labelStyle: TextStyle(
+                    color: Theme.of(context).colorScheme.primaryFixed,
+                    fontSize: 16)),
             validator: validator,
           ))
     ]);
@@ -91,6 +95,7 @@ class _ImageButtonState extends State<ImageButton> {
 
   //method for image picking
   //NEED TO CONVERT IMAGE TO STRING FORMAT BUT IM NOT SURE WHAT FORMAT TO USE TBH
+  //also right now when you go to next of the form and then back the images don't save
   Future<void> _pickImage() async {
     final pickedImage = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedImage == null) return;
@@ -113,11 +118,13 @@ class _ImageButtonState extends State<ImageButton> {
             elevation: 0,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
-                side: const BorderSide(color: Color(0xFFAA4E85))),
+                side: BorderSide(
+                    color: Theme.of(context).colorScheme.primaryFixed)),
             child: _selectedImage != null
                 ? Image.file(
                     _selectedImage!,
-                    width: double.infinity, //this stretch out the image lol Im so confused 
+                    width: double
+                        .infinity, //this stretch out the image lol Im so confused
                     height: double.infinity,
                     fit: BoxFit.fill,
                   )
@@ -193,8 +200,10 @@ class SingleSelectDropDown extends StatelessWidget {
                     ))
                 .toList(),
             onChanged: onChanged,
-            dropdownColor: const Color(0xFFFFF0E6),
-            style: const TextStyle(color: Color(0xFFAA4E85), fontSize: 16),
+            dropdownColor: Theme.of(context).colorScheme.tertiaryContainer,
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.primaryFixed,
+                fontSize: 16),
           ),
         ),
       ],
@@ -459,23 +468,29 @@ class _ProfileFormState extends State<ProfileForm> {
                           keyboardType: TextInputType.multiline,
                           minLines: 3,
                           maxLines: null,
-                          style: const TextStyle(
-                              color: Color(0xFFAA4E85), fontSize: 16),
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.primaryFixed,
+                              fontSize: 16),
                           decoration: InputDecoration(
                             labelText: "Tell us about yourself!",
-                            labelStyle: const TextStyle(
-                                color: Color(0xFFAA4E85), fontSize: 16),
+                            labelStyle: TextStyle(
+                                color:
+                                    Theme.of(context).colorScheme.primaryFixed,
+                                fontSize: 16),
                             filled: true,
-                            fillColor: const Color(0xFFFFF0E6),
+                            fillColor:
+                                Theme.of(context).colorScheme.tertiaryContainer,
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
-                              borderSide:
-                                  const BorderSide(color: Color(0xFFFFA96C)),
+                              borderSide: BorderSide(
+                                  color:
+                                      Theme.of(context).colorScheme.tertiary),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
-                              borderSide: const BorderSide(
-                                  color: Color(0xFFFFA96C), width: 2),
+                              borderSide: BorderSide(
+                                  color: Theme.of(context).colorScheme.tertiary,
+                                  width: 2),
                             ),
                           ),
 
