@@ -14,7 +14,7 @@ abstract class ProfileStyles {
       fontWeight: FontWeight.bold, color: Color(0xFFAA4E85), fontSize: 16);
 }
 
-//custom text input field for our form currently unused
+//custom text input field for our form
 class TextInputField extends StatelessWidget {
   final TextEditingController controller;
   final String labelText;
@@ -108,16 +108,21 @@ class _ImageButtonState extends State<ImageButton> {
       SizedBox(
           width: widget.width,
           height: widget.height,
-          child: _selectedImage != null
-              ? Image.file(_selectedImage!)
-              : FloatingActionButton(
-                  onPressed: () => _pickImage(),
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                      side: const BorderSide(color: Color(0xFFAA4E85))),
-                  child: const Icon(Icons.add),
-                )),
+          child: FloatingActionButton(
+            onPressed: () => _pickImage(),
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+                side: const BorderSide(color: Color(0xFFAA4E85))),
+            child: _selectedImage != null
+                ? Image.file(
+                    _selectedImage!,
+                    width: double.infinity, //this stretch out the image lol Im so confused 
+                    height: double.infinity,
+                    fit: BoxFit.fill,
+                  )
+                : const Icon(Icons.add),
+          )),
     ]);
   }
 }
@@ -616,7 +621,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
           backgroundColor: Theme.of(context).colorScheme.secondary,
           leading: BackButton(
             color: Theme.of(context).colorScheme.secondaryFixed,
-          ), //need to make this actually do something and give it color change for press
+          ),
         ),
         body: const Center(
           child: Column(
