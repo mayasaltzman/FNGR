@@ -159,6 +159,34 @@ class MultiSelectDropdown extends StatelessWidget {
           child: MultiDropdown(
             items: items, //need to add scrollable
             controller: controller,
+            dropdownDecoration: DropdownDecoration(
+                backgroundColor:
+                    Theme.of(context).colorScheme.primaryContainer),
+            dropdownItemDecoration: DropdownItemDecoration(
+                textColor: Theme.of(context).colorScheme.primaryFixed,
+                selectedBackgroundColor: Theme.of(context).colorScheme.primary,
+                selectedTextColor: Theme.of(context).colorScheme.primaryFixed),
+            fieldDecoration: FieldDecoration(
+                showClearIcon: false,
+                labelStyle: TextStyle(
+                    color: Theme.of(context).colorScheme.primaryFixed),
+                backgroundColor:
+                    Theme.of(context).colorScheme.tertiaryContainer,
+                hintStyle: TextStyle(
+                    color: Theme.of(context).colorScheme.primaryFixed),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.tertiary),
+                    borderRadius: BorderRadius.circular(10)),
+                suffixIcon: Icon(Icons.arrow_drop_down,
+                    color: Theme.of(context).colorScheme.primaryFixed)),
+            chipDecoration: ChipDecoration(
+                backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                labelStyle: TextStyle(
+                    color: Theme.of(context).colorScheme.primaryFixed),
+                deleteIcon: Icon(Icons.close,
+                    color: Theme.of(context).colorScheme.primaryFixed,
+                    size: 15)),
           ))
     ]);
   }
