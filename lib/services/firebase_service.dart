@@ -1,4 +1,3 @@
-// lib/services/firebase_service.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -171,7 +170,7 @@ class FirebaseService {
   // ============ CHAT METHODS ============
 
   /// Get or create a chat between two users
-  Future<String> getOrCreateChat(String recipientUid) async {
+  Future<String?> getExistingChat(String recipientUid) async {
     if (currentUserId == null) {
       throw Exception('No user logged in');
     }
@@ -187,17 +186,72 @@ class FirebaseService {
       if (existing.docs.isNotEmpty) {
         return existing.docs.first.id;
       }
+      return null;
+    } catch (e) {
+      throw Exception('Failed to get or create chat: $e');
+    }
+  }
 
-      final newChat = await _firestore.collection('chats').add({
-        'participants': participants,
-        'lastMessage': '',
-        'lastMessageTime': FieldValue.serverTimestamp(),
+  ///Send first message and create chat automatically
+  Future<String> sendFirstMessage({
+    required String recipientUid,
+    required String text,
+  }) async {
+    if (currentUserId ==null){
+      throw Exception('No user logged in');
+    }
+    final participants = [currentUserId!, recipientUid]..sort();
+
+    try {
+      final existing = await _firestore
+          .collection('chats')
+          .where('participants', isEqualTo: participants)
+          .limit(1)
+          .get();  
+
+      String chatId;
+      if (existing.docs.isNotEmpty){
+        chatId = existing.docs.first.id;
+      } else {
+        final newChat = await _firestore.collection('chats').add({
+          'participants': participants,
+          'initiatorId': currentUserId,
+          'acceptedMessage': false,
+          'lastMessage': text,
+          'lastMessageTime': FieldValue.serverTimestamp(),
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+        chatId = newChat.id;
+      }
+
+      // Add the message itself!
+      final messageId = _firestore
+          .collection('chats')
+          .doc(chatId)
+          .collection('messages')
+          .doc()
+          .id;
+
+      await _firestore
+          .collection('chats')
+          .doc(chatId)
+          .collection('messages')
+          .doc(messageId)
+          .set({
+        'authorId': currentUserId,
+        'text': text,
         'createdAt': FieldValue.serverTimestamp(),
       });
 
-      return newChat.id;
+      // Update last message in chat
+      await _firestore.collection('chats').doc(chatId).update({
+        'lastMessage': text,
+        'lastMessageTime': FieldValue.serverTimestamp(),
+      });
+
+      return chatId;
     } catch (e) {
-      throw Exception('Failed to get or create chat: $e');
+      throw Exception('Failed to send message: $e');
     }
   }
 
@@ -210,6 +264,30 @@ class FirebaseService {
     return _firestore
         .collection('chats')
         .where('participants', arrayContains: currentUserId)
+        .snapshots();
+  }
+
+  Stream<QuerySnapshot> getUnaccceptedChatsStream(){
+    if (currentUserId == null) {
+      throw Exception('No user logged in');
+    }
+    return _firestore
+        .collection('chats')
+        .where('participants', arrayContains: currentUserId)
+        .where('acceptedMessage', isEqualTo: false)
+        .where('initiatorId', isNotEqualTo: currentUserId)
+        .snapshots();
+  }
+
+  Stream<QuerySnapshot> getAcceptedChatsStream(){
+     if (currentUserId == null) {
+      throw Exception('No user logged in');
+    }
+    return _firestore
+        .collection('chats')
+        .where('participants', arrayContains: currentUserId)
+        .where('acceptedMessage', isEqualTo: true)
+        .where('initiatorId', isNotEqualTo: currentUserId)
         .snapshots();
   }
 
@@ -274,6 +352,67 @@ class FirebaseService {
           .get();
     } catch (e) {
       throw Exception('Failed to load messages: $e');
+    }
+  }
+
+  Future<void> acceptChat(String chatId) async {
+    if (currentUserId == null) {
+      throw Exception('No user logged in');
+    }
+
+    try {
+      await _firestore.collection('chats').doc(chatId).update({
+        'acceptedMessage': true,
+        'acceptedAt': FieldValue.serverTimestamp(),
+      });
+    } catch (e) {
+      throw Exception('Failed to accept chat: $e');
+    }
+  }
+
+  Future<void> rejectChat(String chatId) async {
+    if (currentUserId == null) {
+      throw Exception('No user logged in');
+    }
+    try {
+      final messagesSnapshot = await _firestore
+          .collection('chats')
+          .doc(chatId)
+          .collection('messages')
+          .get();
+
+      for (var doc in messagesSnapshot.docs) {
+        await doc.reference.delete();
+      }
+
+      await _firestore.collection('chats').doc(chatId).delete();
+    } catch (e) {
+      throw Exception('Failed to reject chat: $e');
+    }
+  }
+    
+  Future<bool> isChatAccepted(String chatId) async {
+    try {
+      final doc = await _firestore.collection('chats').doc(chatId).get();
+      if (doc.exists) {
+        return doc.get('acceptedMessage') ?? false;
+      }
+      return false;
+    } catch (e) {
+      throw Exception('Failed to get chat status: $e');
+    }
+  }
+  
+  Future<bool> isCurrentUserInitiator(String chatId) async {
+    try {
+      final doc = await _firestore.collection('chats').doc(chatId).get();
+      if (doc.exists) {
+        final initiatorId = doc.get('initiatorId');
+        return initiatorId == currentUserId;
+      }
+      return false;
+    } catch (e) {
+      throw Exception('Failed to check initiator status: $e');
     }
   }
 
