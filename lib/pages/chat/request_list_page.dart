@@ -25,7 +25,7 @@ class _RequestListPageState extends State<RequestListPage> {
         ),
         body: const SingleChildScrollView(
             child: Center(
-          child: ChatList(), //invoke chatlist from chats
+          child: ChatList(listType: "unaccepted"), //invoke chatlist from chats
         )));
   }
 }

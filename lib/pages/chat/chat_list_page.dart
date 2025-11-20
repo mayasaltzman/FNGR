@@ -6,7 +6,8 @@ import 'message_page.dart';
 
 //widget for the list of chats
 class ChatList extends StatefulWidget {
-  const ChatList({super.key});
+  final String listType;
+  const ChatList({super.key, required this.listType});
 
   @override
   State<ChatList> createState() => _ChatListState();
@@ -14,11 +15,13 @@ class ChatList extends StatefulWidget {
 
 class _ChatListState extends State<ChatList> {
   final FirebaseService _firebaseService = FirebaseService();
-
+  
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: _firebaseService.getUserChatsStream(),
+      stream: widget.listType == "accepted"
+          ? _firebaseService.getAcceptedChatsStream()
+          : _firebaseService.getUnaccceptedChatsStream(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -84,7 +87,7 @@ class _ChatListState extends State<ChatList> {
                     ),
                     trailing: Icon(
                       Icons.chevron_right,
-                      color: Theme.of(context).colorScheme.tertiary,
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
                     onTap: () {
                       Navigator.push(
@@ -108,7 +111,8 @@ class _ChatListState extends State<ChatList> {
 }
 
 class ChatListPage extends StatefulWidget {
-  const ChatListPage({super.key});
+  final String listType;
+  const ChatListPage({super.key, required this.listType});
 
   @override
   State<ChatListPage> createState() => _ChatListPageState();
@@ -133,9 +137,9 @@ class _ChatListPageState extends State<ChatListPage> {
                 child: const Text("Message Requests"))
           ],
         ),
-        body: const SingleChildScrollView(
+        body: SingleChildScrollView(
             child: Center(
-          child: ChatList(),
+          child: ChatList(listType: widget.listType),
         )));
   }
 }
