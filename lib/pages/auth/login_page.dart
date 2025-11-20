@@ -103,7 +103,7 @@ class _LoginState extends State<LoginPage> {
                   style: ProfileStyles.boxText,
                   decoration: InputDecoration(
                     border: InputBorder.none,
-                    labelText: 'Enter your username (email)',
+                    labelText: 'Enter your email',
                     labelStyle: ProfileStyles.boxText,
                   ),
               ), 

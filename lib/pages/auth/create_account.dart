@@ -3,6 +3,30 @@ import 'package:flutter/material.dart';
 import '../../services/firebase_service.dart';
 import '../../pages/profile/create_profile_page.dart';
 
+//styles for the page
+abstract class ProfileStyles {
+  //styles for boxes
+  static BoxDecoration boxDecoration = BoxDecoration(
+      color: const Color(0xFFFFF0E6),
+      borderRadius: BorderRadius.circular(15.0),
+      border: Border.all(
+        color: const Color(0xFFFF9B55),
+        width: 1,
+      ));
+
+  //text styles for headings in boxes
+  static TextStyle boxHeader = const TextStyle(
+      fontWeight: FontWeight.bold, color: Color(0xFFFF9B55), fontSize: 16);
+
+  //text styles for text in boxes
+  static TextStyle boxText = const TextStyle(
+      fontWeight: FontWeight.normal, color: Color(0xFFAA4E85), fontSize: 16);
+
+  static const containerWidth = 375.0;
+
+  static const boxPadding = EdgeInsets.all(8.0);
+}
+
 class CreateAccount extends StatefulWidget {
   const CreateAccount({super.key});
 
@@ -79,43 +103,43 @@ class _CreateAccountState extends State<CreateAccount> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const Text(
-                "Create account baddies", 
-                style: TextStyle(color: Colors.pink),
+              Text(
+                "Create FNGR Account", 
+                style: ProfileStyles.boxHeader,
               ),
               
               const SizedBox(height: 30),
-              TextField(
-                controller: _emailController,
-                style: TextStyle(color:Colors.pink),
-                decoration: InputDecoration(
-                  labelText: 'Enter your email',
-                  labelStyle: TextStyle(color:Colors.pink),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.orange, width: 1.0),
+              Container(      
+                decoration: ProfileStyles.boxDecoration,
+                padding: ProfileStyles.boxPadding,
+                width: ProfileStyles.containerWidth,         
+                child: TextField(
+                  controller: _emailController,
+                  style: ProfileStyles.boxText,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    labelText: 'Enter your email',
+                    labelStyle: ProfileStyles.boxText,
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.orange, width: 2.0),
-                  ),
-                ),
-              ), 
-              
+                ), 
+              ),
+
               const SizedBox(height: 10),
-              TextField(
-                controller: _passwordController,
-                style: TextStyle(color:Colors.pink),
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'Enter your password',
-                  labelStyle: TextStyle(color:Colors.pink),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.orange, width: 1.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.orange, width: 2.0),
-                  ),
+              Container(
+                decoration: ProfileStyles.boxDecoration,
+                padding: ProfileStyles.boxPadding,
+                width: ProfileStyles.containerWidth,
+                child: TextField(
+                  controller: _passwordController,
+                  style: ProfileStyles.boxText,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    labelText: 'Enter your password',
+                    labelStyle: ProfileStyles.boxText,
+                  ), 
                 ),
-              ), 
+              ),
               
               const SizedBox(height: 30),
               ElevatedButton(
@@ -128,9 +152,9 @@ class _CreateAccountState extends State<CreateAccount> {
                         width: 20,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : const Text(
+                    : Text(
                         "Create Account",
-                        style: TextStyle(color: Colors.pink),
+                        style: ProfileStyles.boxText,
                       ),
               ),
             ],
