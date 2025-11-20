@@ -169,25 +169,32 @@ class _ImageButtonState extends State<ImageButton> {
   Widget build(BuildContext context) {
     return Column(children: [
       SizedBox(
-          width: widget.width,
-          height: widget.height,
-          child: FloatingActionButton(
-            onPressed: () => _pickImage(),
-            elevation: 0,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
-                side: BorderSide(
-                    color: Theme.of(context).colorScheme.primaryFixed)),
-            child: _selectedImage != null
-                ? Image.file(
-                    _selectedImage!,
-                    width: double
-                        .infinity, //this stretch out the image lol Im so confused
-                    height: double.infinity,
-                    fit: BoxFit.fill,
-                  )
-                : const Icon(Icons.add),
-          )),
+        width: widget.width,
+        height: widget.height,
+        child: InkWell(
+          onTap: _pickImage,
+          borderRadius: BorderRadius.circular(15),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Theme.of(context).colorScheme.primaryFixed,
+                ),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: _selectedImage != null
+                  ? Image.file(
+                      _selectedImage!,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: double.infinity,
+                    )
+                  : const Center(child: Icon(Icons.add, color: Colors.white)),
+            ),
+          ),
+        ),
+      ),
     ]);
   }
 }
@@ -280,7 +287,9 @@ class SingleSelectDropDown extends StatelessWidget {
         SizedBox(
           width: ProfileStyles.textInputWidth,
           child: DropdownButton<String>(
-            hint: Text("Select", style: TextStyle(color: Theme.of(context).colorScheme.primaryFixed)),
+            hint: Text("Select",
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.primaryFixed)),
             isExpanded: true,
             value: value,
             items: items
@@ -376,7 +385,7 @@ class _ProfileFormState extends State<ProfileForm> {
 
   //handles form submission
   void _submitForm() async {
-    _formKey.currentState!.save();
+    // _formKey.currentState!.save();
     //get values from multiselect drop down and convert them to type list
     _name = _nameController.text;
     _age = _ageController.text;
@@ -566,8 +575,6 @@ class _ProfileFormState extends State<ProfileForm> {
                   const SizedBox(height: 15),
                   TextInputFieldLong(controller: _bioController),
                   const SizedBox(height: 20),
-
-                  //button to navigate to next part of the form
                   Align(
                     alignment: Alignment.centerRight,
                     child: ElevatedButton(
