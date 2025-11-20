@@ -2,6 +2,31 @@ import 'package:flutter/material.dart';
 import '../../pages/auth/create_account.dart';
 import '../../services/firebase_service.dart';
 import '../../main.dart'; // Import NavMenu
+
+//styles for the page
+abstract class ProfileStyles {
+  //styles for boxes
+  static BoxDecoration boxDecoration = BoxDecoration(
+      color: const Color(0xFFFFF0E6),
+      borderRadius: BorderRadius.circular(15.0),
+      border: Border.all(
+        color: const Color(0xFFFF9B55),
+        width: 1,
+      ));
+
+  //text styles for headings in boxes
+  static TextStyle boxHeader = const TextStyle(
+      fontWeight: FontWeight.bold, color: Color(0xFFFF9B55), fontSize: 16);
+
+  //text styles for text in boxes
+  static TextStyle boxText = const TextStyle(
+      fontWeight: FontWeight.normal, color: Color(0xFFAA4E85), fontSize: 16);
+
+  static const containerWidth = 375.0;
+
+  static const boxPadding = EdgeInsets.all(8.0);
+}
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -63,52 +88,53 @@ class _LoginState extends State<LoginPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const Text(
-                "Login page baddies", 
-                style: TextStyle(color: Colors.pink),
+              Text(
+                "Login to FNGR", 
+                style: ProfileStyles.boxHeader,
               ),
               
               const SizedBox(height: 30),
-              TextField(
-                controller: _emailController,
-                style: TextStyle(color:Colors.pink),
-                decoration: InputDecoration(
-                  labelText: 'Enter your username (email)',
-                  labelStyle: TextStyle(color:Colors.pink),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.orange, width: 1.0),
+              Container(  
+                decoration: ProfileStyles.boxDecoration,
+                padding: ProfileStyles.boxPadding,
+                width: ProfileStyles.containerWidth,            
+                child: TextField(
+                  controller: _emailController,
+                  style: ProfileStyles.boxText,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    labelText: 'Enter your username (email)',
+                    labelStyle: ProfileStyles.boxText,
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.orange, width: 2.0),
-                  ),
-                ),
               ), 
+            ),
+
               
               const SizedBox(height: 10),
-              TextField(
-                controller: _passwordController,
-                style: TextStyle(color:Colors.pink),
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'Enter your password',
-                  labelStyle: TextStyle(color:Colors.pink),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.orange, width: 1.0),
+              Container(
+                decoration: ProfileStyles.boxDecoration,
+                padding: ProfileStyles.boxPadding,
+                width: ProfileStyles.containerWidth, 
+                child: TextField(
+                  controller: _passwordController,
+                  style: ProfileStyles.boxText,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    labelText: 'Enter your password',
+                    labelStyle: ProfileStyles.boxText,
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.orange, width: 2.0),
-                  ),
-                ),
-              ), 
-              
+                ), 
+              ),
+          
               const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: isLoading ? null : () {
                   _signIn();
               },
-                child: const Text(
+                child: Text(
                   "Login",
-                  style: TextStyle(color: Colors.pink),
+                  style: ProfileStyles.boxText,
                 ),
               ),
               
@@ -116,9 +142,9 @@ class _LoginState extends State<LoginPage> {
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateAccount()));
               },
-                child: const Text(
+                child: Text(
                   "Create account", 
-                  style: TextStyle(color: Colors.pink),
+                  style: ProfileStyles.boxText,
                 ),
               ),
             ],
