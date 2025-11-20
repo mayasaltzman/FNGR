@@ -13,6 +13,14 @@ abstract class ProfileStyles {
 
   static TextStyle inputHeader = const TextStyle(
       fontWeight: FontWeight.bold, color: Color(0xFFAA4E85), fontSize: 16);
+
+  static final ButtonStyle button = ElevatedButton.styleFrom(
+    backgroundColor: const Color(0xFFD461A6), // static color
+    fixedSize: const Size(110, 50),
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(12)),
+    ),
+  );
 }
 
 //custom text input field for our form
@@ -359,7 +367,7 @@ class _ProfileFormState extends State<ProfileForm> {
 
   //for conditional rendering of steps of the form
   void _updateFormStep() {
-    _formKey.currentState!.save(); //gets values from text form
+    // _formKey.currentState!.save(); //gets values from text form
     setState(() {
       additionalInfo = !additionalInfo;
       keyInfo = !keyInfo;
@@ -564,12 +572,7 @@ class _ProfileFormState extends State<ProfileForm> {
                     alignment: Alignment.centerRight,
                     child: ElevatedButton(
                         onPressed: _updateFormStep,
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                Theme.of(context).colorScheme.secondary,
-                            fixedSize: const Size(100, 50),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12))),
+                        style: ProfileStyles.button,
                         child: const Text("Next")),
                   )
                 ],
@@ -649,21 +652,11 @@ class _ProfileFormState extends State<ProfileForm> {
                       children: [
                         ElevatedButton(
                             onPressed: _updateFormStep,
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.secondary,
-                                fixedSize: const Size(110, 50),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12))),
+                            style: ProfileStyles.button,
                             child: const Text("Previous")),
                         ElevatedButton(
                             onPressed: _submitForm,
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.secondary,
-                                fixedSize: const Size(100, 50),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12))),
+                            style: ProfileStyles.button,
                             child: const Text("Finish"))
                       ]),
                 ]
