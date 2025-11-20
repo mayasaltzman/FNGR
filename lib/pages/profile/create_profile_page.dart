@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
+import '../../main.dart';
 
 //styles for profile page
 abstract class ProfileStyles {
@@ -350,6 +351,15 @@ class _ProfileFormState extends State<ProfileForm> {
       'bio': _bio //,
       // 'photoURL': _images
     });
+
+    //reroute to home at first page of nav menu
+    if (mounted) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => const NavMenu()),
+        (route) => false
+      );
+    }
+    
   }
 
   @override

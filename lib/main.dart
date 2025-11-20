@@ -46,8 +46,8 @@ class MyApp extends StatelessWidget {
               bodySmall: TextStyle(fontSize: 14))),
       debugShowCheckedModeBanner: false,
       // home: const HomePage(),
-      //home: const LoginPage(),
-      home: const CreateProfilePage(),
+      home: const LoginPage(),
+      //home: const CreateProfilePage(),
     );
   }
 }
@@ -101,7 +101,7 @@ class _NavMenuState extends State<NavMenu> {
             icon: Icon(Icons.person),
             label: 'Profile',
           ),
-           BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(Icons.chat_bubble_rounded),
             label: 'Chat',
           ),
