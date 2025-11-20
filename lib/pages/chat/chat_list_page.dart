@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../services/firebase_service.dart';
+import './request_list_page.dart';
 import 'message_page.dart';
 
 //widget for the list of chats
@@ -14,7 +15,6 @@ class ChatList extends StatefulWidget {
 class _ChatListState extends State<ChatList> {
   final FirebaseService _firebaseService = FirebaseService();
 
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -23,13 +23,14 @@ class _ChatListState extends State<ChatList> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
-        if (!snapshot.hasData || snapshot.data!.docs.isEmpty){
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
           return const Center(child: Text("No chats available"));
         }
         final chats = snapshot.data!.docs.where((chatDoc) {
           final chatData = chatDoc.data() as Map<String, dynamic>;
           final lastMessage = chatData['lastMessage'];
-          return lastMessage != null && (lastMessage as String).trim().isNotEmpty;
+          return lastMessage != null &&
+              (lastMessage as String).trim().isNotEmpty;
         }).toList();
         return ListView.separated(
             physics: const NeverScrollableScrollPhysics(),
@@ -41,13 +42,13 @@ class _ChatListState extends State<ChatList> {
                   thickness: 0.75,
                   color: Theme.of(context).colorScheme.tertiary,
                 )),
-            itemCount: chats.length, //change to actual number from future builder
+            itemCount: chats.length,
             itemBuilder: (context, index) {
               final chatDoc = chats[index];
               final chatData = chatDoc.data() as Map<String, dynamic>;
               final participants = chatData['participants'] as List<dynamic>;
-              final otherUserId = participants.firstWhere(
-                  (id) => id != _firebaseService.currentUserId);
+              final otherUserId = participants
+                  .firstWhere((id) => id != _firebaseService.currentUserId);
               return FutureBuilder<DocumentSnapshot>(
                 future: _firebaseService.getUserProfile(otherUserId),
                 builder: (context, userSnapshot) {
@@ -57,12 +58,11 @@ class _ChatListState extends State<ChatList> {
                     );
                   }
                   print("user snapshot data: ${userSnapshot.data!.data()}");
-                  final data =
-                      userSnapshot.data!.data();
+                  final data = userSnapshot.data!.data();
                   if (data == null) {
                     return const ListTile(
                       title: Text('Unknown User'),
-                    );    
+                    );
                   }
                   final userData = data as Map<String, dynamic>;
 
@@ -72,19 +72,19 @@ class _ChatListState extends State<ChatList> {
 
                   return ListTile(
                     leading: CircleAvatar(
-                      backgroundImage: userPhoto.isNotEmpty
-                          ? NetworkImage(userPhoto)
-                          : null,
-                      child: userPhoto.isEmpty ? const Icon(Icons.person) : null,
+                      backgroundImage:
+                          userPhoto.isNotEmpty ? NetworkImage(userPhoto) : null,
+                      child:
+                          userPhoto.isEmpty ? const Icon(Icons.person) : null,
                     ),
                     title: Text(
                       userName,
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.tertiary),
                     ),
-                    trailing: const Icon(
+                    trailing: Icon(
                       Icons.chevron_right,
-                      color: Colors.pink,
+                      color: Theme.of(context).colorScheme.tertiary,
                     ),
                     onTap: () {
                       Navigator.push(
@@ -101,13 +101,12 @@ class _ChatListState extends State<ChatList> {
                   );
                 },
               );
-            }
-        );
+            });
       },
     );
   }
 }
-  
+
 class ChatListPage extends StatefulWidget {
   const ChatListPage({super.key});
 
@@ -123,7 +122,15 @@ class _ChatListPageState extends State<ChatListPage> {
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.secondary,
           actions: [
-            TextButton(onPressed: () {}, child: const Text("Message Requests"))
+            TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const RequestListPage()),
+                  );
+                },
+                child: const Text("Message Requests"))
           ],
         ),
         body: const SingleChildScrollView(

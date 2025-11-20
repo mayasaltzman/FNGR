@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'chat_list_page.dart';
 
-class ChatRequestListPage extends StatefulWidget {
-  const ChatRequestListPage({super.key});
+class RequestListPage extends StatefulWidget {
+  const RequestListPage({super.key});
 
   @override
-  State<ChatRequestListPage> createState() => _ChatRequestListPageState();
+  State<RequestListPage> createState() => _RequestListPageState();
 }
 
-class _ChatRequestListPageState extends State<ChatRequestListPage> {
+class _RequestListPageState extends State<RequestListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
