@@ -280,7 +280,7 @@ class SingleSelectDropDown extends StatelessWidget {
         SizedBox(
           width: ProfileStyles.textInputWidth,
           child: DropdownButton<String>(
-            hint: const Text("Select"),
+            hint: Text("Select", style: TextStyle(color: Theme.of(context).colorScheme.primaryFixed)),
             isExpanded: true,
             value: value,
             items: items
@@ -478,7 +478,7 @@ class _ProfileFormState extends State<ProfileForm> {
       'monogamous',
       'polyamorous',
       'ethical non monagamy',
-      'relationship anarachy',
+      'relationship anarchy',
       'swinging',
       'exploring'
     ];
