@@ -69,6 +69,54 @@ class TextInputField extends StatelessWidget {
   }
 }
 
+//long text input field for bio and such
+class TextInputFieldLong extends StatelessWidget {
+  final TextEditingController controller;
+  final FormFieldValidator<String>? validator;
+
+  const TextInputFieldLong({
+    super.key,
+    required this.controller,
+    this.validator,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+      SizedBox(
+          width: 350,
+          child: TextFormField(
+            //add validator
+            controller: controller,
+            keyboardType: TextInputType.multiline,
+            minLines: 3,
+            maxLines: null,
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.primaryFixed,
+                fontSize: 16),
+            decoration: InputDecoration(
+              labelText: "Tell us about yourself!",
+              labelStyle: TextStyle(
+                  color: Theme.of(context).colorScheme.primaryFixed,
+                  fontSize: 16),
+              filled: true,
+              fillColor: Theme.of(context).colorScheme.tertiaryContainer,
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide:
+                    BorderSide(color: Theme.of(context).colorScheme.tertiary),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: BorderSide(
+                    color: Theme.of(context).colorScheme.tertiary, width: 2),
+              ),
+            ),
+          ))
+    ]);
+  }
+}
+
 //custom image button widget to get images from user
 class ImageButton extends StatefulWidget {
   final File? image;
@@ -269,6 +317,7 @@ class _ProfileFormState extends State<ProfileForm> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _ageController = TextEditingController();
   final TextEditingController _heightController = TextEditingController();
+  final TextEditingController _bioController = TextEditingController();
 
   //controllers for managing multiselect dropdowns
   final MultiSelectController<String> sexualityController =
@@ -324,6 +373,7 @@ class _ProfileFormState extends State<ProfileForm> {
     _name = _nameController.text;
     _age = _ageController.text;
     _height = _heightController.text;
+    _bio = _bioController.text;
     _sexuality = sexualityController.selectedItems.map((e) => e.value).toList();
     _genderIdentity =
         genderController.selectedItems.map((e) => e.value).toList();
@@ -355,11 +405,9 @@ class _ProfileFormState extends State<ProfileForm> {
     //reroute to home at first page of nav menu
     if (mounted) {
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => const NavMenu()),
-        (route) => false
-      );
+          MaterialPageRoute(builder: (context) => const NavMenu()),
+          (route) => false);
     }
-    
   }
 
   @override
@@ -508,43 +556,7 @@ class _ProfileFormState extends State<ProfileForm> {
                   const SizedBox(height: 15),
                   Text("About me", style: ProfileStyles.inputHeader),
                   const SizedBox(height: 15),
-                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                    SizedBox(
-                        width: 350,
-                        child: TextFormField(
-                          //add validator
-                          keyboardType: TextInputType.multiline,
-                          minLines: 3,
-                          maxLines: null,
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.primaryFixed,
-                              fontSize: 16),
-                          decoration: InputDecoration(
-                            labelText: "Tell us about yourself!",
-                            labelStyle: TextStyle(
-                                color:
-                                    Theme.of(context).colorScheme.primaryFixed,
-                                fontSize: 16),
-                            filled: true,
-                            fillColor:
-                                Theme.of(context).colorScheme.tertiaryContainer,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              borderSide: BorderSide(
-                                  color:
-                                      Theme.of(context).colorScheme.tertiary),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              borderSide: BorderSide(
-                                  color: Theme.of(context).colorScheme.tertiary,
-                                  width: 2),
-                            ),
-                          ),
-
-                          onSaved: (value) => _bio = value!,
-                        ))
-                  ]),
+                  TextInputFieldLong(controller: _bioController),
                   const SizedBox(height: 20),
 
                   //button to navigate to next part of the form
