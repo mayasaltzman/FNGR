@@ -20,7 +20,7 @@ class _ChatListState extends State<ChatList> {
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: widget.listType == "accepted"
-          ? _firebaseService.getAcceptedChatsStream()
+          ? _firebaseService.getAcceptedChatsStream() //I think its not showing cause it should be user chats
           : _firebaseService.getUnaccceptedChatsStream(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
