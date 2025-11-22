@@ -13,21 +13,36 @@ abstract class ProfileStyles {
       color: const Color.fromARGB(255, 214, 212, 210),
       width: 1, 
     ));
+    
+  static ButtonStyle get buttonStyle => ElevatedButton.styleFrom(
+    backgroundColor: const Color(0xFFD461A6),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(15.0),
+      side: const BorderSide(
+        color: Color.fromARGB(255, 214, 212, 210),
+        width: 1,
+      ),
+    ),
+    padding: const EdgeInsets.symmetric(vertical: 14),
+  );
 
   //text styles for headings in boxes
   static TextStyle get boxHeader => const TextStyle(
     fontWeight: FontWeight.bold, color: Color.fromARGB(255, 255, 255, 255), fontSize: 40);
 
-  //text styles for text in boxes
+  //text styles for text above boxes
   static TextStyle get instructionText => const TextStyle(
-    fontWeight: FontWeight.normal, color: Color(0xFFAA4E85), fontSize: 16);
+    fontWeight: FontWeight.normal, color: Color(0xFF9F497D), fontSize: 16);
 
   static TextStyle get boxText => const TextStyle(
-    fontWeight: FontWeight.w200, color: Color.fromARGB(255, 123, 123, 123), fontSize: 16);
+    fontWeight: FontWeight.w200, color: Color(0xFF1F1F1F), fontSize: 16);
+  
+  static TextStyle get buttonText => const TextStyle(
+    fontWeight: FontWeight.w900, color: Color.fromARGB(255, 255, 255, 255), fontSize: 16);
 
   static const containerWidth = 375.0;
 
-  static const boxPadding = EdgeInsets.symmetric(vertical: 1, horizontal: 4);
+  static const boxPadding = EdgeInsets.symmetric(vertical: 1, horizontal: 8);
 }
 
 class LoginPage extends StatefulWidget {
@@ -86,7 +101,7 @@ class _LoginState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 253, 214, 186),
+      backgroundColor: const Color(0xFFFFE0CA),
       //body: Center(
         body: SingleChildScrollView(
           child: Column(
@@ -126,7 +141,7 @@ class _LoginState extends State<LoginPage> {
               ),
 
               Padding(
-                padding: const EdgeInsets.only(right: 290.0, top: 20),              
+                padding: const EdgeInsets.only(right: 290.0, top: 10),              
                 child: Text(
                   "Password",
                   style: ProfileStyles.instructionText,
@@ -152,23 +167,33 @@ class _LoginState extends State<LoginPage> {
                 ),
               ),
 
-              ElevatedButton(
-                onPressed: isLoading ? null : () {
-                  _signIn();
-              },
-                child: Text(
-                  "Login",
-                  style: ProfileStyles.boxText,
+              Container( 
+                padding: ProfileStyles.boxPadding,
+                width: ProfileStyles.containerWidth,             
+                child: ElevatedButton(
+                  style: ProfileStyles.buttonStyle,
+                  onPressed: isLoading ? null : () {
+                    _signIn();
+                  },
+                  child: Text(
+                    "Login",
+                    style: ProfileStyles.buttonText,
+                  ),
                 ),
               ),
-              
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateAccount()));
-              },
-                child: Text(
-                  "Create account", 
-                  style: ProfileStyles.boxText,
+
+              Container(
+                padding: ProfileStyles.boxPadding,
+                width: ProfileStyles.containerWidth,
+                child: ElevatedButton(
+                  style: ProfileStyles.buttonStyle,
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateAccount()));
+                  },
+                  child: Text(
+                    "Create account", 
+                    style: ProfileStyles.buttonText,
+                  ),
                 ),
               ),
             ],
