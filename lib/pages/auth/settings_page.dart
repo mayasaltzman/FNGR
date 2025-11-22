@@ -73,7 +73,9 @@ class _SettingsState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       backgroundColor: const Color(0xFFFFE0CA),
+
       body: SingleChildScrollView(
         child: Align(
           alignment: Alignment.topLeft,
@@ -82,6 +84,7 @@ class _SettingsState extends State<SettingsPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+
                 Padding(
                   padding: const EdgeInsets.only(top: 30),
                   child: Text(
@@ -238,6 +241,26 @@ class _SettingsState extends State<SettingsPage> {
                     ),
                   ),
                 ),
+
+
+                Text(
+                  "Settings",
+                  style: ProfileStyles.boxHeader.copyWith(
+                    fontSize: 26 / MediaQuery.of(context).textScaleFactor,
+                  ),
+                ),
+                const SizedBox(height: 30),
+
+                /*const SizedBox(height: 30),
+                ElevatedButton(
+                  onPressed: isLoading ? null : () {
+                    //_signIn();
+                    },
+                  child: Text(
+                    "Login",
+                    style: ProfileStyles.boxText,
+                  ),
+                ),*/
 
               ],
             ),
