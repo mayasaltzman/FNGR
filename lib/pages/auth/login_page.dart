@@ -28,7 +28,7 @@ abstract class ProfileStyles {
 
   //text styles for headings in boxes
   static TextStyle get boxHeader => const TextStyle(
-    fontWeight: FontWeight.bold, color: Color.fromARGB(255, 255, 255, 255), fontSize: 40);
+    fontWeight: FontWeight.bold, color: Color.fromARGB(255, 255, 255, 255), fontSize: 50);
 
   //text styles for text above boxes
   static TextStyle get instructionText => const TextStyle(
@@ -109,13 +109,13 @@ class _LoginState extends State<LoginPage> {
               Padding( 
                 padding: const EdgeInsets.only(top: 200),             
                 child: Text(
-                  "Login to FNGR", 
+                  "FNGR", 
                   style: ProfileStyles.boxHeader,
                 ),
               ),
 
               Padding(
-                padding: const EdgeInsets.only(right: 320.0, top: 50),              
+                padding: const EdgeInsets.only(right: 320.0, top: 40),              
                 child: Text(
                   "Email",
                   style: ProfileStyles.instructionText,
@@ -167,32 +167,65 @@ class _LoginState extends State<LoginPage> {
                 ),
               ),
 
-              Container( 
-                padding: ProfileStyles.boxPadding,
-                width: ProfileStyles.containerWidth,             
-                child: ElevatedButton(
-                  style: ProfileStyles.buttonStyle,
-                  onPressed: isLoading ? null : () {
-                    _signIn();
-                  },
-                  child: Text(
-                    "Login",
-                    style: ProfileStyles.buttonText,
+              Padding(
+                padding: const EdgeInsets.only(top: 70),
+                child: Container( 
+                  padding: ProfileStyles.boxPadding,
+                  width: ProfileStyles.containerWidth,             
+                  child: ElevatedButton(
+                    style: ProfileStyles.buttonStyle,
+                    onPressed: isLoading ? null : () {
+                      _signIn();
+                    },
+                    child: Text(
+                      "Login",
+                      style: ProfileStyles.buttonText,
+                    ),
                   ),
                 ),
               ),
-
-              Container(
-                padding: ProfileStyles.boxPadding,
-                width: ProfileStyles.containerWidth,
-                child: ElevatedButton(
-                  style: ProfileStyles.buttonStyle,
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateAccount()));
-                  },
-                  child: Text(
-                    "Create account", 
-                    style: ProfileStyles.buttonText,
+ 
+              const Padding(
+                padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),  
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Divider(
+                        color: Colors.black,
+                        thickness: 0.5,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(
+                        "Don't have an account?",
+                        style: TextStyle(color: Colors.black, fontWeight: FontWeight.w200),
+                      ),
+                    ),
+                    Expanded(
+                      child: Divider(
+                        color: Colors.black,
+                        thickness: 0.5,
+                      ),
+                    ),
+                  ],
+                ),
+              ), 
+ 
+              Padding(
+                padding: const EdgeInsets.only(top:   10.0),
+                child: Container(
+                  padding: ProfileStyles.boxPadding,
+                  width: ProfileStyles.containerWidth,
+                  child: ElevatedButton(
+                    style: ProfileStyles.buttonStyle,
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateAccount()));
+                    },
+                    child: Text(
+                      "Create account", 
+                      style: ProfileStyles.buttonText,
+                    ),
                   ),
                 ),
               ),
