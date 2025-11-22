@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+import '../../main.dart';
 
 //styles for profile page
 abstract class ProfileStyles {
@@ -11,7 +13,15 @@ abstract class ProfileStyles {
   static const textInputWidth = 250.0;
 
   static TextStyle inputHeader = const TextStyle(
-      fontWeight: FontWeight.bold, color: Color(0xFFAA4E85), fontSize: 16);
+      fontWeight: FontWeight.bold, color: Color(0xFFAA4E85), fontSize: 18);
+
+  static final ButtonStyle button = ElevatedButton.styleFrom(
+    backgroundColor: const Color(0xFFD461A6), 
+    fixedSize: const Size(110, 50),
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(12)),
+    ),
+  );
 }
 
 //custom text input field for our form
@@ -31,14 +41,16 @@ class TextInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       SizedBox(
-        width: 100,
-        child: Text(textType, style: ProfileStyles.inputHeader),
+        child: Text(
+          textType,
+          style: ProfileStyles.inputHeader,
+          softWrap: true,
+        ),
       ),
       const SizedBox(width: 20),
       SizedBox(
-          width: ProfileStyles.textInputWidth,
           height: 50,
           child: TextFormField(
             controller: controller,
@@ -68,6 +80,55 @@ class TextInputField extends StatelessWidget {
   }
 }
 
+//long text input field for bio and such
+class TextInputFieldLong extends StatelessWidget {
+  final TextEditingController controller;
+  final FormFieldValidator<String>? validator;
+
+  const TextInputFieldLong({
+    super.key,
+    required this.controller,
+    this.validator,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text("About me", style: ProfileStyles.inputHeader),
+      const SizedBox(height: 15),
+      SizedBox(
+          width: 400,
+          child: TextFormField(
+            controller: controller,
+            keyboardType: TextInputType.multiline,
+            minLines: 3,
+            maxLines: null,
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.primaryFixed,
+                fontSize: 16),
+            decoration: InputDecoration(
+              labelText: "Tell us about yourself!",
+              labelStyle: TextStyle(
+                  color: Theme.of(context).colorScheme.primaryFixed,
+                  fontSize: 16),
+              filled: true,
+              fillColor: Theme.of(context).colorScheme.tertiaryContainer,
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide:
+                    BorderSide(color: Theme.of(context).colorScheme.tertiary),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: BorderSide(
+                    color: Theme.of(context).colorScheme.tertiary, width: 2),
+              ),
+            ),
+          ))
+    ]);
+  }
+}
+
 //custom image button widget to get images from user
 class ImageButton extends StatefulWidget {
   final File? image;
@@ -85,7 +146,7 @@ class ImageButton extends StatefulWidget {
 }
 
 class _ImageButtonState extends State<ImageButton> {
-  final _picker = ImagePicker(); //create instance of image picker
+  final _picker = ImagePicker(); 
   File? _selectedImage;
 
   @override
@@ -112,25 +173,32 @@ class _ImageButtonState extends State<ImageButton> {
   Widget build(BuildContext context) {
     return Column(children: [
       SizedBox(
-          width: widget.width,
-          height: widget.height,
-          child: FloatingActionButton(
-            onPressed: () => _pickImage(),
-            elevation: 0,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
-                side: BorderSide(
-                    color: Theme.of(context).colorScheme.primaryFixed)),
-            child: _selectedImage != null
-                ? Image.file(
-                    _selectedImage!,
-                    width: double
-                        .infinity, //this stretch out the image lol Im so confused
-                    height: double.infinity,
-                    fit: BoxFit.fill,
-                  )
-                : const Icon(Icons.add),
-          )),
+        width: widget.width,
+        height: widget.height,
+        child: InkWell(
+          onTap: _pickImage,
+          borderRadius: BorderRadius.circular(15),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Theme.of(context).colorScheme.primaryFixed,
+                ),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: _selectedImage != null
+                  ? Image.file(
+                      _selectedImage!,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: double.infinity,
+                    )
+                  : const Center(child: Icon(Icons.add, color: Colors.white)),
+            ),
+          ),
+        ),
+      ),
     ]);
   }
 }
@@ -150,47 +218,40 @@ class MultiSelectDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-      SizedBox(
-        width: 100,
-        child: Text(labelText, style: ProfileStyles.inputHeader),
-      ),
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      SizedBox(child: Text(labelText, style: ProfileStyles.inputHeader)),
       const SizedBox(width: 20),
       SizedBox(
-          width: ProfileStyles.textInputWidth,
           child: MultiDropdown(
-            items: items, //need to add scrollable
-            controller: controller,
-            dropdownDecoration: DropdownDecoration(
-                backgroundColor:
-                    Theme.of(context).colorScheme.primaryContainer),
-            dropdownItemDecoration: DropdownItemDecoration(
-                textColor: Theme.of(context).colorScheme.primaryFixed,
-                selectedBackgroundColor: Theme.of(context).colorScheme.primary,
-                selectedTextColor: Theme.of(context).colorScheme.primaryFixed),
-            fieldDecoration: FieldDecoration(
-                showClearIcon: false,
-                labelStyle: TextStyle(
-                    color: Theme.of(context).colorScheme.primaryFixed),
-                backgroundColor:
-                    Theme.of(context).colorScheme.tertiaryContainer,
-                hintStyle: TextStyle(
-                    color: Theme.of(context).colorScheme.primaryFixed,
-                    fontSize: 18),
-                border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.tertiary),
-                    borderRadius: BorderRadius.circular(10)),
-                suffixIcon: Icon(Icons.arrow_drop_down,
-                    color: Theme.of(context).colorScheme.primaryFixed)),
-            chipDecoration: ChipDecoration(
-                backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-                labelStyle: TextStyle(
-                    color: Theme.of(context).colorScheme.primaryFixed),
-                deleteIcon: Icon(Icons.close,
-                    color: Theme.of(context).colorScheme.primaryFixed,
-                    size: 15)),
-          ))
+        items: items,
+        controller: controller,
+        dropdownDecoration: DropdownDecoration(
+            backgroundColor: Theme.of(context).colorScheme.primaryContainer),
+        dropdownItemDecoration: DropdownItemDecoration(
+            textColor: Theme.of(context).colorScheme.primaryFixed,
+            selectedBackgroundColor: Theme.of(context).colorScheme.primary,
+            selectedTextColor: Theme.of(context).colorScheme.primaryFixed),
+        fieldDecoration: FieldDecoration(
+            showClearIcon: false,
+            labelStyle:
+                TextStyle(color: Theme.of(context).colorScheme.primaryFixed),
+            backgroundColor: Theme.of(context).colorScheme.tertiaryContainer,
+            hintStyle: TextStyle(
+                color: Theme.of(context).colorScheme.primaryFixed,
+                fontSize: 18),
+            border: OutlineInputBorder(
+                borderSide:
+                    BorderSide(color: Theme.of(context).colorScheme.tertiary),
+                borderRadius: BorderRadius.circular(10)),
+            suffixIcon: Icon(Icons.arrow_drop_down,
+                color: Theme.of(context).colorScheme.primaryFixed)),
+        chipDecoration: ChipDecoration(
+            backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+            labelStyle:
+                TextStyle(color: Theme.of(context).colorScheme.primaryFixed),
+            deleteIcon: Icon(Icons.close,
+                color: Theme.of(context).colorScheme.primaryFixed, size: 15)),
+      ))
     ]);
   }
 }
@@ -212,18 +273,20 @@ class SingleSelectDropDown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-          width: 100,
-          child: Text(label, style: ProfileStyles.inputHeader),
-        ),
+            child: Text(
+          label,
+          style: ProfileStyles.inputHeader,
+        )),
         const SizedBox(width: 20),
         SizedBox(
-          width: ProfileStyles.textInputWidth,
           child: DropdownButton<String>(
-            hint: const Text("Select"),
+            hint: Text("Select",
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.primaryFixed)),
             isExpanded: true,
             value: value,
             items: items
@@ -265,9 +328,11 @@ class _ProfileFormState extends State<ProfileForm> {
   bool keyInfo = true;
   bool additionalInfo = false;
 
+  //text controllers
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _ageController = TextEditingController();
   final TextEditingController _heightController = TextEditingController();
+  final TextEditingController _bioController = TextEditingController();
 
   //controllers for managing multiselect dropdowns
   final MultiSelectController<String> sexualityController =
@@ -309,20 +374,18 @@ class _ProfileFormState extends State<ProfileForm> {
 
   //for conditional rendering of steps of the form
   void _updateFormStep() {
-    _formKey.currentState!.save(); //gets values from text form
     setState(() {
       additionalInfo = !additionalInfo;
       keyInfo = !keyInfo;
     });
   }
 
-  //handles form submission
   void _submitForm() async {
-    _formKey.currentState!.save();
     //get values from multiselect drop down and convert them to type list
     _name = _nameController.text;
     _age = _ageController.text;
     _height = _heightController.text;
+    _bio = _bioController.text;
     _sexuality = sexualityController.selectedItems.map((e) => e.value).toList();
     _genderIdentity =
         genderController.selectedItems.map((e) => e.value).toList();
@@ -350,6 +413,13 @@ class _ProfileFormState extends State<ProfileForm> {
       'bio': _bio //,
       // 'photoURL': _images
     });
+
+    //reroute to home at first page of nav menu
+    if (mounted) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const NavMenu()),
+          (route) => false);
+    }
   }
 
   @override
@@ -412,7 +482,7 @@ class _ProfileFormState extends State<ProfileForm> {
       'monogamous',
       'polyamorous',
       'ethical non monagamy',
-      'relationship anarachy',
+      'relationship anarchy',
       'swinging',
       'exploring'
     ];
@@ -496,58 +566,13 @@ class _ProfileFormState extends State<ProfileForm> {
                       labelText: "Age",
                       textType: "Age"),
                   const SizedBox(height: 15),
-                  Text("About me", style: ProfileStyles.inputHeader),
-                  const SizedBox(height: 15),
-                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                    SizedBox(
-                        width: 350,
-                        child: TextFormField(
-                          //add validator
-                          keyboardType: TextInputType.multiline,
-                          minLines: 3,
-                          maxLines: null,
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.primaryFixed,
-                              fontSize: 16),
-                          decoration: InputDecoration(
-                            labelText: "Tell us about yourself!",
-                            labelStyle: TextStyle(
-                                color:
-                                    Theme.of(context).colorScheme.primaryFixed,
-                                fontSize: 16),
-                            filled: true,
-                            fillColor:
-                                Theme.of(context).colorScheme.tertiaryContainer,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              borderSide: BorderSide(
-                                  color:
-                                      Theme.of(context).colorScheme.tertiary),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              borderSide: BorderSide(
-                                  color: Theme.of(context).colorScheme.tertiary,
-                                  width: 2),
-                            ),
-                          ),
-
-                          onSaved: (value) => _bio = value!,
-                        ))
-                  ]),
+                  TextInputFieldLong(controller: _bioController),
                   const SizedBox(height: 20),
-
-                  //button to navigate to next part of the form
                   Align(
                     alignment: Alignment.centerRight,
                     child: ElevatedButton(
                         onPressed: _updateFormStep,
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                Theme.of(context).colorScheme.secondary,
-                            fixedSize: const Size(100, 50),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12))),
+                        style: ProfileStyles.button,
                         child: const Text("Next")),
                   )
                 ],
@@ -589,7 +614,7 @@ class _ProfileFormState extends State<ProfileForm> {
                       controller: interestsController,
                       labelText: "Interests",
                       items: interestOptions),
-                  const SizedBox(height: 70),
+                  const SizedBox(height: 15),
                   SingleSelectDropDown(
                     value: _relationshipStatus,
                     label: "Relationship Status",
@@ -621,27 +646,17 @@ class _ProfileFormState extends State<ProfileForm> {
                       });
                     },
                   ),
-                  const SizedBox(height: 50),
+                  const SizedBox(height: 20),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         ElevatedButton(
                             onPressed: _updateFormStep,
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.secondary,
-                                fixedSize: const Size(110, 50),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12))),
+                            style: ProfileStyles.button,
                             child: const Text("Previous")),
                         ElevatedButton(
                             onPressed: _submitForm,
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.secondary,
-                                fixedSize: const Size(100, 50),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12))),
+                            style: ProfileStyles.button,
                             child: const Text("Finish"))
                       ]),
                 ]

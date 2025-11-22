@@ -38,6 +38,9 @@ dependencies:
   #lets user send messages with chat
   flutter_chat_core: ^2.8.0
 
+  #responsive text
+  auto_size_text: ^3.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
