@@ -57,6 +57,7 @@ class _LoginState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController  = TextEditingController();
   bool isLoading = false;
+  bool rememberMe = false;
 
   Future<void> _signIn() async {
      if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
@@ -166,9 +167,32 @@ class _LoginState extends State<LoginPage> {
                   ), 
                 ),
               ),
+              
+              Padding(
+                padding: const EdgeInsets.only(top: 20, left: 15),
+                child: Row(
+                  children: [
+                    Checkbox(
+                      value: rememberMe,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          rememberMe = value ?? false;
+                        });
+                      },
+                      activeColor: const Color(0xFFD461A6),
+                      checkColor: Colors.white,
+                    ),
+                    const Text(
+                      "Remember Me",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+              ),
+
 
               Padding(
-                padding: const EdgeInsets.only(top: 70),
+                padding: const EdgeInsets.only(top: 5),
                 child: Container( 
                   padding: ProfileStyles.boxPadding,
                   width: ProfileStyles.containerWidth,             
