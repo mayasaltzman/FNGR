@@ -6,25 +6,28 @@ import '../../main.dart'; // Import NavMenu
 //styles for the page
 abstract class ProfileStyles {
   //styles for boxes
-  static BoxDecoration boxDecoration = BoxDecoration(
-      color: const Color(0xFFFFF0E6),
-      borderRadius: BorderRadius.circular(15.0),
-      border: Border.all(
-        color: const Color(0xFFFF9B55),
-        width: 1,
-      ));
+  static BoxDecoration get boxDecoration => BoxDecoration(
+    color: const Color.fromARGB(255, 255, 255, 255),
+    borderRadius: BorderRadius.circular(15.0),
+    border: Border.all(
+      color: const Color.fromARGB(255, 214, 212, 210),
+      width: 1, 
+    ));
 
   //text styles for headings in boxes
-  static TextStyle boxHeader = const TextStyle(
-      fontWeight: FontWeight.bold, color: Color(0xFFFF9B55), fontSize: 16);
+  static TextStyle get boxHeader => const TextStyle(
+    fontWeight: FontWeight.bold, color: Color.fromARGB(255, 255, 255, 255), fontSize: 40);
 
   //text styles for text in boxes
-  static TextStyle boxText = const TextStyle(
-      fontWeight: FontWeight.normal, color: Color(0xFFAA4E85), fontSize: 16);
+  static TextStyle get instructionText => const TextStyle(
+    fontWeight: FontWeight.normal, color: Color(0xFFAA4E85), fontSize: 16);
+
+  static TextStyle get boxText => const TextStyle(
+    fontWeight: FontWeight.w200, color: Color.fromARGB(255, 123, 123, 123), fontSize: 16);
 
   static const containerWidth = 375.0;
 
-  static const boxPadding = EdgeInsets.all(8.0);
+  static const boxPadding = EdgeInsets.symmetric(vertical: 1, horizontal: 4);
 }
 
 class LoginPage extends StatefulWidget {
@@ -83,51 +86,72 @@ class _LoginState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
-      body: Center(
-        child: SingleChildScrollView(
+      backgroundColor: const Color.fromARGB(255, 253, 214, 186),
+      //body: Center(
+        body: SingleChildScrollView(
           child: Column(
             children: [
-              Text(
-                "Login to FNGR", 
-                style: ProfileStyles.boxHeader,
+              Padding( 
+                padding: const EdgeInsets.only(top: 200),             
+                child: Text(
+                  "Login to FNGR", 
+                  style: ProfileStyles.boxHeader,
+                ),
               ),
-              
-              const SizedBox(height: 30),
-              Container(  
-                decoration: ProfileStyles.boxDecoration,
-                padding: ProfileStyles.boxPadding,
-                width: ProfileStyles.containerWidth,            
-                child: TextField(
-                  controller: _emailController,
-                  style: ProfileStyles.boxText,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    labelText: 'Enter your email',
-                    labelStyle: ProfileStyles.boxText,
-                  ),
-              ), 
-            ),
 
-              
-              const SizedBox(height: 10),
-              Container(
-                decoration: ProfileStyles.boxDecoration,
-                padding: ProfileStyles.boxPadding,
-                width: ProfileStyles.containerWidth, 
-                child: TextField(
-                  controller: _passwordController,
-                  style: ProfileStyles.boxText,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    labelText: 'Enter your password',
-                    labelStyle: ProfileStyles.boxText,
-                  ),
-                ), 
+              Padding(
+                padding: const EdgeInsets.only(right: 320.0, top: 50),              
+                child: Text(
+                  "Email",
+                  style: ProfileStyles.instructionText,
+                ),
               ),
-          
-              const SizedBox(height: 30),
+                        
+              Padding(
+                padding: const EdgeInsets.only(left: 10.0, top: 5),
+                child: Container(  
+                  decoration: ProfileStyles.boxDecoration,
+                  padding: ProfileStyles.boxPadding,
+                  width: ProfileStyles.containerWidth,            
+                  child: TextField(
+                    controller: _emailController,
+                    style: ProfileStyles.boxText,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Enter your email',
+                      hintStyle: ProfileStyles.boxText,
+                    ),
+                  ), 
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.only(right: 290.0, top: 20),              
+                child: Text(
+                  "Password",
+                  style: ProfileStyles.instructionText,
+                ),
+              ),
+
+              Padding( 
+                padding: const EdgeInsets.only(left: 10.0, top: 5),             
+                child: Container(
+                  decoration: ProfileStyles.boxDecoration,
+                  padding: ProfileStyles.boxPadding,
+                  width: ProfileStyles.containerWidth, 
+                  child: TextField(
+                    controller: _passwordController,
+                    style: ProfileStyles.boxText,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Enter your password',
+                      hintStyle: ProfileStyles.boxText,
+                    ),
+                  ), 
+                ),
+              ),
+
               ElevatedButton(
                 onPressed: isLoading ? null : () {
                   _signIn();
@@ -148,9 +172,9 @@ class _LoginState extends State<LoginPage> {
                 ),
               ),
             ],
-          )
-        )
-      ),
-    );
+          ),
+        ),
+      );
+    //);
   }
 }
