@@ -84,31 +84,36 @@ class _SettingsState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
-      body: Center(
-        //const size: 30,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Text(
-                "Settings", 
-                style: ProfileStyles.boxHeader.copyWith(
-                fontSize: 26 / MediaQuery.of(context).textScaleFactor,
-              ),
-              ),
-
-              /*const SizedBox(height: 30),
-              ElevatedButton(
-                onPressed: isLoading ? null : () {
-                  //_signIn();
-              },
-                child: Text(
-                  "Login",
-                  style: ProfileStyles.boxText,
+      body: SingleChildScrollView(
+        child: Align(
+          alignment: Alignment.topLeft,
+          child: Padding(
+            padding: const EdgeInsets.all(45.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Settings",
+                  style: ProfileStyles.boxHeader.copyWith(
+                    fontSize: 26 / MediaQuery.of(context).textScaleFactor,
+                  ),
                 ),
-              ),*/
-            ],
+                const SizedBox(height: 30),
+
+                /*const SizedBox(height: 30),
+                ElevatedButton(
+                  onPressed: isLoading ? null : () {
+                    //_signIn();
+                    },
+                  child: Text(
+                    "Login",
+                    style: ProfileStyles.boxText,
+                  ),
+                ),*/
+              ],
+            ),
           )
-        )
+        ),
       ),
     );
   }
