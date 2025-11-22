@@ -3,6 +3,7 @@ import 'package:test_milestone/pages/auth/login_page.dart';
 import '../../services/firebase_service.dart';
 import '../../main.dart';
 import 'package:flutter/cupertino.dart';
+import '../../main.dart'; // Import Login Page
 
 //styles for the page
 abstract class ProfileStyles {
@@ -84,7 +85,6 @@ class _SettingsState extends State<SettingsPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 Padding(
                   padding: const EdgeInsets.only(top: 30),
                   child: Text(
@@ -242,27 +242,30 @@ class _SettingsState extends State<SettingsPage> {
                   ),
                 ),
 
-
+                const SizedBox(height: 35),
                 Text(
                   "Settings",
                   style: ProfileStyles.boxHeader.copyWith(
                     fontSize: 26 / MediaQuery.of(context).textScaleFactor,
                   ),
                 ),
-                const SizedBox(height: 30),
-
-                /*const SizedBox(height: 30),
+                Divider(
+                  thickness: 3,
+                  color: Theme.of(context).colorScheme.secondary,
+                  height: 40,
+                ),
+                
+                const SizedBox(height: 640),
                 ElevatedButton(
                   onPressed: isLoading ? null : () {
-                    //_signIn();
-                    },
+                    _signOut();
+                  },
                   child: Text(
-                    "Login",
-                    style: ProfileStyles.boxText,
+                    "Logout",
+                    style: ProfileStyles.boxHeader,
                   ),
-                ),*/
-
-              ],
+                ),
+             ],
             ),
           )
         ),
