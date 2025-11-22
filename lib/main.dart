@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:test_milestone/pages/auth/settings_page.dart';
 import '/../services/firebase_service.dart';
 import '../services/location_service.dart';
 import 'pages/home/home_page.dart'; // we’ll define this next
@@ -48,7 +49,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       // home: const HomePage(),
       //home: const LoginPage(),
-      home: const CreateProfilePage(),
+      home: const SettingsPage(),
     );
   }
 }
