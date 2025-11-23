@@ -70,9 +70,26 @@ class _MessagePageState extends State<MessagePage> {
   }
 }
 
-class ApproveDeclineWidget extends StatelessWidget {
-  const ApproveDeclineWidget({super.key});
+class ApproveDeclineWidget extends StatefulWidget {
+  final void Function() acceptChat;
+  final void Function() rejectChat;
+  final String chatId;
+  final InMemoryChatController chatController;
+  final FirebaseService firebaseService;
 
+  const ApproveDeclineWidget(
+      {super.key,
+      required this.acceptChat,
+      required this.rejectChat,
+      required this.chatId,
+      required this.chatController,
+      required this.firebaseService});
+
+  @override
+  ApproveDeclineWidgetState createState() => ApproveDeclineWidgetState();
+}
+
+class ApproveDeclineWidgetState extends State<ApproveDeclineWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.end, children: [
@@ -95,7 +112,7 @@ class ApproveDeclineWidget extends StatelessWidget {
                   spacing: 60,
                   children: [
                     TextButton(
-                        onPressed: () {},
+                        onPressed: widget.rejectChat,
                         child: Text(
                           "Decline",
                           style: TextStyle(
@@ -108,7 +125,7 @@ class ApproveDeclineWidget extends StatelessWidget {
                       color: Colors.grey,
                     ),
                     TextButton(
-                        onPressed: () {},
+                        onPressed: widget.acceptChat,
                         child: const Text("Allow",
                             style: TextStyle(color: Colors.black)))
                   ],
@@ -246,7 +263,12 @@ class MessageWidgetState extends State<MessageWidget> {
             firebaseService: _firebaseService,
             isNewChat: _chatId.isEmpty,
           )
-        : ApproveDeclineWidget();
+        : ApproveDeclineWidget(
+            acceptChat: _acceptChat,
+            rejectChat: _rejectChat,
+            chatId: _chatId,
+            chatController: _chatController,
+            firebaseService: _firebaseService);
   }
 }
 

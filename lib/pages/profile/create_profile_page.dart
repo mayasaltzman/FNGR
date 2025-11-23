@@ -16,7 +16,7 @@ abstract class ProfileStyles {
       fontWeight: FontWeight.bold, color: Color(0xFFAA4E85), fontSize: 18);
 
   static final ButtonStyle button = ElevatedButton.styleFrom(
-    backgroundColor: const Color(0xFFD461A6), 
+    backgroundColor: const Color(0xFFD461A6),
     fixedSize: const Size(110, 50),
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(12)),
@@ -146,7 +146,7 @@ class ImageButton extends StatefulWidget {
 }
 
 class _ImageButtonState extends State<ImageButton> {
-  final _picker = ImagePicker(); 
+  final _picker = ImagePicker();
   File? _selectedImage;
 
   @override
