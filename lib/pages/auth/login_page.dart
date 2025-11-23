@@ -265,7 +265,7 @@ class _LoginState extends State<LoginPage> {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateAccount()));
                   },
                   child: Text(
-                    'Sing Up', 
+                    'Sign Up', 
                     style: ProfileStyles.buttonText,
                   ),
                 ),

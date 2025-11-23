@@ -15,12 +15,12 @@ class ChatList extends StatefulWidget {
 
 class _ChatListState extends State<ChatList> {
   final FirebaseService _firebaseService = FirebaseService();
-  
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: widget.listType == "accepted"
-          ? _firebaseService.getAcceptedChatsStream() //I think its not showing cause it should be user chats
+          ? _firebaseService.getAcceptedChatsStream()
           : _firebaseService.getUnaccceptedChatsStream(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {

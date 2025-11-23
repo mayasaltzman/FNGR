@@ -286,8 +286,8 @@ class FirebaseService {
         .collection('chats')
         .where('participants', arrayContains: currentUserId)
         .where('acceptedMessage', isEqualTo: true)
-        .where('initiatorId', isNotEqualTo: currentUserId)
-        .orderBy('initiatorId')
+        //.where('initiatorId', isNotEqualTo: currentUserId)
+        //.orderBy('initiatorId')
         .snapshots();
   }
 
