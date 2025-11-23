@@ -6,25 +6,43 @@ import '../../pages/profile/create_profile_page.dart';
 //styles for the page
 abstract class ProfileStyles {
   //styles for boxes
-  static BoxDecoration boxDecoration = BoxDecoration(
-      color: const Color(0xFFFFF0E6),
-      borderRadius: BorderRadius.circular(15.0),
-      border: Border.all(
-        color: const Color(0xFFFF9B55),
+  static BoxDecoration get boxDecoration => BoxDecoration(
+    color: const Color.fromARGB(255, 255, 255, 255),
+    borderRadius: BorderRadius.circular(15),
+    border: Border.all(
+      color: const Color.fromARGB(255, 214, 212, 210),
+      width: 1, 
+    ));
+    
+  static ButtonStyle get buttonStyle => ElevatedButton.styleFrom(
+    backgroundColor: const Color(0xFFD461A6),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(15),
+      side: const BorderSide(
+        color: Color.fromARGB(255, 214, 212, 210),
         width: 1,
-      ));
+      ),
+    ),
+    padding: const EdgeInsets.symmetric(vertical: 14),
+  );
 
   //text styles for headings in boxes
-  static TextStyle boxHeader = const TextStyle(
-      fontWeight: FontWeight.bold, color: Color(0xFFFF9B55), fontSize: 16);
+  static TextStyle get boxHeader => const TextStyle(
+    fontWeight: FontWeight.bold, color: Color.fromARGB(255, 255, 255, 255), fontSize: 30);
 
-  //text styles for text in boxes
-  static TextStyle boxText = const TextStyle(
-      fontWeight: FontWeight.normal, color: Color(0xFFAA4E85), fontSize: 16);
+  //text styles for text above boxes
+  static TextStyle get instructionText => const TextStyle(
+    fontWeight: FontWeight.normal, color: Color(0xFF9F497D), fontSize: 16);
+
+  static TextStyle get boxText => const TextStyle(
+    fontWeight: FontWeight.w200, color: Color(0xFF1F1F1F), fontSize: 16);
+  
+  static TextStyle get buttonText => const TextStyle(
+    fontWeight: FontWeight.w900, color: Color.fromARGB(255, 255, 255, 255), fontSize: 16);
 
   static const containerWidth = 375.0;
 
-  static const boxPadding = EdgeInsets.all(8.0);
+  static const boxPadding = EdgeInsets.symmetric(vertical: 1, horizontal: 8);
 }
 
 class CreateAccount extends StatefulWidget {
@@ -39,7 +57,7 @@ class _CreateAccountState extends State<CreateAccount> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController  = TextEditingController();
   bool isLoading = false;
-
+  bool rememberMe = false;
 
   Future<void> createUserAccount() async {
     if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
@@ -98,18 +116,29 @@ class _CreateAccountState extends State<CreateAccount> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Text(
-                "Create FNGR Account", 
+      backgroundColor: const Color(0xFFFFE0CA),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(  
+              padding: const EdgeInsets.only(top: 200),          
+              child: Text(
+                'Create FNGR Account', 
                 style: ProfileStyles.boxHeader,
               ),
-              
-              const SizedBox(height: 30),
-              Container(      
+            ),
+            
+            Padding(
+              padding: const EdgeInsets.only(right: 320, top: 40),              
+              child: Text(
+                'Email',
+                style: ProfileStyles.instructionText,
+              ),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.only(left: 10, top: 5),
+              child: Container(      
                 decoration: ProfileStyles.boxDecoration,
                 padding: ProfileStyles.boxPadding,
                 width: ProfileStyles.containerWidth,         
@@ -118,14 +147,24 @@ class _CreateAccountState extends State<CreateAccount> {
                   style: ProfileStyles.boxText,
                   decoration: InputDecoration(
                     border: InputBorder.none,
-                    labelText: 'Enter your email',
-                    labelStyle: ProfileStyles.boxText,
+                    hintText: 'Enter your email',
+                    hintStyle: ProfileStyles.boxText,
                   ),
                 ), 
               ),
+            ),
 
-              const SizedBox(height: 10),
-              Container(
+            Padding(
+              padding: const EdgeInsets.only(right: 290, top: 10),              
+              child: Text(
+                'Password',
+                style: ProfileStyles.instructionText,
+              ),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.only(left: 10, top: 5),
+              child: Container(
                 decoration: ProfileStyles.boxDecoration,
                 padding: ProfileStyles.boxPadding,
                 width: ProfileStyles.containerWidth,
@@ -140,27 +179,58 @@ class _CreateAccountState extends State<CreateAccount> {
                   ), 
                 ),
               ),
-              
-              const SizedBox(height: 30),
-              ElevatedButton(
-                onPressed: isLoading ? null : () {
-                  createUserAccount();
-                },
-                child: isLoading
-                    ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : Text(
-                        "Create Account",
-                        style: ProfileStyles.boxText,
-                      ),
+            ),
+
+//add confirm password here?
+
+            Padding(
+              padding: const EdgeInsets.only(top: 20, left: 15),
+              child: Row(
+                children: [
+                  Checkbox(
+                    value: rememberMe,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        rememberMe = value ?? false;
+                      });
+                    },
+                    activeColor: const Color(0xFFD461A6),
+                    checkColor: Colors.white,
+                  ),
+                  const Text(
+                    'Remember Me',
+                    style: TextStyle(fontSize: 16, color: Color(0xFF1F1F1F), fontWeight: FontWeight.w200), 
+                  ),
+                ],
               ),
-            ],
-          )
+            ),
+            
+            Padding(
+              padding: const EdgeInsets.only(top: 5),
+              child: Container(
+                padding: ProfileStyles.boxPadding,
+                width: ProfileStyles.containerWidth,
+                child: ElevatedButton(
+                  style: ProfileStyles.buttonStyle,
+                  onPressed: isLoading ? null : () {
+                    createUserAccount();
+                  },
+                  child: isLoading
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : Text(
+                          'Sign Up',
+                          style: ProfileStyles.buttonText,
+                        ),
+                ),
+              ),
+            ),
+          ],
         )
-      ),
+      )
     );
   }
 }
