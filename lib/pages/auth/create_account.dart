@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:test_milestone/pages/auth/login_page.dart';
 import '../../services/firebase_service.dart';
 import '../../pages/profile/create_profile_page.dart';
 
@@ -225,6 +226,51 @@ class _CreateAccountState extends State<CreateAccount> {
                           'Sign Up',
                           style: ProfileStyles.buttonText,
                         ),
+                ),
+              ),
+            ),
+
+            const Padding(
+              padding: EdgeInsets.only(left: 20, right: 20, top: 10),  
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Divider(
+                      color: Colors.black,
+                      thickness: 0.5,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    child: Text(
+                      'Already have an account?',
+                      style: TextStyle(color: Color(0xFF1F1F1F), fontWeight: FontWeight.w200),
+                    ),
+                  ),
+                  Expanded(
+                    child: Divider(
+                      color: Colors.black,
+                      thickness: 0.5,
+                    ),
+                  ),
+                ],
+              ),
+            ), 
+
+            Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Container(
+                padding: ProfileStyles.boxPadding,
+                width: ProfileStyles.containerWidth,
+                child: ElevatedButton(
+                  style: ProfileStyles.buttonStyle,
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()));
+                  },
+                  child: Text(
+                    'Login', 
+                    style: ProfileStyles.buttonText,
+                  ),
                 ),
               ),
             ),
