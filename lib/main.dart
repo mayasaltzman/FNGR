@@ -34,6 +34,7 @@ class MyApp extends StatelessWidget {
               secondary: Color(0xFFD461A6), //header color
               secondaryFixed: Color(0xFFFFFFFF), //white
               tertiary: Color(0xFFFF9B55),
+
               tertiaryContainer: Color(0xFFFFF0E6),
               tertiaryFixed: Color(0xFFFFE0CA)),
           textTheme: const TextTheme(
@@ -68,6 +69,7 @@ class _NavMenuState extends State<NavMenu> {
     super.initState();
     final FirebaseService _firebaseService = FirebaseService();
     final currentUserId = _firebaseService.currentUserId ?? '';
+
     _pages = [
       const HomePage(),
       UserProfilePage(userId: currentUserId),
