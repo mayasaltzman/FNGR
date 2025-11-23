@@ -20,21 +20,21 @@ class _ChatListState extends State<ChatList> {
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: widget.listType == "accepted"
-          ? _firebaseService.getAcceptedChatsStream()
-          : _firebaseService.getUnaccceptedChatsStream(),
+      ? _firebaseService.getAcceptedChatsStream()
+      : _firebaseService.getUnaccceptedChatsStream(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
-        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty){
           return const Center(child: Text("No chats available"));
         }
         final chats = snapshot.data!.docs.where((chatDoc) {
           final chatData = chatDoc.data() as Map<String, dynamic>;
           final lastMessage = chatData['lastMessage'];
-          return lastMessage != null &&
-              (lastMessage as String).trim().isNotEmpty;
+          return lastMessage != null && (lastMessage as String).trim().isNotEmpty;
         }).toList();
+
         return ListView.separated(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
