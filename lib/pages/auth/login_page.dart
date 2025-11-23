@@ -195,7 +195,7 @@ class _LoginState extends State<LoginPage> {
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                     child: const Text(
-                      'Forgot password?',
+                      'Forgot Password?',
                       style: TextStyle(
                         decoration: TextDecoration.underline, 
                         decorationColor: Color(0xFF9F497D),
@@ -265,7 +265,7 @@ class _LoginState extends State<LoginPage> {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateAccount()));
                   },
                   child: Text(
-                    'Create account', 
+                    'Sing Up', 
                     style: ProfileStyles.buttonText,
                   ),
                 ),
