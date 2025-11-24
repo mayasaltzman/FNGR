@@ -139,21 +139,9 @@ class _ProfileFormState extends State<ProfileForm> {
   //instance of firebase
   final firestoreInstance = FirebaseFirestore.instance;
 
-  //store info entered in form
-  late String _name;
-  late String
-      _age; //this will have to be made integer idk probs convert before submit
-  late String _height;
-  late List<String> _sexuality;
-  late List<String> _genderIdentity;
-  late List<String> _pronouns;
   String? _relationshipStatus;
   String? _relationshipStyle;
-  late List<String> _sexualPref;
-  late List<String> _genderPresentation;
-  late List<String> _interests;
   String? _lookingFor;
-  String? _bio;
 
   //need to figure out how to add to this from the seperate image picker thing
   final List<File> _images = [];
@@ -169,37 +157,26 @@ class _ProfileFormState extends State<ProfileForm> {
   }
 
   void _submitForm() async {
-    //get values from multiselect drop down and convert them to type list
-    _name = _nameController.text;
-    _age = _ageController.text;
-    _height = _heightController.text;
-    _bio = _bioController.text;
-    _sexuality = sexualityController.selectedItems.map((e) => e.value).toList();
-    _genderIdentity =
-        genderController.selectedItems.map((e) => e.value).toList();
-    _pronouns = pronounController.selectedItems.map((e) => e.value).toList();
-    _sexualPref =
-        sexualPrefController.selectedItems.map((e) => e.value).toList();
-    _genderPresentation =
-        genderPresentationController.selectedItems.map((e) => e.value).toList();
-    _interests = interestsController.selectedItems.map((e) => e.value).toList();
-
     //insert to database
     await firestoreInstance.collection('users').add({
-      'name': _name,
-      'age': _age,
-      'height': _height,
-      'sexuality': _sexuality,
-      'gender': _genderIdentity,
-      'pronouns': _pronouns,
+      'name': _nameController.text,
+      'age': _ageController.text,
+      'height': _heightController.text,
+      'sexuality':
+          sexualityController.selectedItems.map((e) => e.value).toList(),
+      'gender': genderController.selectedItems.map((e) => e.value).toList(),
+      'pronouns': pronounController.selectedItems.map((e) => e.value).toList(),
       'relationship_status': _relationshipStatus,
       'relationship_style': _relationshipStyle,
       'expectations': _lookingFor,
-      'expression': _genderPresentation,
-      'interests': _interests,
-      'sexual_pref': _sexualPref,
-      'bio': _bio //,
-      // 'photoURL': _images
+      'expression': genderPresentationController.selectedItems
+          .map((e) => e.value)
+          .toList(),
+      'interests':
+          interestsController.selectedItems.map((e) => e.value).toList(),
+      'sexual_pref':
+          sexualPrefController.selectedItems.map((e) => e.value).toList(),
+      'bio': _bioController.text
     });
 
     //reroute to home at first page of nav menu
