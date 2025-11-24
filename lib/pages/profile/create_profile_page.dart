@@ -2,10 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 import '../../main.dart';
+import './widgets/multi_select_widget.dart';
+import './widgets/single_select_widget.dart';
+import './widgets/text_input_widgets.dart';
+import '../../services/firebase_service.dart';
 
 //styles for profile page
 abstract class ProfileStyles {
@@ -22,111 +24,6 @@ abstract class ProfileStyles {
       borderRadius: BorderRadius.all(Radius.circular(12)),
     ),
   );
-}
-
-//custom text input field for our form
-class TextInputField extends StatelessWidget {
-  final TextEditingController controller;
-  final String labelText;
-  final FormFieldValidator<String>? validator;
-  final String textType;
-
-  const TextInputField({
-    super.key,
-    required this.controller,
-    required this.labelText,
-    required this.textType,
-    this.validator,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      SizedBox(
-        child: Text(
-          textType,
-          style: ProfileStyles.inputHeader,
-          softWrap: true,
-        ),
-      ),
-      const SizedBox(width: 20),
-      SizedBox(
-          height: 50,
-          child: TextFormField(
-            controller: controller,
-            style: TextStyle(
-                color: Theme.of(context).colorScheme.primaryFixed,
-                fontSize: 16),
-            decoration: InputDecoration(
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide:
-                      BorderSide(color: Theme.of(context).colorScheme.tertiary),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.tertiary, width: 2),
-                ),
-                filled: true,
-                fillColor: Theme.of(context).colorScheme.tertiaryContainer,
-                labelText: labelText,
-                labelStyle: TextStyle(
-                    color: Theme.of(context).colorScheme.primaryFixed,
-                    fontSize: 16)),
-            validator: validator,
-          ))
-    ]);
-  }
-}
-
-//long text input field for bio and such
-class TextInputFieldLong extends StatelessWidget {
-  final TextEditingController controller;
-  final FormFieldValidator<String>? validator;
-
-  const TextInputFieldLong({
-    super.key,
-    required this.controller,
-    this.validator,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text("About me", style: ProfileStyles.inputHeader),
-      const SizedBox(height: 15),
-      SizedBox(
-          width: 400,
-          child: TextFormField(
-            controller: controller,
-            keyboardType: TextInputType.multiline,
-            minLines: 3,
-            maxLines: null,
-            style: TextStyle(
-                color: Theme.of(context).colorScheme.primaryFixed,
-                fontSize: 16),
-            decoration: InputDecoration(
-              labelText: "Tell us about yourself!",
-              labelStyle: TextStyle(
-                  color: Theme.of(context).colorScheme.primaryFixed,
-                  fontSize: 16),
-              filled: true,
-              fillColor: Theme.of(context).colorScheme.tertiaryContainer,
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide:
-                    BorderSide(color: Theme.of(context).colorScheme.tertiary),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.tertiary, width: 2),
-              ),
-            ),
-          ))
-    ]);
-  }
 }
 
 //custom image button widget to get images from user
@@ -203,115 +100,6 @@ class _ImageButtonState extends State<ImageButton> {
   }
 }
 
-//custom multiselect dropdown widget
-class MultiSelectDropdown extends StatelessWidget {
-  final MultiSelectController<String> controller;
-  final String labelText;
-  final List<DropdownItem<String>> items;
-
-  const MultiSelectDropdown({
-    super.key,
-    required this.controller,
-    required this.labelText,
-    required this.items,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      SizedBox(child: Text(labelText, style: ProfileStyles.inputHeader)),
-      const SizedBox(width: 20),
-      SizedBox(
-          child: MultiDropdown(
-        items: items,
-        controller: controller,
-        dropdownDecoration: DropdownDecoration(
-            backgroundColor: Theme.of(context).colorScheme.primaryContainer),
-        dropdownItemDecoration: DropdownItemDecoration(
-            textColor: Theme.of(context).colorScheme.primaryFixed,
-            selectedBackgroundColor: Theme.of(context).colorScheme.primary,
-            selectedTextColor: Theme.of(context).colorScheme.primaryFixed),
-        fieldDecoration: FieldDecoration(
-            showClearIcon: false,
-            labelStyle:
-                TextStyle(color: Theme.of(context).colorScheme.primaryFixed),
-            backgroundColor: Theme.of(context).colorScheme.tertiaryContainer,
-            hintStyle: TextStyle(
-                color: Theme.of(context).colorScheme.primaryFixed,
-                fontSize: 18),
-            border: OutlineInputBorder(
-                borderSide:
-                    BorderSide(color: Theme.of(context).colorScheme.tertiary),
-                borderRadius: BorderRadius.circular(10)),
-            suffixIcon: Icon(Icons.arrow_drop_down,
-                color: Theme.of(context).colorScheme.primaryFixed)),
-        chipDecoration: ChipDecoration(
-            backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-            labelStyle:
-                TextStyle(color: Theme.of(context).colorScheme.primaryFixed),
-            deleteIcon: Icon(Icons.close,
-                color: Theme.of(context).colorScheme.primaryFixed, size: 15)),
-      ))
-    ]);
-  }
-}
-
-//custom single dropdown widget
-class SingleSelectDropDown extends StatelessWidget {
-  final String? value;
-  final List<String> items;
-  final String label;
-  final ValueChanged<String?> onChanged;
-
-  const SingleSelectDropDown({
-    super.key,
-    required this.value,
-    required this.label,
-    required this.items,
-    required this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-            child: Text(
-          label,
-          style: ProfileStyles.inputHeader,
-        )),
-        const SizedBox(width: 20),
-        SizedBox(
-          child: DropdownButton<String>(
-            hint: Text("Select",
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.primaryFixed)),
-            isExpanded: true,
-            value: value,
-            items: items
-                .map((status) => DropdownMenuItem<String>(
-                      value: status,
-                      child: Text(status),
-                    ))
-                .toList(),
-            onChanged: onChanged,
-            dropdownColor: Theme.of(context).colorScheme.primaryContainer,
-            style: TextStyle(
-                color: Theme.of(context).colorScheme.primaryFixed,
-                fontSize: 16),
-            icon: Icon(Icons.arrow_drop_down,
-                color: Theme.of(context).colorScheme.primaryFixed),
-            menuWidth: 280,
-            elevation: 1,
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
 //widget for key info form
 class ProfileForm extends StatefulWidget {
   const ProfileForm({super.key});
@@ -348,24 +136,12 @@ class _ProfileFormState extends State<ProfileForm> {
   final MultiSelectController<String> interestsController =
       MultiSelectController<String>();
 
-  //instance of firebase
-  final firestoreInstance = FirebaseFirestore.instance;
+  //call ffire
+  final FirebaseService _firebaseService = FirebaseService();
 
-  //store info entered in form
-  late String _name;
-  late String
-      _age; //this will have to be made integer idk probs convert before submit
-  late String _height;
-  late List<String> _sexuality;
-  late List<String> _genderIdentity;
-  late List<String> _pronouns;
   String? _relationshipStatus;
   String? _relationshipStyle;
-  late List<String> _sexualPref;
-  late List<String> _genderPresentation;
-  late List<String> _interests;
   String? _lookingFor;
-  String? _bio;
 
   //need to figure out how to add to this from the seperate image picker thing
   final List<File> _images = [];
@@ -379,41 +155,29 @@ class _ProfileFormState extends State<ProfileForm> {
       keyInfo = !keyInfo;
     });
   }
-
+  
   void _submitForm() async {
-    //get values from multiselect drop down and convert them to type list
-    _name = _nameController.text;
-    _age = _ageController.text;
-    _height = _heightController.text;
-    _bio = _bioController.text;
-    _sexuality = sexualityController.selectedItems.map((e) => e.value).toList();
-    _genderIdentity =
-        genderController.selectedItems.map((e) => e.value).toList();
-    _pronouns = pronounController.selectedItems.map((e) => e.value).toList();
-    _sexualPref =
-        sexualPrefController.selectedItems.map((e) => e.value).toList();
-    _genderPresentation =
-        genderPresentationController.selectedItems.map((e) => e.value).toList();
-    _interests = interestsController.selectedItems.map((e) => e.value).toList();
-
-    //insert to database
-    await firestoreInstance.collection('users').add({
-      'name': _name,
-      'age': _age,
-      'height': _height,
-      'sexuality': _sexuality,
-      'gender': _genderIdentity,
-      'pronouns': _pronouns,
+    final data  = {
+      'name': _nameController.text,
+      'age': _ageController.text,
+      'height': _heightController.text,
+      'sexuality':
+          sexualityController.selectedItems.map((e) => e.value).toList(),
+      'gender': genderController.selectedItems.map((e) => e.value).toList(),
+      'pronouns': pronounController.selectedItems.map((e) => e.value).toList(),
       'relationship_status': _relationshipStatus,
       'relationship_style': _relationshipStyle,
       'expectations': _lookingFor,
-      'expression': _genderPresentation,
-      'interests': _interests,
-      'sexual_pref': _sexualPref,
-      'bio': _bio //,
-      // 'photoURL': _images
-    });
-
+      'expression': genderPresentationController.selectedItems
+          .map((e) => e.value)
+          .toList(),
+      'interests':
+          interestsController.selectedItems.map((e) => e.value).toList(),
+      'sexual_pref':
+          sexualPrefController.selectedItems.map((e) => e.value).toList(),
+      'bio': _bioController.text
+    };
+    await _firebaseService.updateUserProfile(data: data);
     //reroute to home at first page of nav menu
     if (mounted) {
       Navigator.of(context).pushAndRemoveUntil(
@@ -424,107 +188,6 @@ class _ProfileFormState extends State<ProfileForm> {
 
   @override
   Widget build(BuildContext context) {
-    //list of sexualities fields drop down memebers we can add more LOL
-    var sexualities = [
-      DropdownItem(label: 'Aromantic', value: "Aromantic"),
-      DropdownItem(label: 'Asexual', value: "Asexual"),
-      DropdownItem(label: 'Bisexual', value: "Bisexual"),
-      DropdownItem(label: 'Demisexual', value: "Demisexual"),
-      DropdownItem(label: 'Gay', value: "Gay"),
-      DropdownItem(label: 'Lesbian', value: "Lesbian"),
-      DropdownItem(label: 'Other', value: "Other"),
-      DropdownItem(label: 'Pansexual', value: "Pansexual"),
-      DropdownItem(label: 'Polysexual', value: "Polysexual"),
-      DropdownItem(label: 'Queer', value: "Queer"),
-      DropdownItem(label: 'Sapphic', value: "Sapphic")
-    ];
-
-    //gender identity values for drop down again we can add more not to get canceled but im lazy
-    var genders = [
-      DropdownItem(label: 'Agender', value: "Agender"),
-      DropdownItem(label: 'Bigender', value: "Bigender"),
-      DropdownItem(label: 'Genderfluid', value: "Genderfluid"),
-      DropdownItem(label: 'Genderqueer', value: "Genderqueer"),
-      DropdownItem(label: 'Intersex', value: "Intersex"),
-      DropdownItem(label: 'Non-binary', value: "Non-binary"),
-      DropdownItem(label: 'Pangender', value: "Pangender"),
-      DropdownItem(label: 'Transgender', value: "Transgender"),
-      DropdownItem(label: 'Trans Man', value: "Trans Man"),
-      DropdownItem(label: 'Trans Woman', value: "Trans Woman"),
-      DropdownItem(label: 'Trans Masculine', value: "Trans Masculine"),
-      DropdownItem(label: 'Trans Feminine', value: "Trans Feminine"),
-      DropdownItem(label: 'Two-Spirit', value: "Two-Spirit"),
-      DropdownItem(label: 'Woman', value: "Woman")
-    ];
-
-    //pronouns ALSO NEED MORE BUT IM BUSY
-    var pronouns = [
-      DropdownItem(label: 'she/her', value: "she/her"),
-      DropdownItem(label: 'they/them', value: "they/them"),
-      DropdownItem(label: 'he/him', value: "he/him"),
-      DropdownItem(label: 'ze/zir', value: "ze/zir"),
-      DropdownItem(label: 'fae/faer', value: "fae/faer"),
-      DropdownItem(label: 'ae/aer', value: "ae/aer"),
-      DropdownItem(label: 'xe/xem', value: "xe/xem"),
-      DropdownItem(label: 'it/its', value: "it/its"),
-      DropdownItem(label: 'ask me', value: "ask me"),
-    ];
-
-    //relationship status for drop down
-    List<String> relationshipStatuses = [
-      'single',
-      'open relationship',
-      'in a relationship',
-    ];
-
-    //relationship style for drop down
-    List<String> relationshipStyles = [
-      'monogamous',
-      'polyamorous',
-      'ethical non monagamy',
-      'relationship anarchy',
-      'swinging',
-      'exploring'
-    ];
-
-    //what your looking for types for drop down
-    List<String> expectations = [
-      'hookups',
-      'long term relationship',
-      'short term relationship',
-      'casual dating',
-      'figuring it out'
-    ];
-
-    //sexual preferences for drop down
-    var sexualPrefs = [
-      DropdownItem(label: 'top', value: "top"),
-      DropdownItem(label: 'bottom', value: "bottom"),
-      DropdownItem(label: 'switch', value: "switch"),
-    ];
-
-    //gender presentations for drop down
-    var genderPresentations = [
-      DropdownItem(label: 'androgynous', value: "androgynous"),
-      DropdownItem(label: 'alien', value: "alien"),
-      DropdownItem(label: 'chapstick', value: "chapstick"),
-      DropdownItem(label: 'femme', value: "femme"),
-      DropdownItem(label: 'futch', value: "futch"),
-      DropdownItem(label: 'butch', value: "butch"),
-      DropdownItem(label: 'lipstick', value: "lipstick"),
-      DropdownItem(label: 'masc', value: "masc"),
-      DropdownItem(label: 'stud', value: "stud"),
-      DropdownItem(label: 'stemme', value: "stemme"),
-    ];
-
-    //interests for drop down
-    var interestOptions = [
-      DropdownItem(label: 'reading', value: "reading"),
-      DropdownItem(label: 'outdoors', value: "outdoors"),
-      DropdownItem(label: 'cooking', value: "cooking"),
-      DropdownItem(label: 'emo femmes', value: "emo femmes"),
-    ];
-
     return (SizedBox(
         width: ProfileStyles.formWidth,
         child: Form(
@@ -586,39 +249,29 @@ class _ProfileFormState extends State<ProfileForm> {
                       textType: "Height"),
                   const SizedBox(height: 15),
                   MultiSelectDropdown(
-                      controller: sexualityController,
-                      labelText: "Sexuality",
-                      items: sexualities),
+                      controller: sexualityController, labelText: "Sexuality"),
                   const SizedBox(height: 15),
                   MultiSelectDropdown(
                       controller: genderController,
-                      labelText: "Gender Identity",
-                      items: genders),
+                      labelText: "Gender Identity"),
                   const SizedBox(height: 15),
                   MultiSelectDropdown(
-                      controller: pronounController,
-                      labelText: "Pronouns",
-                      items: pronouns),
+                      controller: pronounController, labelText: "Pronouns"),
                   const SizedBox(height: 15),
                   MultiSelectDropdown(
                       controller: sexualPrefController,
-                      labelText: "Sexual Preferences",
-                      items: sexualPrefs),
+                      labelText: "Sexual Preferences"),
                   const SizedBox(height: 15),
                   MultiSelectDropdown(
                       controller: genderPresentationController,
-                      labelText: "Gender Presentation",
-                      items: genderPresentations),
+                      labelText: "Gender Presentation"),
                   const SizedBox(height: 15),
                   MultiSelectDropdown(
-                      controller: interestsController,
-                      labelText: "Interests",
-                      items: interestOptions),
+                      controller: interestsController, labelText: "Interests"),
                   const SizedBox(height: 15),
                   SingleSelectDropDown(
                     value: _relationshipStatus,
                     label: "Relationship Status",
-                    items: relationshipStatuses,
                     onChanged: (newVal) {
                       setState(() {
                         _relationshipStatus = newVal;
@@ -629,7 +282,6 @@ class _ProfileFormState extends State<ProfileForm> {
                   SingleSelectDropDown(
                     value: _relationshipStyle,
                     label: "Relationship Style",
-                    items: relationshipStyles,
                     onChanged: (newVal) {
                       setState(() {
                         _relationshipStyle = newVal;
@@ -639,7 +291,6 @@ class _ProfileFormState extends State<ProfileForm> {
                   SingleSelectDropDown(
                     value: _lookingFor,
                     label: "Looking For",
-                    items: expectations,
                     onChanged: (newVal) {
                       setState(() {
                         _lookingFor = newVal;
