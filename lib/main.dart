@@ -35,7 +35,6 @@ class MyApp extends StatelessWidget {
               secondary: Color(0xFFD461A6), //header color
               secondaryFixed: Color(0xFFFFFFFF), //white
               tertiary: Color(0xFFFF9B55),
-
               tertiaryContainer: Color(0xFFFFF0E6),
               tertiaryFixed: Color(0xFFFFE0CA)),
           textTheme: const TextTheme(
@@ -48,8 +47,8 @@ class MyApp extends StatelessWidget {
               bodySmall: TextStyle(fontSize: 14))),
       debugShowCheckedModeBanner: false,
       // home: const HomePage(),
-      home: const LoginPage(),
-      // home: const CreateProfilePage(),
+      //home: const LoginPage(),
+      home: const EditProfilePage(),
     );
   }
 }
