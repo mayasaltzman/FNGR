@@ -73,7 +73,7 @@ class _NavMenuState extends State<NavMenu> {
     _pages = [
       const HomePage(),
       UserProfilePage(userId: currentUserId),
-      const ChatListPage(),
+      const ChatListPage(listType: "accepted"),
     ];
   }
 
