@@ -135,6 +135,7 @@ class _ProfileImageState extends State<ProfileImage> {
       height: 500,
       width: ProfileStyles.containerWidth,
       decoration: ProfileStyles.boxDecoration,
+      clipBehavior: Clip.hardEdge,
       child: hasCarousel
           ? Column (
               children: [
