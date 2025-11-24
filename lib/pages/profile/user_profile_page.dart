@@ -43,6 +43,7 @@ class HeaderElements extends StatelessWidget {
   final bool isUser;
   final String userId;
   final String photoURL;
+
   const HeaderElements({
     super.key,
     required this.name,
@@ -110,21 +111,44 @@ class HeaderElements extends StatelessWidget {
 //image box
 class ProfileImage extends StatelessWidget {
   final String? imageUrl;
-  const ProfileImage({super.key, this.imageUrl});
-
+  final List<dynamic>? profileImages;
+  
+  const ProfileImage({
+    super.key, 
+    this.imageUrl, 
+    this.profileImages
+  });
 
   @override
   Widget build(BuildContext context) {
-    //doesn't render until data is loaded
+    final hasCarousel = profileImages != null && profileImages!.isNotEmpty;
+    
     return Container(
       height: 500,
       width: ProfileStyles.containerWidth,
       decoration: ProfileStyles.boxDecoration,
-      child: imageUrl != null && imageUrl!.isNotEmpty
-          ? Image.network(imageUrl!,fit: BoxFit.cover, errorBuilder: (context, error, stackTrace) => 
-                  const Icon(Icons.person, size: 100),
+      child: hasCarousel
+          ? PageView.builder(
+              itemCount: profileImages!.length,
+              itemBuilder: (context, index) {
+                final img = profileImages![index];
+
+                return Image.network(
+                  img,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) =>
+                      const Center(child: Icon(Icons.person, size: 100)),
+                );
+              },
             )
-            : const Center( child: Icon(Icons.person, size: 100)),
+          : imageUrl != null && imageUrl!.isNotEmpty
+              ? Image.network(
+                  imageUrl!,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) =>
+                      const Center(child: Icon(Icons.person, size: 100)),
+                )
+              : const Center(child: Icon(Icons.person, size: 100)),
     );
   }
 }
@@ -426,7 +450,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         userId: userId,
                         photoURL: data['photoURL'] ?? '',
                       ),
-                      ProfileImage(imageUrl: data['photoURL'] ?? ''),
+                      ProfileImage(
+                        imageUrl: data['photoURL'] ?? '', 
+                        profileImages: data['profileImages'] ?? []
+                      ),
                       AboutMe(bio: data['bio'] ?? 'No bio available.'),
                       KeyInfo(
                         distance: distance.isFinite ? distance : null,

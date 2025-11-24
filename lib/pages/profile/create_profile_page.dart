@@ -193,7 +193,6 @@ class _ProfileFormState extends State<ProfileForm> {
         'sexual_pref': sexualPrefController.selectedItems.map((e) => e.value).toList(),
         'profileImages': imageUrls,
         'photoURL': imageUrls.first, // Primary profile photo
-        'isProfileComplete': true,
       };
 
       await _firebaseService.updateUserProfile(data: data);
