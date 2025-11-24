@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../main.dart';
 import './widgets/multi_select_widget.dart';
 import './widgets/single_select_widget.dart';
+import './widgets/text_input_widgets.dart';
 
 //styles for profile page
 abstract class ProfileStyles {
@@ -23,111 +24,6 @@ abstract class ProfileStyles {
       borderRadius: BorderRadius.all(Radius.circular(12)),
     ),
   );
-}
-
-//custom text input field for our form
-class TextInputField extends StatelessWidget {
-  final TextEditingController controller;
-  final String labelText;
-  final FormFieldValidator<String>? validator;
-  final String textType;
-
-  const TextInputField({
-    super.key,
-    required this.controller,
-    required this.labelText,
-    required this.textType,
-    this.validator,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      SizedBox(
-        child: Text(
-          textType,
-          style: ProfileStyles.inputHeader,
-          softWrap: true,
-        ),
-      ),
-      const SizedBox(width: 20),
-      SizedBox(
-          height: 50,
-          child: TextFormField(
-            controller: controller,
-            style: TextStyle(
-                color: Theme.of(context).colorScheme.primaryFixed,
-                fontSize: 16),
-            decoration: InputDecoration(
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide:
-                      BorderSide(color: Theme.of(context).colorScheme.tertiary),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.tertiary, width: 2),
-                ),
-                filled: true,
-                fillColor: Theme.of(context).colorScheme.tertiaryContainer,
-                labelText: labelText,
-                labelStyle: TextStyle(
-                    color: Theme.of(context).colorScheme.primaryFixed,
-                    fontSize: 16)),
-            validator: validator,
-          ))
-    ]);
-  }
-}
-
-//long text input field for bio and such
-class TextInputFieldLong extends StatelessWidget {
-  final TextEditingController controller;
-  final FormFieldValidator<String>? validator;
-
-  const TextInputFieldLong({
-    super.key,
-    required this.controller,
-    this.validator,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text("About me", style: ProfileStyles.inputHeader),
-      const SizedBox(height: 15),
-      SizedBox(
-          width: 400,
-          child: TextFormField(
-            controller: controller,
-            keyboardType: TextInputType.multiline,
-            minLines: 3,
-            maxLines: null,
-            style: TextStyle(
-                color: Theme.of(context).colorScheme.primaryFixed,
-                fontSize: 16),
-            decoration: InputDecoration(
-              labelText: "Tell us about yourself!",
-              labelStyle: TextStyle(
-                  color: Theme.of(context).colorScheme.primaryFixed,
-                  fontSize: 16),
-              filled: true,
-              fillColor: Theme.of(context).colorScheme.tertiaryContainer,
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide:
-                    BorderSide(color: Theme.of(context).colorScheme.tertiary),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.tertiary, width: 2),
-              ),
-            ),
-          ))
-    ]);
-  }
 }
 
 //custom image button widget to get images from user

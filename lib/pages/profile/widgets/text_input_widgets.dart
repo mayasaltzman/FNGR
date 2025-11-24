@@ -1,0 +1,121 @@
+import 'package:flutter/material.dart';
+
+//styles for profile page
+abstract class ProfileStyles {
+  static const formWidth = 375.0;
+  static const textInputWidth = 250.0;
+
+  static TextStyle inputHeader = const TextStyle(
+      fontWeight: FontWeight.bold, color: Color(0xFFAA4E85), fontSize: 18);
+
+  static final ButtonStyle button = ElevatedButton.styleFrom(
+    backgroundColor: const Color(0xFFD461A6),
+    fixedSize: const Size(110, 50),
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(12)),
+    ),
+  );
+}
+
+class TextInputField extends StatelessWidget {
+  final TextEditingController controller;
+  final String labelText;
+  final FormFieldValidator<String>? validator;
+  final String textType;
+
+  const TextInputField({
+    super.key,
+    required this.controller,
+    required this.labelText,
+    required this.textType,
+    this.validator,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      SizedBox(
+        child: Text(
+          textType,
+          style: ProfileStyles.inputHeader,
+          softWrap: true,
+        ),
+      ),
+      const SizedBox(width: 20),
+      SizedBox(
+          height: 50,
+          child: TextFormField(
+            controller: controller,
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.primaryFixed,
+                fontSize: 16),
+            decoration: InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide:
+                      BorderSide(color: Theme.of(context).colorScheme.tertiary),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.tertiary, width: 2),
+                ),
+                filled: true,
+                fillColor: Theme.of(context).colorScheme.tertiaryContainer,
+                labelText: labelText,
+                labelStyle: TextStyle(
+                    color: Theme.of(context).colorScheme.primaryFixed,
+                    fontSize: 16)),
+            validator: validator,
+          ))
+    ]);
+  }
+}
+
+class TextInputFieldLong extends StatelessWidget {
+  final TextEditingController controller;
+  final FormFieldValidator<String>? validator;
+
+  const TextInputFieldLong({
+    super.key,
+    required this.controller,
+    this.validator,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text("About me", style: ProfileStyles.inputHeader),
+      const SizedBox(height: 15),
+      SizedBox(
+          width: 400,
+          child: TextFormField(
+            controller: controller,
+            keyboardType: TextInputType.multiline,
+            minLines: 3,
+            maxLines: null,
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.primaryFixed,
+                fontSize: 16),
+            decoration: InputDecoration(
+              labelText: "Tell us about yourself!",
+              labelStyle: TextStyle(
+                  color: Theme.of(context).colorScheme.primaryFixed,
+                  fontSize: 16),
+              filled: true,
+              fillColor: Theme.of(context).colorScheme.tertiaryContainer,
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide:
+                    BorderSide(color: Theme.of(context).colorScheme.tertiary),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: BorderSide(
+                    color: Theme.of(context).colorScheme.tertiary, width: 2),
+              ),
+            ),
+          ))
+    ]);
+  }
+}
