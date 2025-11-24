@@ -57,15 +57,13 @@ class StorageService {
   Future<List<String>> uploadMultipleProfileImages({
     required List<File> imageFiles,
     required String userId,
-    Function(int current, int total, double progress)? onProgress,
 
-  }) async {
+    }) async {
     List<String> downloadUrls = [];
     
     for (int i = 0; i < imageFiles.length; i++) {
       try {
 
-        onProgress?.call(i + 1, imageFiles.length, (i + 1) / imageFiles.length);
         
         final url = await uploadProfileImage(
           imageFile: imageFiles[i],
@@ -74,7 +72,6 @@ class StorageService {
         );
         downloadUrls.add(url);
 
-        onProgress?.call(i + 1, imageFiles.length, (i + 1) / imageFiles.length);
 
         print('Uploaded image ${i + 1}/${imageFiles.length}');
       } catch (e) {
