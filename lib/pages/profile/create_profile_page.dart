@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 import '../../main.dart';
+import './widgets/multi_select_widget.dart';
 
 //styles for profile page
 abstract class ProfileStyles {
@@ -203,59 +203,6 @@ class _ImageButtonState extends State<ImageButton> {
   }
 }
 
-//custom multiselect dropdown widget
-class MultiSelectDropdown extends StatelessWidget {
-  final MultiSelectController<String> controller;
-  final String labelText;
-  final List<DropdownItem<String>> items;
-
-  const MultiSelectDropdown({
-    super.key,
-    required this.controller,
-    required this.labelText,
-    required this.items,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      SizedBox(child: Text(labelText, style: ProfileStyles.inputHeader)),
-      const SizedBox(width: 20),
-      SizedBox(
-          child: MultiDropdown(
-        items: items,
-        controller: controller,
-        dropdownDecoration: DropdownDecoration(
-            backgroundColor: Theme.of(context).colorScheme.primaryContainer),
-        dropdownItemDecoration: DropdownItemDecoration(
-            textColor: Theme.of(context).colorScheme.primaryFixed,
-            selectedBackgroundColor: Theme.of(context).colorScheme.primary,
-            selectedTextColor: Theme.of(context).colorScheme.primaryFixed),
-        fieldDecoration: FieldDecoration(
-            showClearIcon: false,
-            labelStyle:
-                TextStyle(color: Theme.of(context).colorScheme.primaryFixed),
-            backgroundColor: Theme.of(context).colorScheme.tertiaryContainer,
-            hintStyle: TextStyle(
-                color: Theme.of(context).colorScheme.primaryFixed,
-                fontSize: 18),
-            border: OutlineInputBorder(
-                borderSide:
-                    BorderSide(color: Theme.of(context).colorScheme.tertiary),
-                borderRadius: BorderRadius.circular(10)),
-            suffixIcon: Icon(Icons.arrow_drop_down,
-                color: Theme.of(context).colorScheme.primaryFixed)),
-        chipDecoration: ChipDecoration(
-            backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-            labelStyle:
-                TextStyle(color: Theme.of(context).colorScheme.primaryFixed),
-            deleteIcon: Icon(Icons.close,
-                color: Theme.of(context).colorScheme.primaryFixed, size: 15)),
-      ))
-    ]);
-  }
-}
-
 //custom single dropdown widget
 class SingleSelectDropDown extends StatelessWidget {
   final String? value;
@@ -424,52 +371,6 @@ class _ProfileFormState extends State<ProfileForm> {
 
   @override
   Widget build(BuildContext context) {
-    //list of sexualities fields drop down memebers we can add more LOL
-    var sexualities = [
-      DropdownItem(label: 'Aromantic', value: "Aromantic"),
-      DropdownItem(label: 'Asexual', value: "Asexual"),
-      DropdownItem(label: 'Bisexual', value: "Bisexual"),
-      DropdownItem(label: 'Demisexual', value: "Demisexual"),
-      DropdownItem(label: 'Gay', value: "Gay"),
-      DropdownItem(label: 'Lesbian', value: "Lesbian"),
-      DropdownItem(label: 'Other', value: "Other"),
-      DropdownItem(label: 'Pansexual', value: "Pansexual"),
-      DropdownItem(label: 'Polysexual', value: "Polysexual"),
-      DropdownItem(label: 'Queer', value: "Queer"),
-      DropdownItem(label: 'Sapphic', value: "Sapphic")
-    ];
-
-    //gender identity values for drop down again we can add more not to get canceled but im lazy
-    var genders = [
-      DropdownItem(label: 'Agender', value: "Agender"),
-      DropdownItem(label: 'Bigender', value: "Bigender"),
-      DropdownItem(label: 'Genderfluid', value: "Genderfluid"),
-      DropdownItem(label: 'Genderqueer', value: "Genderqueer"),
-      DropdownItem(label: 'Intersex', value: "Intersex"),
-      DropdownItem(label: 'Non-binary', value: "Non-binary"),
-      DropdownItem(label: 'Pangender', value: "Pangender"),
-      DropdownItem(label: 'Transgender', value: "Transgender"),
-      DropdownItem(label: 'Trans Man', value: "Trans Man"),
-      DropdownItem(label: 'Trans Woman', value: "Trans Woman"),
-      DropdownItem(label: 'Trans Masculine', value: "Trans Masculine"),
-      DropdownItem(label: 'Trans Feminine', value: "Trans Feminine"),
-      DropdownItem(label: 'Two-Spirit', value: "Two-Spirit"),
-      DropdownItem(label: 'Woman', value: "Woman")
-    ];
-
-    //pronouns ALSO NEED MORE BUT IM BUSY
-    var pronouns = [
-      DropdownItem(label: 'she/her', value: "she/her"),
-      DropdownItem(label: 'they/them', value: "they/them"),
-      DropdownItem(label: 'he/him', value: "he/him"),
-      DropdownItem(label: 'ze/zir', value: "ze/zir"),
-      DropdownItem(label: 'fae/faer', value: "fae/faer"),
-      DropdownItem(label: 'ae/aer', value: "ae/aer"),
-      DropdownItem(label: 'xe/xem', value: "xe/xem"),
-      DropdownItem(label: 'it/its', value: "it/its"),
-      DropdownItem(label: 'ask me', value: "ask me"),
-    ];
-
     //relationship status for drop down
     List<String> relationshipStatuses = [
       'single',
@@ -494,35 +395,6 @@ class _ProfileFormState extends State<ProfileForm> {
       'short term relationship',
       'casual dating',
       'figuring it out'
-    ];
-
-    //sexual preferences for drop down
-    var sexualPrefs = [
-      DropdownItem(label: 'top', value: "top"),
-      DropdownItem(label: 'bottom', value: "bottom"),
-      DropdownItem(label: 'switch', value: "switch"),
-    ];
-
-    //gender presentations for drop down
-    var genderPresentations = [
-      DropdownItem(label: 'androgynous', value: "androgynous"),
-      DropdownItem(label: 'alien', value: "alien"),
-      DropdownItem(label: 'chapstick', value: "chapstick"),
-      DropdownItem(label: 'femme', value: "femme"),
-      DropdownItem(label: 'futch', value: "futch"),
-      DropdownItem(label: 'butch', value: "butch"),
-      DropdownItem(label: 'lipstick', value: "lipstick"),
-      DropdownItem(label: 'masc', value: "masc"),
-      DropdownItem(label: 'stud', value: "stud"),
-      DropdownItem(label: 'stemme', value: "stemme"),
-    ];
-
-    //interests for drop down
-    var interestOptions = [
-      DropdownItem(label: 'reading', value: "reading"),
-      DropdownItem(label: 'outdoors', value: "outdoors"),
-      DropdownItem(label: 'cooking', value: "cooking"),
-      DropdownItem(label: 'emo femmes', value: "emo femmes"),
     ];
 
     return (SizedBox(
@@ -586,34 +458,25 @@ class _ProfileFormState extends State<ProfileForm> {
                       textType: "Height"),
                   const SizedBox(height: 15),
                   MultiSelectDropdown(
-                      controller: sexualityController,
-                      labelText: "Sexuality",
-                      items: sexualities),
+                      controller: sexualityController, labelText: "Sexuality"),
                   const SizedBox(height: 15),
                   MultiSelectDropdown(
                       controller: genderController,
-                      labelText: "Gender Identity",
-                      items: genders),
+                      labelText: "Gender Identity"),
                   const SizedBox(height: 15),
                   MultiSelectDropdown(
-                      controller: pronounController,
-                      labelText: "Pronouns",
-                      items: pronouns),
+                      controller: pronounController, labelText: "Pronouns"),
                   const SizedBox(height: 15),
                   MultiSelectDropdown(
                       controller: sexualPrefController,
-                      labelText: "Sexual Preferences",
-                      items: sexualPrefs),
+                      labelText: "Sexual Preferences"),
                   const SizedBox(height: 15),
                   MultiSelectDropdown(
                       controller: genderPresentationController,
-                      labelText: "Gender Presentation",
-                      items: genderPresentations),
+                      labelText: "Gender Presentation"),
                   const SizedBox(height: 15),
                   MultiSelectDropdown(
-                      controller: interestsController,
-                      labelText: "Interests",
-                      items: interestOptions),
+                      controller: interestsController, labelText: "Interests"),
                   const SizedBox(height: 15),
                   SingleSelectDropDown(
                     value: _relationshipStatus,
