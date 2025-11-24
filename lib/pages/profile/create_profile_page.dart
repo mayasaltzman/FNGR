@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../main.dart';
 import './widgets/multi_select_widget.dart';
 import './widgets/single_select_widget.dart';
 import './widgets/text_input_widgets.dart';
+import '../../services/firebase_service.dart';
 
 //styles for profile page
 abstract class ProfileStyles {
@@ -136,8 +136,8 @@ class _ProfileFormState extends State<ProfileForm> {
   final MultiSelectController<String> interestsController =
       MultiSelectController<String>();
 
-  //instance of firebase
-  final firestoreInstance = FirebaseFirestore.instance;
+  //call ffire
+  final FirebaseService _firebaseService = FirebaseService();
 
   String? _relationshipStatus;
   String? _relationshipStyle;
@@ -155,10 +155,9 @@ class _ProfileFormState extends State<ProfileForm> {
       keyInfo = !keyInfo;
     });
   }
-
+  
   void _submitForm() async {
-    //insert to database
-    await firestoreInstance.collection('users').add({
+    final data  = {
       'name': _nameController.text,
       'age': _ageController.text,
       'height': _heightController.text,
@@ -177,8 +176,8 @@ class _ProfileFormState extends State<ProfileForm> {
       'sexual_pref':
           sexualPrefController.selectedItems.map((e) => e.value).toList(),
       'bio': _bioController.text
-    });
-
+    };
+    await _firebaseService.updateUserProfile(data: data);
     //reroute to home at first page of nav menu
     if (mounted) {
       Navigator.of(context).pushAndRemoveUntil(
