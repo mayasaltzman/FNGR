@@ -31,6 +31,12 @@ class StorageService {
           .child('profile_images')
           .child(fileName);
 
+      final metadata = SettableMetadata(
+        contentType: 'image/jpeg',
+        customMetadata: {
+          'uploadedAt': DateTime.now().toIso8601String(),
+        },
+      );
       // Upload the file
       final UploadTask uploadTask = ref.putFile(imageFile);
       
@@ -42,6 +48,7 @@ class StorageService {
       
       return downloadUrl;
     } catch (e) {
+      print('Failed to upload image: $e');
       throw Exception('Failed to upload image: $e');
     }
   }
@@ -50,23 +57,35 @@ class StorageService {
   Future<List<String>> uploadMultipleProfileImages({
     required List<File> imageFiles,
     required String userId,
+    Function(int current, int total, double progress)? onProgress,
+
   }) async {
     List<String> downloadUrls = [];
     
     for (int i = 0; i < imageFiles.length; i++) {
       try {
+
+        onProgress?.call(i + 1, imageFiles.length, (i + 1) / imageFiles.length);
+        
         final url = await uploadProfileImage(
           imageFile: imageFiles[i],
           userId: userId,
           imageIndex: i,
         );
         downloadUrls.add(url);
+
+        onProgress?.call(i + 1, imageFiles.length, (i + 1) / imageFiles.length);
+
+        print('Uploaded image ${i + 1}/${imageFiles.length}');
       } catch (e) {
         print('Error uploading image $i: $e');
         // Continue with other images even if one fails
       }
+    } 
+    if (downloadUrls.isEmpty) {
+      throw Exception('Failed to upload any images.');
     }
-    
+
     return downloadUrls;
   }
 
@@ -97,5 +116,44 @@ class StorageService {
     } catch (e) {
       throw Exception('Failed to delete all images: $e');
     }
+  }
+  
+  
+  Future<String> replaceProfileImage({
+    required File newImageFile,
+    required String userId,
+    required int imageIndex,
+    String? oldImageUrl,
+  }) async {
+    try {
+      // Delete old image if URL provided
+      if (oldImageUrl != null && oldImageUrl.isNotEmpty) {
+        try {
+          await deleteProfileImage(oldImageUrl);
+        } catch (e) {
+          print('Could not delete old image: $e');
+          // Continue with upload even if delete fails
+        }
+      }
+      
+      // Upload new image
+      return await uploadProfileImage(
+        imageFile: newImageFile,
+        userId: userId,
+        imageIndex: imageIndex,
+      );
+    } catch (e) {
+      throw Exception('Failed to replace image: $e');
+    }
+  }
+
+  Future<double> getFileSizeInMB(File file) async {
+    final bytes = await file.length();
+    return bytes / (1024 * 1024);
+  }
+
+  Future<bool> isFileSizeAcceptable(File file, {int maxSizeMB = 10}) async {
+    final sizeInMB = await getFileSizeInMB(file);
+    return sizeInMB <= maxSizeMB;
   }
 }
