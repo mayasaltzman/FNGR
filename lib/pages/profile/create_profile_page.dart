@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../main.dart';
 import './widgets/multi_select_widget.dart';
+import './widgets/single_select_widget.dart';
 
 //styles for profile page
 abstract class ProfileStyles {
@@ -203,62 +204,6 @@ class _ImageButtonState extends State<ImageButton> {
   }
 }
 
-//custom single dropdown widget
-class SingleSelectDropDown extends StatelessWidget {
-  final String? value;
-  final List<String> items;
-  final String label;
-  final ValueChanged<String?> onChanged;
-
-  const SingleSelectDropDown({
-    super.key,
-    required this.value,
-    required this.label,
-    required this.items,
-    required this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-            child: Text(
-          label,
-          style: ProfileStyles.inputHeader,
-        )),
-        const SizedBox(width: 20),
-        SizedBox(
-          child: DropdownButton<String>(
-            hint: Text("Select",
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.primaryFixed)),
-            isExpanded: true,
-            value: value,
-            items: items
-                .map((status) => DropdownMenuItem<String>(
-                      value: status,
-                      child: Text(status),
-                    ))
-                .toList(),
-            onChanged: onChanged,
-            dropdownColor: Theme.of(context).colorScheme.primaryContainer,
-            style: TextStyle(
-                color: Theme.of(context).colorScheme.primaryFixed,
-                fontSize: 16),
-            icon: Icon(Icons.arrow_drop_down,
-                color: Theme.of(context).colorScheme.primaryFixed),
-            menuWidth: 280,
-            elevation: 1,
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
 //widget for key info form
 class ProfileForm extends StatefulWidget {
   const ProfileForm({super.key});
@@ -371,32 +316,6 @@ class _ProfileFormState extends State<ProfileForm> {
 
   @override
   Widget build(BuildContext context) {
-    //relationship status for drop down
-    List<String> relationshipStatuses = [
-      'single',
-      'open relationship',
-      'in a relationship',
-    ];
-
-    //relationship style for drop down
-    List<String> relationshipStyles = [
-      'monogamous',
-      'polyamorous',
-      'ethical non monagamy',
-      'relationship anarchy',
-      'swinging',
-      'exploring'
-    ];
-
-    //what your looking for types for drop down
-    List<String> expectations = [
-      'hookups',
-      'long term relationship',
-      'short term relationship',
-      'casual dating',
-      'figuring it out'
-    ];
-
     return (SizedBox(
         width: ProfileStyles.formWidth,
         child: Form(
@@ -481,7 +400,6 @@ class _ProfileFormState extends State<ProfileForm> {
                   SingleSelectDropDown(
                     value: _relationshipStatus,
                     label: "Relationship Status",
-                    items: relationshipStatuses,
                     onChanged: (newVal) {
                       setState(() {
                         _relationshipStatus = newVal;
@@ -492,7 +410,6 @@ class _ProfileFormState extends State<ProfileForm> {
                   SingleSelectDropDown(
                     value: _relationshipStyle,
                     label: "Relationship Style",
-                    items: relationshipStyles,
                     onChanged: (newVal) {
                       setState(() {
                         _relationshipStyle = newVal;
@@ -502,7 +419,6 @@ class _ProfileFormState extends State<ProfileForm> {
                   SingleSelectDropDown(
                     value: _lookingFor,
                     label: "Looking For",
-                    items: expectations,
                     onChanged: (newVal) {
                       setState(() {
                         _lookingFor = newVal;
