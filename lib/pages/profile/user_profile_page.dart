@@ -109,7 +109,7 @@ class HeaderElements extends StatelessWidget {
 }
 
 //image box
-class ProfileImage extends StatelessWidget {
+class ProfileImage extends StatefulWidget {
   final String? imageUrl;
   final List<dynamic>? profileImages;
   
@@ -119,37 +119,70 @@ class ProfileImage extends StatelessWidget {
     this.profileImages
   });
 
+ @override
+  State<ProfileImage> createState() => _ProfileImageState();
+}
+class _ProfileImageState extends State<ProfileImage> {
+  final PageController _pageController = PageController();
+  int _index = 0;
+  
   @override
   Widget build(BuildContext context) {
-    final hasCarousel = profileImages != null && profileImages!.isNotEmpty;
-    
+    final images = widget.profileImages ?? [];
+    final hasCarousel = images.isNotEmpty;
+
     return Container(
       height: 500,
       width: ProfileStyles.containerWidth,
       decoration: ProfileStyles.boxDecoration,
       child: hasCarousel
-          ? PageView.builder(
-              itemCount: profileImages!.length,
-              itemBuilder: (context, index) {
-                final img = profileImages![index];
+          ? Column (
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(images.length, (i) {
+                    return Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                      height: 4,
+                      width: 25,
+                      color: _index == i ? 
+                         Theme.of(context).colorScheme.tertiaryFixed: 
+                         Theme.of(context).colorScheme.tertiary,
+                    );
+                  }),
+                ),
 
-                return Image.network(
-                  img,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) =>
-                      const Center(child: Icon(Icons.person, size: 100)),
-                );
-              },
+                Expanded(
+                  child: PageView(
+                    controller: _pageController,
+                    onPageChanged: (i) => setState(() => _index = i),
+                    children: images.map((img) {
+                      return Image.network(
+                        img,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) =>
+                            const Center(child: Icon(Icons.person, size: 100)),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ],
             )
-          : imageUrl != null && imageUrl!.isNotEmpty
-              ? Image.network(
-                  imageUrl!,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) =>
-                      const Center(child: Icon(Icons.person, size: 100)),
-                )
-              : const Center(child: Icon(Icons.person, size: 100)),
+          : _buildSingleImageOrFallback(),
+          
     );
+  }
+  Widget _buildSingleImageOrFallback() {
+    if (widget.imageUrl != null && widget.imageUrl!.isNotEmpty) {
+      return Image.network(
+        widget.imageUrl!,
+        fit: BoxFit.cover,
+        errorBuilder: (_, __, ___) =>
+            const Center(child: Icon(Icons.person, size: 100)),
+      );
+    } else {
+      return const Center(child: Icon(Icons.person, size: 100));
+    }
   }
 }
 
