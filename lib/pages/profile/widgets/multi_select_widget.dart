@@ -20,13 +20,11 @@ abstract class ProfileStyles {
 class MultiSelectDropdown extends StatelessWidget {
   final MultiSelectController<String> controller;
   final String labelText;
-  //final List<DropdownItem<String>> items;
 
   const MultiSelectDropdown({
     super.key,
     required this.controller,
     required this.labelText,
-    //required this.items,
   });
 
   @override
