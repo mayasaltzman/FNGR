@@ -7,6 +7,7 @@ import 'pages/profile/user_profile_page.dart';
 import 'pages/chat/chat_list_page.dart';
 import 'pages/auth/login_page.dart';
 import 'pages/profile/create_profile_page.dart';
+import 'pages/profile/edit_profile_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
