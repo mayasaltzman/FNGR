@@ -7,7 +7,9 @@ import '../../main.dart';
 import './widgets/multi_select_widget.dart';
 import './widgets/single_select_widget.dart';
 import './widgets/text_input_widgets.dart';
+import './widgets/image_button_widget.dart';
 import '../../services/firebase_service.dart';
+import '../../services/storage_service.dart';
 
 //styles for profile page
 abstract class ProfileStyles {
@@ -25,82 +27,8 @@ abstract class ProfileStyles {
     ),
   );
 }
-
 //custom image button widget to get images from user
-class ImageButton extends StatefulWidget {
-  final File? image;
-  final double width;
-  final double height;
 
-  const ImageButton(
-      {super.key,
-      required this.image,
-      required this.width,
-      required this.height});
-
-  @override
-  State<ImageButton> createState() => _ImageButtonState();
-}
-
-class _ImageButtonState extends State<ImageButton> {
-  final _picker = ImagePicker();
-  File? _selectedImage;
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedImage = widget.image;
-  }
-
-  //method for image picking
-  //NEED TO CONVERT IMAGE TO STRING FORMAT BUT IM NOT SURE WHAT FORMAT TO USE TBH
-  //also right now when you go to next of the form and then back the images don't save
-  Future<void> _pickImage() async {
-    final pickedImage = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedImage == null) return;
-
-    final imageFile = File(pickedImage.path);
-
-    setState(() {
-      _selectedImage = imageFile;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(children: [
-      SizedBox(
-        width: widget.width,
-        height: widget.height,
-        child: InkWell(
-          onTap: _pickImage,
-          borderRadius: BorderRadius.circular(15),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(15),
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Theme.of(context).colorScheme.primaryFixed,
-                ),
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: _selectedImage != null
-                  ? Image.file(
-                      _selectedImage!,
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: double.infinity,
-                    )
-                  : const Center(child: Icon(Icons.add, color: Colors.white)),
-            ),
-          ),
-        ),
-      ),
-    ]);
-  }
-}
-
-//widget for key info form
 class ProfileForm extends StatefulWidget {
   const ProfileForm({super.key});
 
@@ -111,10 +39,12 @@ class ProfileForm extends StatefulWidget {
 class _ProfileFormState extends State<ProfileForm> {
   //state for managing form
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _picker = ImagePicker();
 
   //conditions to set which process of profile creation the user is on
   bool keyInfo = true;
   bool additionalInfo = false;
+  bool isLoading = false;
 
   //text controllers
   final TextEditingController _nameController = TextEditingController();
@@ -138,52 +68,161 @@ class _ProfileFormState extends State<ProfileForm> {
 
   //call ffire
   final FirebaseService _firebaseService = FirebaseService();
+  final StorageService _storageService = StorageService();
 
   String? _relationshipStatus;
   String? _relationshipStyle;
   String? _lookingFor;
 
   //need to figure out how to add to this from the seperate image picker thing
-  final List<File> _images = [];
+  final List<File?> _selectedImages = List.filled(5, null);
+    
+  // Upload progress tracking
+  double _uploadProgress = 0.0;
+  int _currentImageUploading = 0;
+  int _totalImages = 0;
 
-  File? _image1, _image2, _image3, _image4, _image5;
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _ageController.dispose();
+    _heightController.dispose();
+    _bioController.dispose();
+    sexualityController.dispose();
+    genderController.dispose();
+    pronounController.dispose();
+    sexualPrefController.dispose();
+    genderPresentationController.dispose();
+    interestsController.dispose();
+    super.dispose();
+  }
+  
+  Future<void> _pickImage(int index) async {
+    try {
+      final pickedImage = await _picker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 1920,
+        maxHeight: 1920,
+        imageQuality: 80,
+      );
+      if (pickedImage == null) return;
+      final imageFile = File(pickedImage.path);
 
-  //for conditional rendering of steps of the form
+      final sizeInMB = await imageFile.length() / (1024 * 1024);
+      if (sizeInMB > 10) {
+        if (mounted) {
+          _showSnackBar('Image size should not exceed 10 MB.');
+        }
+        return;
+      }
+      setState(() {
+        _selectedImages[index] = imageFile;
+      });
+    } catch (e) {
+      if (mounted) {
+        _showSnackBar('Error picking image: $e');
+      }
+    }
+  }
+
+  bool _validateKeyInfo() {
+    if (_selectedImages.every((img) => img == null)) {
+      _showSnackBar('Please add at least one photo');
+      return false;
+    }
+    if (_nameController.text.trim().isEmpty) {
+      _showSnackBar('Please enter your name');
+      return false;
+    }
+    if (_ageController.text.trim().isEmpty) {
+      _showSnackBar('Please enter your age');
+      return false;
+    }
+    return true;
+  }
+
   void _updateFormStep() {
+    if (!additionalInfo && !_validateKeyInfo()) {
+      return;
+    }
     setState(() {
       additionalInfo = !additionalInfo;
       keyInfo = !keyInfo;
     });
   }
-  
-  void _submitForm() async {
-    final data  = {
-      'name': _nameController.text,
-      'age': _ageController.text,
-      'height': _heightController.text,
-      'sexuality':
-          sexualityController.selectedItems.map((e) => e.value).toList(),
-      'gender': genderController.selectedItems.map((e) => e.value).toList(),
-      'pronouns': pronounController.selectedItems.map((e) => e.value).toList(),
-      'relationship_status': _relationshipStatus,
-      'relationship_style': _relationshipStyle,
-      'expectations': _lookingFor,
-      'expression': genderPresentationController.selectedItems
-          .map((e) => e.value)
-          .toList(),
-      'interests':
-          interestsController.selectedItems.map((e) => e.value).toList(),
-      'sexual_pref':
-          sexualPrefController.selectedItems.map((e) => e.value).toList(),
-      'bio': _bioController.text
-    };
-    await _firebaseService.updateUserProfile(data: data);
-    //reroute to home at first page of nav menu
-    if (mounted) {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const NavMenu()),
-          (route) => false);
+
+  Future<void> _submitForm() async {
+    if (!_validateKeyInfo()) return;
+    setState(() {
+      isLoading = true;
+    });
+    
+    try {
+      final userId = _firebaseService.currentUserId;
+      if (userId == null) {
+        throw Exception('No user logged in');
+      }
+
+      final imagesToUpload = _selectedImages.whereType<File>().toList();
+      _totalImages = imagesToUpload.length;
+      
+      if (imagesToUpload.isEmpty) {
+        throw Exception('Please select at least one image');
+      }
+
+      List<String> imageUrls = await _storageService.uploadMultipleProfileImages(
+        imageFiles: imagesToUpload,
+        userId: userId,
+      );
+      if (imageUrls.isEmpty) {
+        throw Exception('Image upload failed');
+      }
+      final data = {
+        'name': _nameController.text.trim(),
+        'age': _ageController.text.trim(),
+        'height': _heightController.text.trim(),
+        'bio': _bioController.text.trim(),
+        'sexuality': sexualityController.selectedItems.map((e) => e.value).toList(),
+        'gender': genderController.selectedItems.map((e) => e.value).toList(),
+        'pronouns': pronounController.selectedItems.map((e) => e.value).toList(),
+        'relationship_status': _relationshipStatus ?? '',
+        'relationship_style': _relationshipStyle ?? '',
+        'expectations': _lookingFor ?? '',
+        'expression': genderPresentationController.selectedItems.map((e) => e.value).toList(),
+        'interests': interestsController.selectedItems.map((e) => e.value).toList(),
+        'sexual_pref': sexualPrefController.selectedItems.map((e) => e.value).toList(),
+        'profileImages': imageUrls,
+        'photoURL': imageUrls.first, // Primary profile photo
+      };
+
+      await _firebaseService.updateUserProfile(data: data);
+      //reroute to home at first page of nav menu
+      if (mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const NavMenu()),
+            (route) => false
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        _showSnackBar('Error submitting profile: $e');
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
+  }
+
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(seconds: 3),
+      ),
+    );
   }
 
   @override
@@ -200,21 +239,22 @@ class _ProfileFormState extends State<ProfileForm> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        ImageButton(image: _image1, width: 200, height: 400),
+                        ImageButton(
+                          image: _selectedImages[0], width: 200, height: 400, onTap: () => _pickImage(0)),
                         const SizedBox(width: 5),
                         Column(
                           children: [
-                            ImageButton(image: _image2, width: 80, height: 190),
+                            ImageButton(image: _selectedImages[1], width: 80, height: 190, onTap: () => _pickImage(1)),
                             const SizedBox(height: 10),
-                            ImageButton(image: _image3, width: 80, height: 190),
+                            ImageButton(image: _selectedImages[2], width: 80, height: 190, onTap: () => _pickImage(2)),
                           ],
                         ),
                         const SizedBox(width: 5),
                         Column(
                           children: [
-                            ImageButton(image: _image4, width: 80, height: 190),
+                            ImageButton(image: _selectedImages[3], width: 80, height: 190, onTap: () => _pickImage(3)),
                             const SizedBox(height: 10),
-                            ImageButton(image: _image5, width: 80, height: 190),
+                            ImageButton(image: _selectedImages[4], width: 80, height: 190, onTap: () => _pickImage(4)),
                           ],
                         ),
                       ]),
@@ -240,7 +280,6 @@ class _ProfileFormState extends State<ProfileForm> {
                   )
                 ],
 
-                //ADDITIONAL INFO FORM CONTENTS HERE
                 if (additionalInfo) ...[
                   const SizedBox(height: 15),
                   TextInputField(
