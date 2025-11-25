@@ -62,7 +62,7 @@ class TextInputField extends StatelessWidget {
                 ),
                 filled: true,
                 fillColor: Theme.of(context).colorScheme.tertiaryContainer,
-                labelText: labelText,
+                //labelText: labelText,
                 labelStyle: TextStyle(
                     color: Theme.of(context).colorScheme.primaryFixed,
                     fontSize: 16)),
@@ -98,7 +98,6 @@ class TextInputFieldLong extends StatelessWidget {
                 color: Theme.of(context).colorScheme.primaryFixed,
                 fontSize: 16),
             decoration: InputDecoration(
-              labelText: "Tell us about yourself!",
               labelStyle: TextStyle(
                   color: Theme.of(context).colorScheme.primaryFixed,
                   fontSize: 16),

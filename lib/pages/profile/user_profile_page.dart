@@ -56,56 +56,69 @@ class HeaderElements extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: ProfileStyles.containerWidth,
-      padding: ProfileStyles.boxPadding,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          // Name and age on the left
-          Flexible(
-            child: Text(
-              '${name}${(name.isNotEmpty && age != 'N/A' ? ', ' : '')} ${age != 'N/A' ? age : ''}',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.tertiary,
+        width: ProfileStyles.containerWidth,
+        padding: ProfileStyles.boxPadding,
+        child: Column(
+          spacing: 20,
+          children: [
+            if (isUser)
+              DefaultTabController(
+                length: 2,
+                child: Column(
+                  children: [
+                  TabBar( 
+                    tabs: [Tab(text: "Edit"), Tab(text: "View")]), //Expanded(child: TabBarView(children: []))
+                ]),
               ),
-            ),
-          ),
-
-          // Message button on the right with icon
-          if (!isUser)
-            ElevatedButton.icon(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MessagePage(
-                      recipientUid: userId,
-                      recipientName: name,
-                      recipientImage: photoURL,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Name and age on the left
+                Flexible(
+                  child: Text(
+                    '${name}${(name.isNotEmpty && age != 'N/A' ? ', ' : '')} ${age != 'N/A' ? age : ''}',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.tertiary,
                     ),
                   ),
-                );
-              },
-              icon: const Icon(Icons.chat_bubble_outline),
-              label: const Text("Message"),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.secondary,
-                foregroundColor: Theme.of(context).colorScheme.secondaryFixed,
-                elevation: 3,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
                 ),
-              ),
+
+                // Message button on the right with icon
+                if (!isUser)
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MessagePage(
+                            recipientUid: userId,
+                            recipientName: name,
+                            recipientImage: photoURL,
+                          ),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.chat_bubble_outline),
+                    label: const Text("Message"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.secondary,
+                      foregroundColor:
+                          Theme.of(context).colorScheme.secondaryFixed,
+                      elevation: 3,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+              ],
             ),
-          if (isUser) Text("test")
-        ],
-      ),
-    );
+          ],
+        ));
   }
 }
 
