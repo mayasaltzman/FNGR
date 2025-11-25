@@ -41,13 +41,45 @@ class UserView extends StatelessWidget {
             padding: ProfileStyles.boxPadding,
             alignment: Alignment.center,
             height: 150,
-            child: Row(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(name),
-                Text(age),
-                TextButton(onPressed: () {}, child: Text("Edit Profile"))
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      name,
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.tertiary),
+                    ),
+                    Text(age,
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.tertiary)),
+                  ],
+                ),
+                TextButton(
+                  onPressed: () {},
+                  child: Text("Edit Profile"),
+                  style: TextButton.styleFrom(
+                    foregroundColor: Theme.of(context).colorScheme.tertiary,
+                    backgroundColor:
+                        Theme.of(context).colorScheme.tertiaryFixed,
+                  ),
+                )
               ],
             )));
+  }
+}
+
+class SettingsView extends StatelessWidget {
+  Widget build(BuildContext context) {
+    return Center(
+        child: Container(
+            width: ProfileStyles.containerWidth,
+            decoration: ProfileStyles.boxDecoration,
+            padding: ProfileStyles.boxPadding,
+            alignment: Alignment.center,
+            height: 500));
   }
 }
 
@@ -68,7 +100,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   void initState() {
     super.initState();
     _firebaseService = FirebaseService();
-    userId = widget.userId; //?? _firebaseService.currentUserId!;
+    userId = widget.userId;
   }
 
   @override
@@ -98,7 +130,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
               child: Center(
                 child: Column(
                   spacing: 20,
-                  children: [UserView(name: data['name'], age: data['age'])],
+                  children: [
+                    SizedBox(height: 10),
+                    UserView(name: data['name'], age: data['age']),
+                    SettingsView()
+                  ],
                 ),
               ),
             );

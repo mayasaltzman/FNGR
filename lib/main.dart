@@ -47,8 +47,13 @@ class MyApp extends StatelessWidget {
               bodySmall: TextStyle(fontSize: 14))),
       debugShowCheckedModeBanner: false,
       // home: const HomePage(),
+<<<<<<< HEAD
       //home: const LoginPage(),
       home: const EditProfilePage(),
+=======
+      home: const LoginPage(),
+      //home: const EditProfilePage(userId: "1a4dZXRtA80tkguo1REw"),
+>>>>>>> aca09a7 (add nav to edit profile)
     );
   }
 }
@@ -72,8 +77,9 @@ class _NavMenuState extends State<NavMenu> {
 
     _pages = [
       const HomePage(),
-      UserProfilePage(userId: currentUserId),
+      EditProfilePage(userId: currentUserId),
       const ChatListPage(listType: "accepted"),
+      //EditProfilePage(userId: currentUserId)
     ];
   }
 
