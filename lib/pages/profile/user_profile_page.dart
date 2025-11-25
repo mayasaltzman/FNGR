@@ -192,18 +192,20 @@ class AboutMe extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //doesn't render until data is loaded
-    return Container(
-      width: ProfileStyles.containerWidth,
-      decoration: ProfileStyles.boxDecoration,
-      padding: ProfileStyles.boxPadding,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text("About Me", style: ProfileStyles.boxHeader),
-          Text(bio, style: ProfileStyles.boxText)
-        ],
-      ),
-    );
+    return bio != ""
+        ? Container(
+            width: ProfileStyles.containerWidth,
+            decoration: ProfileStyles.boxDecoration,
+            padding: ProfileStyles.boxPadding,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("About Me", style: ProfileStyles.boxHeader),
+                Text(bio, style: ProfileStyles.boxText)
+              ],
+            ),
+          )
+        : SizedBox(height: 0);
   }
 }
 
@@ -352,7 +354,7 @@ class Preferences extends StatelessWidget {
                     ]),
               ],
             ),
-          ) // render nothing if no bio
+          )
         ],
       ),
     );
@@ -367,6 +369,7 @@ class Interests extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (interests.isEmpty) return const SizedBox();
     return Container(
       width: ProfileStyles.containerWidth,
       decoration: ProfileStyles.boxDecoration,
@@ -395,7 +398,7 @@ class Interests extends StatelessWidget {
                     ]),
               ],
             ),
-          ) // render nothing if no bio
+          )
         ],
       ),
     );
@@ -516,8 +519,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                               data['relationship_status'] ?? 'Unknown',
                           genderExpression: data['expression'] ?? ['Unknown'],
                         ),
-                        Preferences(
-                            preferences: data['sexual_pref'] ?? ['Unknown']),
+                        Preferences(preferences: data['sexual_pref'] ?? []),
                         Interests(interests: data['interests'] ?? []),
                         const SizedBox(height: 16),
                       ],
