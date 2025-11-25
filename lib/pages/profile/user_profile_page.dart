@@ -205,7 +205,7 @@ class AboutMe extends StatelessWidget {
               ],
             ),
           )
-        : SizedBox(height: 0);
+        : const SizedBox(height: 0);
   }
 }
 
@@ -243,16 +243,37 @@ class KeyInfo extends StatelessWidget {
         'label': 'Distance',
         'value': distance != null
             ? '${distance!.toStringAsFixed(1)} km away'
-            : 'Unknown'
+            : 'Unknown',
+        'icon': Icons.location_on_outlined
       },
-      {'label': 'Location', 'value': location},
-      {'label': 'Sexuality', 'value': sexuality.join(', ')},
-      {'label': 'Pronouns', 'value': pronouns.join(', ')},
-      {'label': 'Height', 'value': height},
-      {'label': 'Looking For', 'value': lookingFor},
-      {'label': 'Relationship Style', 'value': relationshipStyle},
-      {'label': 'Relationship Status', 'value': relationshipStatus},
-      {'label': 'Gender Expression', 'value': genderExpression.join(', ')},
+      {'label': 'Location', 'value': location, 'icon': Icons.home_outlined},
+      {
+        'label': 'Sexuality',
+        'value': sexuality.join(', '),
+        'icon': Icons.circle_outlined
+      },
+      {
+        'label': 'Pronouns',
+        'value': pronouns.join(', '),
+        'icon': Icons.chat_bubble_outline
+      },
+      {'label': 'Height', 'value': height, 'icon': Icons.height},
+      {'label': 'Looking For', 'value': lookingFor, 'icon': Icons.search},
+      {
+        'label': 'Relationship Style',
+        'value': relationshipStyle,
+        'icon': Icons.handshake
+      },
+      {
+        'label': 'Relationship Status',
+        'value': relationshipStatus,
+        'icon': Icons.star_outline_sharp
+      },
+      {
+        'label': 'Gender Expression',
+        'value': genderExpression.join(', '),
+        'icon': Icons.person_2_outlined
+      },
     ];
 
     final fieldsFiltered = fields.where((f) {
@@ -298,14 +319,21 @@ class KeyInfo extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   //Text(field['label'] ?? '', style: ProfileStyles.boxText),
-                  Flexible(
-                    child: Text(
-                      field['value'],
-                      style: ProfileStyles.boxText,
-                      textAlign: TextAlign.right,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    spacing: 10,
+                    children: [
+                      Icon(field['icon'], color: Color(0xFFD461A6), size: 20),
+                      Flexible(
+                        child: Text(
+                          field['value'],
+                          style: ProfileStyles.boxText,
+                          textAlign: TextAlign.right,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  )
                 ],
               );
             },
