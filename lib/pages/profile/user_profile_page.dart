@@ -102,6 +102,7 @@ class HeaderElements extends StatelessWidget {
                 ),
               ),
             ),
+          if (isUser) Text("test")
         ],
       ),
     );
@@ -112,20 +113,17 @@ class HeaderElements extends StatelessWidget {
 class ProfileImage extends StatefulWidget {
   final String? imageUrl;
   final List<dynamic>? profileImages;
-  
-  const ProfileImage({
-    super.key, 
-    this.imageUrl, 
-    this.profileImages
-  });
 
- @override
+  const ProfileImage({super.key, this.imageUrl, this.profileImages});
+
+  @override
   State<ProfileImage> createState() => _ProfileImageState();
 }
+
 class _ProfileImageState extends State<ProfileImage> {
   final PageController _pageController = PageController();
   int _index = 0;
-  
+
   @override
   Widget build(BuildContext context) {
     final images = widget.profileImages ?? [];
@@ -137,22 +135,22 @@ class _ProfileImageState extends State<ProfileImage> {
       decoration: ProfileStyles.boxDecoration,
       clipBehavior: Clip.hardEdge,
       child: hasCarousel
-          ? Column (
+          ? Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: List.generate(images.length, (i) {
                     return Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 4, vertical: 8),
                       height: 4,
                       width: 25,
-                      color: _index == i ? 
-                         Theme.of(context).colorScheme.tertiaryFixed: 
-                         Theme.of(context).colorScheme.tertiary,
+                      color: _index == i
+                          ? Theme.of(context).colorScheme.tertiaryFixed
+                          : Theme.of(context).colorScheme.tertiary,
                     );
                   }),
                 ),
-
                 Expanded(
                   child: PageView(
                     controller: _pageController,
@@ -170,9 +168,9 @@ class _ProfileImageState extends State<ProfileImage> {
               ],
             )
           : _buildSingleImageOrFallback(),
-          
     );
   }
+
   Widget _buildSingleImageOrFallback() {
     if (widget.imageUrl != null && widget.imageUrl!.isNotEmpty) {
       return Image.network(
@@ -235,21 +233,24 @@ class KeyInfo extends StatelessWidget {
       required this.relationshipStatus,
       required this.genderExpression});
 
- 
-
   @override
   Widget build(BuildContext context) {
     //list of fields in key info
     final List<Map<String, dynamic>> fields = [
-      {'label': 'Distance', 'value': distance != null ? '${distance!.toStringAsFixed(1)} km away' : 'Unknown'},
+      {
+        'label': 'Distance',
+        'value': distance != null
+            ? '${distance!.toStringAsFixed(1)} km away'
+            : 'Unknown'
+      },
       {'label': 'Location', 'value': location},
-      {'label': 'Sexuality','value': sexuality.join(', ')},
-      {'label': 'Pronouns','value': pronouns.join(', ')},
-      {'label': 'Height','value': height},
-      {'label': 'Looking For','value': lookingFor},
-      {'label': 'Relationship Style','value': relationshipStyle},
-      {'label': 'Relationship Status','value': relationshipStatus},
-      {'label': 'Gender Expression','value': genderExpression.join(', ')},
+      {'label': 'Sexuality', 'value': sexuality.join(', ')},
+      {'label': 'Pronouns', 'value': pronouns.join(', ')},
+      {'label': 'Height', 'value': height},
+      {'label': 'Looking For', 'value': lookingFor},
+      {'label': 'Relationship Style', 'value': relationshipStyle},
+      {'label': 'Relationship Status', 'value': relationshipStatus},
+      {'label': 'Gender Expression', 'value': genderExpression.join(', ')},
     ];
 
     return Container(
@@ -288,7 +289,7 @@ class KeyInfo extends StatelessWidget {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(field['label'] ?? '', style: ProfileStyles.boxText),
+                  //Text(field['label'] ?? '', style: ProfileStyles.boxText),
                   Flexible(
                     child: Text(
                       field['value'] ?? '',
@@ -313,7 +314,6 @@ class Preferences extends StatelessWidget {
 
   const Preferences({super.key, required this.preferences});
 
-  
   @override
   Widget build(BuildContext context) {
     if (preferences.isEmpty) return const SizedBox();
@@ -433,86 +433,93 @@ class _UserProfilePageState extends State<UserProfilePage> {
   Widget build(BuildContext context) {
     final isUserProfile = userId == _firebaseService.currentUserId;
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        leading: BackButton(
-            color: Theme.of(context)
-                .colorScheme
-                .secondaryFixed), //need to make this actually do something and give it color change for press
-        centerTitle: true,
-        title: Text(
-          'FNGR',
-          style:
-              TextStyle(color: Theme.of(context).colorScheme.secondaryFixed),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.secondary,
+          leading: BackButton(
+              color: Theme.of(context)
+                  .colorScheme
+                  .secondaryFixed), //need to make this actually do something and give it color change for press
+          centerTitle: true,
+          title: Text(
+            'FNGR',
+            style:
+                TextStyle(color: Theme.of(context).colorScheme.secondaryFixed),
+          ),
         ),
-      ),
-      body: FutureBuilder<DocumentSnapshot>(
-        future: _firebaseService.getUserProfile(userId),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
+        body: FutureBuilder<DocumentSnapshot>(
+          future: _firebaseService.getUserProfile(userId),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-          if (!snapshot.hasData || !snapshot.data!.exists) {
-            return const Center(child: Text('User not found'));
-          }
+            if (!snapshot.hasData || !snapshot.data!.exists) {
+              return const Center(child: Text('User not found'));
+            }
 
-          final data = snapshot.data!.data() as Map<String, dynamic>;
+            final data = snapshot.data!.data() as Map<String, dynamic>;
+            print(data);
 
-          double distance = double.infinity;
-          final lat = data['lat'] as double? ?? 0.0;
-          final lng = data['long'] as double? ?? 0.0;
-       
-          if (lat != 0.0 && lng != 0.0 && _locationService.latitude != null && _locationService.longitude != null) {
-            distance = _locationService.calculateDistance(_locationService.latitude!,_locationService.longitude!,lat,lng);
-          }
-          return FutureBuilder<String?>(
+            double distance = double.infinity;
+            final lat = data['lat'] as double? ?? 0.0;
+            final lng = data['long'] as double? ?? 0.0;
+
+            if (lat != 0.0 &&
+                lng != 0.0 &&
+                _locationService.latitude != null &&
+                _locationService.longitude != null) {
+              distance = _locationService.calculateDistance(
+                  _locationService.latitude!,
+                  _locationService.longitude!,
+                  lat,
+                  lng);
+            }
+            return FutureBuilder<String?>(
               future: _locationService.getCityFromCoordinates(lat, lng),
               builder: (context, citySnapshot) {
                 final city = citySnapshot.data;
 
-              return SingleChildScrollView(
-                child: Center(
-                  child: Column(
-                    spacing: 20,
-                    children: [
-                      HeaderElements(
-                        name: data['name'] ?? 'Unknown',
-                        age: data['age']?.toString() ?? 'N/A',
-                        isUser: isUserProfile,
-                        userId: userId,
-                        photoURL: data['photoURL'] ?? '',
-                      ),
-                      ProfileImage(
-                        imageUrl: data['photoURL'] ?? '', 
-                        profileImages: data['profileImages'] ?? []
-                      ),
-                      AboutMe(bio: data['bio'] ?? 'No bio available.'),
-                      KeyInfo(
-                        distance: distance.isFinite ? distance : null,
-                        location: city ?? 'Unknown',
-                        lookingFor: data['lookingFor'] ?? 'Unknown',
-                        relationshipStyle: data['relationshipStyle'] ?? 'Unknown',
-                        height: data['height'] ?? 'Unknown',
-                        sexuality: data['sexuality'] ?? ['Unknown'],
-                        genderIdentity: data['genderIdentity'] ?? ['Unknown'],
-                        pronouns: data['pronouns'] ?? ['Unknown'],
-                        relationshipStatus: data['relationshipStatus'] ?? 'Unknown',
-                        genderExpression: data['genderExpression'] ?? ['Unknown'],
-                      ),
-                      Preferences(
-                          preferences: data['sexualPreferences'] ?? []),
-                      Interests(interests: data['interests'] ?? []),
-                      const SizedBox(height: 16),
-                    ],
+                return SingleChildScrollView(
+                  child: Center(
+                    child: Column(
+                      spacing: 20,
+                      children: [
+                        HeaderElements(
+                          name: data['name'] ?? 'Unknown',
+                          age: data['age']?.toString() ?? 'N/A',
+                          isUser: isUserProfile,
+                          userId: userId,
+                          photoURL: data['photoURL'] ?? '',
+                        ),
+                        ProfileImage(
+                            imageUrl: data['photoURL'] ?? '',
+                            profileImages: data['profileImages'] ?? []),
+                        AboutMe(bio: data['bio'] ?? 'No bio available.'),
+                        KeyInfo(
+                          lookingFor: data['expectations'] ?? 'Unknown',
+                          relationshipStyle:
+                              data['relationship_style'] ?? 'Unknown',
+                          height: data['height'] ?? 'Unknown',
+                          distance: distance.isFinite ? distance : null,
+                          location: city ?? 'Unknown',
+                          sexuality: data['sexuality'] ?? ['Unknown'],
+                          genderIdentity: data['gender'] ?? ['Unknown'],
+                          pronouns: data['pronouns'] ?? ['Unknown'],
+                          relationshipStatus:
+                              data['relationship_status'] ?? 'Unknown',
+                          genderExpression: data['expression'] ?? ['Unknown'],
+                        ),
+                        Preferences(preferences: data['sexual_pref'] ?? ['Unknown']),
+                        Interests(interests: data['interests'] ?? []),
+                        const SizedBox(height: 16),
+                      ],
+                    ),
                   ),
-                ),
-              );
-            },
-          );
-        },
-      )
-    );
+                );
+              },
+            );
+          },
+        ));
   }
 }
