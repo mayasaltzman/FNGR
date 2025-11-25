@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_chat_core/flutter_chat_core.dart';
 import '../../services/firebase_service.dart';
+import './user_profile_page.dart';
 
 abstract class ProfileStyles {
   //styles for boxes that store profile info
@@ -30,12 +32,14 @@ class UserView extends StatelessWidget {
   final String name;
   final String age;
   final String userPhoto;
+  final String userId;
 
   const UserView(
       {super.key,
       required this.name,
       required this.age,
-      required this.userPhoto});
+      required this.userPhoto,
+      required this.userId});
 
   @override
   Widget build(BuildContext context) {
@@ -76,16 +80,24 @@ class UserView extends StatelessWidget {
                           Text(
                             "$name,",
                             style: TextStyle(
-                                color: Theme.of(context).colorScheme.tertiary, fontWeight: FontWeight.bold),
+                                color: Theme.of(context).colorScheme.tertiary,
+                                fontWeight: FontWeight.bold),
                           ),
                           Text(age,
                               style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.tertiary, fontWeight: FontWeight.bold)),
+                                  color: Theme.of(context).colorScheme.tertiary,
+                                  fontWeight: FontWeight.bold)),
                         ],
                       ),
                       TextButton.icon(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    UserProfilePage(userId: userId)),
+                          );
+                        },
                         icon: Icon(Icons.arrow_forward),
                         label: Text("Edit Profile"),
                         style: TextButton.styleFrom(
@@ -115,7 +127,8 @@ class SettingsView extends StatelessWidget {
       padding: ProfileStyles.boxPadding,
       alignment: Alignment.center,
       height: 500,
-      child: Text("Advanced Settings Coming Soon", style: TextStyle(color: Theme.of(context).colorScheme.tertiary)),
+      child: Text("Advanced Settings Coming Soon",
+          style: TextStyle(color: Theme.of(context).colorScheme.tertiary)),
     ));
   }
 }
@@ -149,7 +162,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
               style: TextStyle(
                   color: Theme.of(context).colorScheme.secondaryFixed)),
           backgroundColor: Theme.of(context).colorScheme.secondary,
-          actions: [IconButton(onPressed: (){}, icon: Icon(Icons.settings, color: Colors.white))],
+          actions: [
+            IconButton(
+                onPressed: () {},
+                icon: Icon(Icons.settings, color: Colors.white))
+          ],
         ),
         body: FutureBuilder<DocumentSnapshot>(
           future: _firebaseService.getUserProfile(userId),
@@ -173,7 +190,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     UserView(
                         name: data['name'] ?? '',
                         age: data['age'] ?? '',
-                        userPhoto: data['photoURL'] ?? ''),
+                        userPhoto: data['photoURL'] ?? '',
+                        userId: widget.userId),
                     SettingsView()
                   ],
                 ),
