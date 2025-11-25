@@ -65,7 +65,7 @@ class HeaderElements extends StatelessWidget {
           // Name and age on the left
           Flexible(
             child: Text(
-              '${name}${(name.isNotEmpty && age.isNotEmpty ? ', ' : '')}$age',
+              '${name}${(name.isNotEmpty && age != 'N/A' ? ', ' : '')} ${age != 'N/A' ? age : ''}',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -504,7 +504,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         ProfileImage(
                             imageUrl: data['photoURL'] ?? '',
                             profileImages: data['profileImages'] ?? []),
-                        AboutMe(bio: data['bio'] ?? 'No bio available.'),
+                        AboutMe(bio: data['bio'] ?? ''),
                         KeyInfo(
                           lookingFor: data['expectations'] ?? 'Unknown',
                           relationshipStyle:
