@@ -29,8 +29,13 @@ abstract class ProfileStyles {
 class UserView extends StatelessWidget {
   final String name;
   final String age;
+  final String userPhoto;
 
-  const UserView({super.key, required this.name, required this.age});
+  const UserView(
+      {super.key,
+      required this.name,
+      required this.age,
+      required this.userPhoto});
 
   @override
   Widget build(BuildContext context) {
@@ -41,33 +46,63 @@ class UserView extends StatelessWidget {
             padding: ProfileStyles.boxPadding,
             alignment: Alignment.center,
             height: 150,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      name,
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.tertiary),
-                    ),
-                    Text(age,
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.tertiary)),
-                  ],
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: Text("Edit Profile"),
-                  style: TextButton.styleFrom(
-                    foregroundColor: Theme.of(context).colorScheme.tertiary,
-                    backgroundColor:
-                        Theme.of(context).colorScheme.tertiaryFixed,
+            child: Row(
+                spacing: 10,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        maxRadius: 40,
+                        backgroundImage: userPhoto.isNotEmpty
+                            ? NetworkImage(userPhoto)
+                            : null,
+                        child:
+                            userPhoto.isEmpty ? const Icon(Icons.person) : null,
+                      )
+                    ],
                   ),
-                )
-              ],
-            )));
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        spacing: 10,
+                        children: [
+                          Text(
+                            "$name,",
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.tertiary, fontWeight: FontWeight.bold),
+                          ),
+                          Text(age,
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.tertiary, fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                      TextButton.icon(
+                        onPressed: () {},
+                        icon: Icon(Icons.arrow_forward),
+                        label: Text("Edit Profile"),
+                        style: TextButton.styleFrom(
+                            foregroundColor:
+                                Theme.of(context).colorScheme.tertiary,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.tertiaryFixed,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            side: BorderSide(
+                                color: Theme.of(context).colorScheme.tertiary)),
+                        iconAlignment: IconAlignment.end,
+                      )
+                    ],
+                  )
+                ])));
   }
 }
 
@@ -75,11 +110,13 @@ class SettingsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
         child: Container(
-            width: ProfileStyles.containerWidth,
-            decoration: ProfileStyles.boxDecoration,
-            padding: ProfileStyles.boxPadding,
-            alignment: Alignment.center,
-            height: 500));
+      width: ProfileStyles.containerWidth,
+      decoration: ProfileStyles.boxDecoration,
+      padding: ProfileStyles.boxPadding,
+      alignment: Alignment.center,
+      height: 500,
+      child: Text("Advanced Settings Coming Soon", style: TextStyle(color: Theme.of(context).colorScheme.tertiary)),
+    ));
   }
 }
 
@@ -112,6 +149,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               style: TextStyle(
                   color: Theme.of(context).colorScheme.secondaryFixed)),
           backgroundColor: Theme.of(context).colorScheme.secondary,
+          actions: [IconButton(onPressed: (){}, icon: Icon(Icons.settings, color: Colors.white))],
         ),
         body: FutureBuilder<DocumentSnapshot>(
           future: _firebaseService.getUserProfile(userId),
@@ -132,7 +170,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   spacing: 20,
                   children: [
                     SizedBox(height: 10),
-                    UserView(name: data['name'], age: data['age']),
+                    UserView(
+                        name: data['name'] ?? '',
+                        age: data['age'] ?? '',
+                        userPhoto: data['photoURL'] ?? ''),
                     SettingsView()
                   ],
                 ),
