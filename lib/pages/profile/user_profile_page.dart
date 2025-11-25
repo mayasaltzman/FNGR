@@ -55,22 +55,30 @@ class HeaderElements extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        width: ProfileStyles.containerWidth,
-        padding: ProfileStyles.boxPadding,
-        child: Column(
-          spacing: 20,
-          children: [
-            if (isUser)
-              DefaultTabController(
-                length: 2,
-                child: Column(
-                  children: [
-                  TabBar( 
-                    tabs: [Tab(text: "Edit"), Tab(text: "View")]), //Expanded(child: TabBarView(children: []))
-                ]),
-              ),
-            Row(
+    return Column(
+      spacing: 20,
+      children: [
+        if (isUser)
+          DefaultTabController(
+            length: 2,
+            child: Column(children: [
+              Container(
+                color: Theme.of(context).colorScheme.tertiaryFixed,
+                child: TabBar(
+                    dividerColor:
+                        Theme.of(context).colorScheme.primaryContainer,
+                    unselectedLabelColor: Colors.black,
+                    labelColor: Theme.of(context).colorScheme.primaryFixed,
+                    indicatorColor: Theme.of(context).colorScheme.primaryFixed,
+                    tabs: [Tab(text: "Edit"), Tab(text: "View")]),
+              )
+              //Expanded(child: TabBarView(children: []))
+            ]),
+          ),
+        Container(
+            width: ProfileStyles.containerWidth,
+            padding: ProfileStyles.boxPadding,
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -116,9 +124,9 @@ class HeaderElements extends StatelessWidget {
                     ),
                   ),
               ],
-            ),
-          ],
-        ));
+            )),
+      ],
+    );
   }
 }
 
