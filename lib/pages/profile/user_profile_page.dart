@@ -253,6 +253,11 @@ class KeyInfo extends StatelessWidget {
       {'label': 'Gender Expression', 'value': genderExpression.join(', ')},
     ];
 
+    final fieldsFiltered = fields.where((f) {
+      final v = f['value'];
+      return v != 'Unknown' && v.toString().isNotEmpty;
+    }).toList();
+
     return Container(
       width: ProfileStyles.containerWidth,
       decoration: ProfileStyles.boxDecoration,
@@ -272,17 +277,18 @@ class KeyInfo extends StatelessWidget {
           ListView.separated(
             physics: const NeverScrollableScrollPhysics(), // let parent scroll
             shrinkWrap: true, // important so it fits inside the column
-            itemCount: fields.length,
+            itemCount: fieldsFiltered.length,
             separatorBuilder: (context, index) => const Divider(
               height: 20,
               thickness: 2,
               color: Color(0xFFD461A6),
             ),
             itemBuilder: (context, index) {
-              final field = fields[index];
+              final field = fieldsFiltered[index];
 
               // skip empty fields
-              if (field['value'] == null || field['value'].toString().isEmpty) {
+              if (field['value'] == 'Unknown' ||
+                  field['value'].toString().isEmpty) {
                 return const SizedBox.shrink();
               }
 
@@ -292,7 +298,7 @@ class KeyInfo extends StatelessWidget {
                   //Text(field['label'] ?? '', style: ProfileStyles.boxText),
                   Flexible(
                     child: Text(
-                      field['value'] ?? '',
+                      field['value'],
                       style: ProfileStyles.boxText,
                       textAlign: TextAlign.right,
                       overflow: TextOverflow.ellipsis,
@@ -510,7 +516,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
                               data['relationship_status'] ?? 'Unknown',
                           genderExpression: data['expression'] ?? ['Unknown'],
                         ),
-                        Preferences(preferences: data['sexual_pref'] ?? ['Unknown']),
+                        Preferences(
+                            preferences: data['sexual_pref'] ?? ['Unknown']),
                         Interests(interests: data['interests'] ?? []),
                         const SizedBox(height: 16),
                       ],
