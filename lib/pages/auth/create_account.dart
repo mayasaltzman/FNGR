@@ -115,6 +115,18 @@ class _CreateAccountState extends State<CreateAccount> {
     super.dispose();
   }
 
+  void _confirmPassword(){
+    if (_confirmPasswordController.text.isEmpty || _passwordController.text.isEmpty) {
+      _showSnackBar('Please fill in all fields');
+      return;
+    }
+    if (_confirmPasswordController.text != _passwordController.text) {
+      _showSnackBar('Please ensure both password fields match');
+      return;
+    }
+    createUserAccount();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -183,7 +195,6 @@ class _CreateAccountState extends State<CreateAccount> {
               ),
             ),
 
-//add confirm password here?
             Padding(
               padding: const EdgeInsets.only(right: 225, top: 10),              
               child: Text(
@@ -204,7 +215,7 @@ class _CreateAccountState extends State<CreateAccount> {
                   obscureText: true,
                   decoration: InputDecoration(
                     border: InputBorder.none,
-                    labelText: 'Confirm your password',
+                    labelText: 'Re-enter password',
                     labelStyle: ProfileStyles.boxText,
                   ), 
                 ),
@@ -241,7 +252,7 @@ class _CreateAccountState extends State<CreateAccount> {
                 child: ElevatedButton(
                   style: ProfileStyles.buttonStyle,
                   onPressed: isLoading ? null : () {
-                    createUserAccount();
+                    _confirmPassword();
                   },
                   child: isLoading
                       ? const SizedBox(
