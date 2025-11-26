@@ -345,60 +345,16 @@ class KeyInfo extends StatelessWidget {
   }
 }
 
-//sexual preferences box
-class Preferences extends StatelessWidget {
-  final List<dynamic> preferences;
+//sexual preferences and interests field box
+class FieldsBox extends StatelessWidget {
+  final List<dynamic> items;
+  final String label;
 
-  const Preferences({super.key, required this.preferences});
-
-  @override
-  Widget build(BuildContext context) {
-    if (preferences.isEmpty) return const SizedBox();
-    return Container(
-      width: ProfileStyles.containerWidth,
-      decoration: ProfileStyles.boxDecoration,
-      padding: ProfileStyles.boxPadding,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            child: Column(
-              spacing: 5,
-              children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Sexual Preferences",
-                    style: ProfileStyles.boxHeader,
-                  ),
-                ),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ...preferences.map((p) => Container(
-                          alignment: Alignment.center,
-                          width: 75,
-                          decoration: ProfileStyles.itemBoxDecoration,
-                          child: Text(p, style: ProfileStyles.boxText)))
-                    ]),
-              ],
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-//sexual preferences box
-class Interests extends StatelessWidget {
-  final List<dynamic> interests;
-
-  const Interests({super.key, required this.interests});
+  const FieldsBox({super.key, required this.items, required this.label});
 
   @override
   Widget build(BuildContext context) {
-    if (interests.isEmpty) return const SizedBox();
+    if (items.isEmpty) return const SizedBox();
     return Container(
       width: ProfileStyles.containerWidth,
       decoration: ProfileStyles.boxDecoration,
@@ -412,14 +368,14 @@ class Interests extends StatelessWidget {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Interests",
+                    label,
                     style: ProfileStyles.boxHeader,
                   ),
                 ),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ...interests.map((i) => Container(
+                      ...items.map((i) => Container(
                           alignment: Alignment.center,
                           width: 75,
                           decoration: ProfileStyles.itemBoxDecoration,

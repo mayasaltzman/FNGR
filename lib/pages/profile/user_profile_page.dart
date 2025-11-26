@@ -37,7 +37,6 @@ abstract class ProfileStyles {
   static const boxPadding = EdgeInsets.all(8.0);
 }
 
-
 class BuildUserProfilePage extends StatefulWidget {
   final String userId;
 
@@ -137,8 +136,10 @@ class _BuildUserProfilePageState extends State<BuildUserProfilePage> {
                           data['relationship_status'] ?? 'Unknown',
                       genderExpression: data['expression'] ?? ['Unknown'],
                     ),
-                    Preferences(preferences: data['sexual_pref'] ?? []),
-                    Interests(interests: data['interests'] ?? []),
+                    FieldsBox(
+                        items: data['sexual_pref'] ?? [], label: "Preferences"),
+                    FieldsBox(
+                        items: data['interests'] ?? [], label: "Interests"),
                     const SizedBox(height: 16),
                   ],
                 ),
