@@ -216,7 +216,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                     ),
                                     Expanded(
                                         child: TabBarView(children: [
-                                      UpdateProfilePage(),
+                                      UpdateProfilePage(bio: data['bio'] ?? ''),
                                       SingleChildScrollView(
                                           child: Column(children: [
                                         BuildUserProfilePage(
