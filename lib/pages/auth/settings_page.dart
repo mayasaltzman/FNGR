@@ -5,35 +5,24 @@ import '../../main.dart'; // Import Login Page
 
 //styles for the page
 abstract class ProfileStyles {
-  //styles for boxes that store profile info
-  static BoxDecoration get boxDecoration => BoxDecoration(
-      color: const Color(0xFFFFF0E6),
-      borderRadius: BorderRadius.circular(15.0),
-      border: Border.all(
-        color: const Color(0xFFFF9B55),
-        width: 1,
-      ));
+  //styles for setting buttons
+  static ButtonStyle get settingsButton => ElevatedButton.styleFrom(
+      fixedSize: const Size(500, 50),
+      side: BorderSide.none,
+      backgroundColor: const Color(0xFFFFE0CA),
+      elevation: 0.0,
+    );
+  
+  //styles for icons on buttons
+  static Icon styledIcon() => const Icon(
+      Icons.arrow_forward_ios,
+      color: Color(0xFFD461A6),
+      size: 24,
+    );
 
-  //styles for boxes that are individual items in sexual preferences and interests
-  static BoxDecoration get itemBoxDecoration => BoxDecoration(
-      color: const Color(0xFFF9E7F2),
-      borderRadius: BorderRadius.circular(15.0),
-      border: Border.all(
-        color: const Color(0xFFAA4E85),
-        width: 1,
-      ));
-
-  //text styles for headings in boxes
+  //style for text on buttons
   static TextStyle get boxHeader => const TextStyle(
       fontWeight: FontWeight.bold, color: Color(0xFFFF9B55), fontSize: 16);
-
-  //text styles for text in boxes
-  static TextStyle get boxText => const TextStyle(
-    fontWeight: FontWeight.w200, color: Color(0xFF1F1F1F), fontSize: 16);
-
-  static const containerWidth = 375.0;
-
-  static const boxPadding = EdgeInsets.all(8.0);
 }
 
 class SettingsPage extends StatefulWidget {
@@ -94,12 +83,14 @@ class _SettingsState extends State<SettingsPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 35),
-                Text(
-                  "Settings",
-                  style: ProfileStyles.boxHeader.copyWith(
-                    fontSize: 40 / MediaQuery.of(context).textScaleFactor,
-                    color: const Color(0xFFFFFFFF),
+                Padding(
+                  padding: const EdgeInsets.only(top: 30),
+                  child: Text(
+                    "Settings",
+                    style: ProfileStyles.boxHeader.copyWith(
+                      fontSize: 40 / MediaQuery.of(context).textScaleFactor,
+                      color: const Color(0xFFFFFFFF),
+                    ),
                   ),
                 ),
                 
@@ -110,34 +101,37 @@ class _SettingsState extends State<SettingsPage> {
                 ),
                 
                 ElevatedButton(
+                  style: ProfileStyles.settingsButton,
                   onPressed: isLoading ? null : () {
                     print("great");
                   },
-                  
-                  style: TextButton.styleFrom(
-                    fixedSize: Size(500, 50),
-                    side: BorderSide.none,
-                    backgroundColor: Color(0xFFFFE0CA),
-                    elevation: 0.0,
-                  ),
-                  
-                  child: Text(
-                    "Edit Profile",
-                    style: ProfileStyles.boxHeader,
-                  ),
-                ),
-
-                const SizedBox(height: 640),
-                ElevatedButton(
-                  onPressed: isLoading ? null : () {
-                    _signOut();
-                  },
-                  child: Text(
-                    "Logout",
-                    style: ProfileStyles.boxHeader,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 0),
+                    child: Row (
+                      children: [
+                        Text(
+                          "Edit Preferences",
+                          style: ProfileStyles.boxHeader,
+                        ),
+                        Spacer(),
+                        ProfileStyles.styledIcon(),
+                      ]
+                    ),
                   ),
                 ),
-
+                
+                Padding(
+                  padding: const EdgeInsets.only(top: 590, right: 190),
+                  child: ElevatedButton(
+                    onPressed: isLoading ? null : () {
+                      _signOut();
+                    },
+                    child: Text(
+                      "Logout",
+                      style: ProfileStyles.boxHeader,
+                    ),
+                  ),
+                ),
 
               ],
             ),
