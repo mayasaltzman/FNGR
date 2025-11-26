@@ -8,7 +8,12 @@ class UpdateProfilePage extends StatefulWidget {
   final String rStyle;
   final String lookingFor;
 
-  const UpdateProfilePage({super.key, required this.bio, required this.rStatus, required this.rStyle, required this.lookingFor});
+  const UpdateProfilePage(
+      {super.key,
+      required this.bio,
+      required this.rStatus,
+      required this.rStyle,
+      required this.lookingFor});
 
   @override
   State<UpdateProfilePage> createState() => _UpdateProfilePageState();
@@ -27,8 +32,9 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(spacing: 15, children: [
-      SizedBox(height: 10),
+    return Container(
+      padding: EdgeInsets.all(10),
+      child: Column(spacing: 15, children: [
       TextInputFieldLong(controller: _bioController, bio: widget.bio),
       SingleSelectDropDown(
         value: _relationshipStyle,
@@ -40,7 +46,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
         },
         hintText: widget.rStyle,
       ),
-       SingleSelectDropDown(
+      SingleSelectDropDown(
         value: _relationshipStatus,
         label: "Relationship Status",
         onChanged: (newVal) {
@@ -50,7 +56,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
         },
         hintText: widget.rStatus,
       ),
-       SingleSelectDropDown(
+      SingleSelectDropDown(
         value: _lookingFor,
         label: "Looking For",
         onChanged: (newVal) {
@@ -67,7 +73,6 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
             foregroundColor: Theme.of(context).colorScheme.secondaryFixed,
             backgroundColor: Theme.of(context).colorScheme.secondary,
           )),
-          
-    ]);
+    ]));
   }
 }
