@@ -216,7 +216,14 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                     ),
                                     Expanded(
                                         child: TabBarView(children: [
-                                      UpdateProfilePage(bio: data['bio'] ?? ''),
+                                      UpdateProfilePage(
+                                          bio: data['bio'] ?? '',
+                                          rStatus:
+                                              data['relationship_status'] ?? '',
+                                          rStyle:
+                                              data['relationship_style'] ?? '',
+                                          lookingFor:
+                                              data['expectations'] ?? ''),
                                       SingleChildScrollView(
                                           child: Column(children: [
                                         BuildUserProfilePage(
