@@ -57,6 +57,7 @@ class _CreateAccountState extends State<CreateAccount> {
   final FirebaseService firebaseService = FirebaseService();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController  = TextEditingController();
+  final TextEditingController _confirmPasswordController  = TextEditingController();
   bool isLoading = false;
   bool rememberMe = false;
 
@@ -183,6 +184,32 @@ class _CreateAccountState extends State<CreateAccount> {
             ),
 
 //add confirm password here?
+            Padding(
+              padding: const EdgeInsets.only(right: 225, top: 10),              
+              child: Text(
+                'Confirm password',
+                style: ProfileStyles.instructionText,
+              ),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.only(left: 10, top: 5),
+              child: Container(
+                decoration: ProfileStyles.boxDecoration,
+                padding: ProfileStyles.boxPadding,
+                width: ProfileStyles.containerWidth,
+                child: TextField(
+                  controller: _confirmPasswordController,
+                  style: ProfileStyles.boxText,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    labelText: 'Confirm your password',
+                    labelStyle: ProfileStyles.boxText,
+                  ), 
+                ),
+              ),
+            ),
 
             Padding(
               padding: const EdgeInsets.only(top: 20, left: 15),
