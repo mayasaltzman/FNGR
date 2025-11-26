@@ -57,6 +57,7 @@ class _CreateAccountState extends State<CreateAccount> {
   final FirebaseService firebaseService = FirebaseService();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController  = TextEditingController();
+  final TextEditingController _confirmPasswordController  = TextEditingController();
   bool isLoading = false;
   bool rememberMe = false;
 
@@ -112,6 +113,18 @@ class _CreateAccountState extends State<CreateAccount> {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  void _confirmPassword(){
+    if (_confirmPasswordController.text.isEmpty || _passwordController.text.isEmpty) {
+      _showSnackBar('Please fill in all fields');
+      return;
+    }
+    if (_confirmPasswordController.text != _passwordController.text) {
+      _showSnackBar('Please ensure both password fields match');
+      return;
+    }
+    createUserAccount();
   }
 
   @override
@@ -182,7 +195,32 @@ class _CreateAccountState extends State<CreateAccount> {
               ),
             ),
 
-//add confirm password here?
+            Padding(
+              padding: const EdgeInsets.only(right: 225, top: 10),              
+              child: Text(
+                'Confirm password',
+                style: ProfileStyles.instructionText,
+              ),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.only(left: 10, top: 5),
+              child: Container(
+                decoration: ProfileStyles.boxDecoration,
+                padding: ProfileStyles.boxPadding,
+                width: ProfileStyles.containerWidth,
+                child: TextField(
+                  controller: _confirmPasswordController,
+                  style: ProfileStyles.boxText,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    labelText: 'Re-enter password',
+                    labelStyle: ProfileStyles.boxText,
+                  ), 
+                ),
+              ),
+            ),
 
             Padding(
               padding: const EdgeInsets.only(top: 20, left: 15),
@@ -214,7 +252,7 @@ class _CreateAccountState extends State<CreateAccount> {
                 child: ElevatedButton(
                   style: ProfileStyles.buttonStyle,
                   onPressed: isLoading ? null : () {
-                    createUserAccount();
+                    _confirmPassword();
                   },
                   child: isLoading
                       ? const SizedBox(
