@@ -133,9 +133,7 @@ class FirebaseService {
 
   /// Get all users as a stream
   Stream<QuerySnapshot> getAllUsers() {
-    return _firestore
-        .collection('users')
-        .snapshots();
+    return _firestore.collection('users').snapshots();
   }
 
   /// Update user location
@@ -197,7 +195,7 @@ class FirebaseService {
     required String recipientUid,
     required String text,
   }) async {
-    if (currentUserId ==null){
+    if (currentUserId == null) {
       throw Exception('No user logged in');
     }
     final participants = [currentUserId!, recipientUid]..sort();
@@ -207,10 +205,10 @@ class FirebaseService {
           .collection('chats')
           .where('participants', isEqualTo: participants)
           .limit(1)
-          .get();  
+          .get();
 
       String chatId;
-      if (existing.docs.isNotEmpty){
+      if (existing.docs.isNotEmpty) {
         chatId = existing.docs.first.id;
       } else {
         final newChat = await _firestore.collection('chats').add({
@@ -267,7 +265,7 @@ class FirebaseService {
         .snapshots();
   }
 
-  Stream<QuerySnapshot> getUnaccceptedChatsStream(){
+  Stream<QuerySnapshot> getUnaccceptedChatsStream() {
     if (currentUserId == null) {
       throw Exception('No user logged in');
     }
@@ -276,18 +274,20 @@ class FirebaseService {
         .where('participants', arrayContains: currentUserId)
         .where('acceptedMessage', isEqualTo: false)
         .where('initiatorId', isNotEqualTo: currentUserId)
+        .orderBy('initiatorId')
         .snapshots();
   }
 
-  Stream<QuerySnapshot> getAcceptedChatsStream(){
-     if (currentUserId == null) {
+  Stream<QuerySnapshot> getAcceptedChatsStream() {
+    if (currentUserId == null) {
       throw Exception('No user logged in');
     }
     return _firestore
         .collection('chats')
         .where('participants', arrayContains: currentUserId)
         .where('acceptedMessage', isEqualTo: true)
-        .where('initiatorId', isNotEqualTo: currentUserId)
+        //.where('initiatorId', isNotEqualTo: currentUserId)
+        //.orderBy('initiatorId')
         .snapshots();
   }
 
@@ -390,7 +390,7 @@ class FirebaseService {
       throw Exception('Failed to reject chat: $e');
     }
   }
-    
+
   Future<bool> isChatAccepted(String chatId) async {
     try {
       final doc = await _firestore.collection('chats').doc(chatId).get();
@@ -402,7 +402,7 @@ class FirebaseService {
       throw Exception('Failed to get chat status: $e');
     }
   }
-  
+
   Future<bool> isCurrentUserInitiator(String chatId) async {
     try {
       final doc = await _firestore.collection('chats').doc(chatId).get();
