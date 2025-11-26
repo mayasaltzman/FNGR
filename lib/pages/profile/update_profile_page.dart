@@ -1,0 +1,23 @@
+import 'package:flutter/material.dart';
+import './widgets/text_input_widgets.dart';
+
+class UpdateProfilePage extends StatefulWidget {
+  const UpdateProfilePage({super.key});
+
+  @override
+  State<UpdateProfilePage> createState() => _UpdateProfilePageState();
+}
+
+class _UpdateProfilePageState extends State<UpdateProfilePage> {
+  final TextEditingController _bioController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [TextInputFieldLong(controller: _bioController)]);
+  }
+}
