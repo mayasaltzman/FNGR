@@ -27,6 +27,7 @@ abstract class ProfileStyles {
       fontWeight: FontWeight.bold, color: Color(0xFFFF9B55), fontSize: 16);
 }
 
+
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
@@ -74,9 +75,7 @@ class _SettingsState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-      backgroundColor: const Color(0xFFFFE0CA),
-
+      backgroundColor: Theme.of(context).colorScheme.primary,
       body: SingleChildScrollView(
         child: Align(
           alignment: Alignment.topLeft,
@@ -246,15 +245,35 @@ class _SettingsState extends State<SettingsPage> {
                 Text(
                   "Settings",
                   style: ProfileStyles.boxHeader.copyWith(
-                    fontSize: 26 / MediaQuery.of(context).textScaleFactor,
+                    fontSize: 40 / MediaQuery.of(context).textScaleFactor,
+                    color: const Color(0xFFFFFFFF),
                   ),
                 ),
+                
                 Divider(
-                  thickness: 3,
-                  color: Theme.of(context).colorScheme.secondary,
+                  thickness: 4,
+                  color: ProfileStyles.boxHeader.color,
                   height: 40,
                 ),
                 
+                ElevatedButton(
+                  onPressed: isLoading ? null : () {
+                    print("great");
+                  },
+                  
+                  style: TextButton.styleFrom(
+                    fixedSize: Size(500, 50),
+                    side: BorderSide.none,
+                    backgroundColor: Color(0xFFFFE0CA),
+                    elevation: 0.0,
+                  ),
+                  
+                  child: Text(
+                    "Edit Profile",
+                    style: ProfileStyles.boxHeader,
+                  ),
+                ),
+
                 const SizedBox(height: 640),
                 ElevatedButton(
                   onPressed: isLoading ? null : () {
@@ -265,7 +284,7 @@ class _SettingsState extends State<SettingsPage> {
                     style: ProfileStyles.boxHeader,
                   ),
                 ),
-             ],
+              ],
             ),
           )
         ),

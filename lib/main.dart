@@ -47,11 +47,9 @@ class MyApp extends StatelessWidget {
               ),
               bodySmall: TextStyle(fontSize: 14))),
       debugShowCheckedModeBanner: false,
-       home: const SettingsPage(),
+      // home: const HomePage(),
       //home: const LoginPage(),
-      //home: const CreateProfilePage(),
-      // home: const CreateProfilePage(),
-
+      home: const SettingsPage(),
     );
   }
 }
