@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:test_milestone/pages/auth/login_page.dart';
 import '../../services/firebase_service.dart';
 import '../../main.dart'; // Import Login Page
+import 'package:flutter/cupertino.dart';
 
 //styles for the page
 abstract class ProfileStyles {
@@ -99,11 +100,51 @@ class _SettingsState extends State<SettingsPage> {
                   color: ProfileStyles.boxHeader.color,
                   height: 40,
                 ),
-                
+
                 ElevatedButton(
                   style: ProfileStyles.settingsButton,
                   onPressed: isLoading ? null : () {
-                    print("great");
+                    print("Insert notification page nav here");
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 0),
+                    child: Row (
+                      children: [
+                        Text(
+                          "Allow FNGR notifications",
+                          style: ProfileStyles.boxHeader,
+                        ),
+                        Spacer(),
+                        ProfileStyles.styledIcon(),
+                      ]
+                    ),
+                  ),
+                ),
+
+                ElevatedButton(
+                  style: ProfileStyles.settingsButton,
+                  onPressed: isLoading ? null : () {
+                    print("Insert filters page nav here");
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 0),
+                    child: Row (
+                      children: [
+                        Text(
+                          "Allow FNGR to access location",
+                          style: ProfileStyles.boxHeader,
+                        ),
+                        Spacer(),
+                        ProfileStyles.styledIcon(),
+                      ]
+                    ),
+                  ),
+                ),
+                                
+                ElevatedButton(
+                  style: ProfileStyles.settingsButton,
+                  onPressed: isLoading ? null : () {
+                    print("Insert filters page nav here");
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(right: 0),
@@ -119,9 +160,49 @@ class _SettingsState extends State<SettingsPage> {
                     ),
                   ),
                 ),
+
+                ElevatedButton(
+                  style: ProfileStyles.settingsButton,
+                  onPressed: isLoading ? null : () {
+                    print("Verify profile function appears");
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 0),
+                    child: Row (
+                      children: [
+                        Text(
+                          "Verify Profile",
+                          style: ProfileStyles.boxHeader,
+                        ),
+                        Spacer(),
+                        ProfileStyles.styledIcon(),
+                      ]
+                    ),
+                  ),
+                ),
+
+                ElevatedButton(
+                  style: ProfileStyles.settingsButton,
+                  onPressed: isLoading ? null : () {
+                    print("Insert delete account functionality");
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 0),
+                    child: Row (
+                      children: [
+                        Text(
+                          "Delete FNGR account",
+                          style: ProfileStyles.boxHeader,
+                        ),
+                        Spacer(),
+                        ProfileStyles.styledIcon(),
+                      ]
+                    ),
+                  ),
+                ),
                 
                 Padding(
-                  padding: const EdgeInsets.only(top: 590, right: 190),
+                  padding: const EdgeInsets.only(top: 380, right: 190),
                   child: ElevatedButton(
                     onPressed: isLoading ? null : () {
                       _signOut();
