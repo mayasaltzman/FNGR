@@ -38,6 +38,8 @@ class _SettingsState extends State<SettingsPage> {
   //final TextEditingController _emailController = TextEditingController();
   //final TextEditingController _passwordController  = TextEditingController();
   bool isLoading = false;
+  bool _allowNotifs = true;
+  bool _allowLocation = true;
 
   Future<void> _signOut() async {
     setState(() {
@@ -101,21 +103,35 @@ class _SettingsState extends State<SettingsPage> {
                   height: 40,
                 ),
 
+
                 ElevatedButton(
                   style: ProfileStyles.settingsButton,
                   onPressed: isLoading ? null : () {
-                    print("Insert notification page nav here");
+                    _showSnackBar("Please press the toggle to alter notification settings");
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(right: 0),
                     child: Row (
                       children: [
-                        Text(
-                          "Allow FNGR notifications",
-                          style: ProfileStyles.boxHeader,
+                        Expanded(
+                          child: Text(
+                            "Allow notifications",
+                            style: ProfileStyles.boxHeader,
+                          ),
                         ),
-                        Spacer(),
-                        ProfileStyles.styledIcon(),
+                      
+                        Transform.scale(
+                        scale: 0.6,
+                          child: CupertinoSwitch(
+                            value: _allowNotifs,
+                            onChanged: (bool newValue) {
+                              setState(() {
+                                _allowNotifs = newValue;
+                              });
+                            },
+                            activeColor:Color(0xFFD461A6),
+                          ),
+                        ),
                       ]
                     ),
                   ),
@@ -124,18 +140,31 @@ class _SettingsState extends State<SettingsPage> {
                 ElevatedButton(
                   style: ProfileStyles.settingsButton,
                   onPressed: isLoading ? null : () {
-                    print("Insert filters page nav here");
+                    _showSnackBar("Please press the toggle to alter location settings");
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(right: 0),
                     child: Row (
                       children: [
-                        Text(
-                          "Allow FNGR to access location",
-                          style: ProfileStyles.boxHeader,
+                        Expanded(
+                          child: Text(
+                            "Allow location access",
+                            style: ProfileStyles.boxHeader,
+                          ),
                         ),
-                        Spacer(),
-                        ProfileStyles.styledIcon(),
+                      
+                        Transform.scale(
+                        scale: 0.6,
+                          child: CupertinoSwitch(
+                            value: _allowLocation,
+                            onChanged: (bool newValue) {
+                              setState(() {
+                                _allowLocation = newValue;
+                              });
+                            },
+                            activeColor:Color(0xFFD461A6),
+                          ),
+                        ),
                       ]
                     ),
                   ),
