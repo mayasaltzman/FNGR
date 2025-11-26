@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       // home: const HomePage(),
       home: const LoginPage(),
-      //home: const CreateProfilePage(),
+      // home: const CreateProfilePage(),
     );
   }
 }
@@ -73,7 +73,7 @@ class _NavMenuState extends State<NavMenu> {
     _pages = [
       const HomePage(),
       UserProfilePage(userId: currentUserId),
-      const ChatListPage(),
+      const ChatListPage(listType: "accepted"),
     ];
   }
 

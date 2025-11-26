@@ -2,10 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 import '../../main.dart';
+import './widgets/multi_select_widget.dart';
+import './widgets/single_select_widget.dart';
+import './widgets/text_input_widgets.dart';
+import './widgets/image_button_widget.dart';
+import '../../services/firebase_service.dart';
+import '../../services/storage_service.dart';
 
 //styles for profile page
 abstract class ProfileStyles {
@@ -16,303 +20,15 @@ abstract class ProfileStyles {
       fontWeight: FontWeight.bold, color: Color(0xFFAA4E85), fontSize: 18);
 
   static final ButtonStyle button = ElevatedButton.styleFrom(
-    backgroundColor: const Color(0xFFD461A6), 
+    backgroundColor: const Color(0xFFD461A6),
     fixedSize: const Size(110, 50),
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(12)),
     ),
   );
 }
-
-//custom text input field for our form
-class TextInputField extends StatelessWidget {
-  final TextEditingController controller;
-  final String labelText;
-  final FormFieldValidator<String>? validator;
-  final String textType;
-
-  const TextInputField({
-    super.key,
-    required this.controller,
-    required this.labelText,
-    required this.textType,
-    this.validator,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      SizedBox(
-        child: Text(
-          textType,
-          style: ProfileStyles.inputHeader,
-          softWrap: true,
-        ),
-      ),
-      const SizedBox(width: 20),
-      SizedBox(
-          height: 50,
-          child: TextFormField(
-            controller: controller,
-            style: TextStyle(
-                color: Theme.of(context).colorScheme.primaryFixed,
-                fontSize: 16),
-            decoration: InputDecoration(
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide:
-                      BorderSide(color: Theme.of(context).colorScheme.tertiary),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.tertiary, width: 2),
-                ),
-                filled: true,
-                fillColor: Theme.of(context).colorScheme.tertiaryContainer,
-                labelText: labelText,
-                labelStyle: TextStyle(
-                    color: Theme.of(context).colorScheme.primaryFixed,
-                    fontSize: 16)),
-            validator: validator,
-          ))
-    ]);
-  }
-}
-
-//long text input field for bio and such
-class TextInputFieldLong extends StatelessWidget {
-  final TextEditingController controller;
-  final FormFieldValidator<String>? validator;
-
-  const TextInputFieldLong({
-    super.key,
-    required this.controller,
-    this.validator,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text("About me", style: ProfileStyles.inputHeader),
-      const SizedBox(height: 15),
-      SizedBox(
-          width: 400,
-          child: TextFormField(
-            controller: controller,
-            keyboardType: TextInputType.multiline,
-            minLines: 3,
-            maxLines: null,
-            style: TextStyle(
-                color: Theme.of(context).colorScheme.primaryFixed,
-                fontSize: 16),
-            decoration: InputDecoration(
-              labelText: "Tell us about yourself!",
-              labelStyle: TextStyle(
-                  color: Theme.of(context).colorScheme.primaryFixed,
-                  fontSize: 16),
-              filled: true,
-              fillColor: Theme.of(context).colorScheme.tertiaryContainer,
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide:
-                    BorderSide(color: Theme.of(context).colorScheme.tertiary),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.tertiary, width: 2),
-              ),
-            ),
-          ))
-    ]);
-  }
-}
-
 //custom image button widget to get images from user
-class ImageButton extends StatefulWidget {
-  final File? image;
-  final double width;
-  final double height;
 
-  const ImageButton(
-      {super.key,
-      required this.image,
-      required this.width,
-      required this.height});
-
-  @override
-  State<ImageButton> createState() => _ImageButtonState();
-}
-
-class _ImageButtonState extends State<ImageButton> {
-  final _picker = ImagePicker(); 
-  File? _selectedImage;
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedImage = widget.image;
-  }
-
-  //method for image picking
-  //NEED TO CONVERT IMAGE TO STRING FORMAT BUT IM NOT SURE WHAT FORMAT TO USE TBH
-  //also right now when you go to next of the form and then back the images don't save
-  Future<void> _pickImage() async {
-    final pickedImage = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedImage == null) return;
-
-    final imageFile = File(pickedImage.path);
-
-    setState(() {
-      _selectedImage = imageFile;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(children: [
-      SizedBox(
-        width: widget.width,
-        height: widget.height,
-        child: InkWell(
-          onTap: _pickImage,
-          borderRadius: BorderRadius.circular(15),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(15),
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Theme.of(context).colorScheme.primaryFixed,
-                ),
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: _selectedImage != null
-                  ? Image.file(
-                      _selectedImage!,
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: double.infinity,
-                    )
-                  : const Center(child: Icon(Icons.add, color: Colors.white)),
-            ),
-          ),
-        ),
-      ),
-    ]);
-  }
-}
-
-//custom multiselect dropdown widget
-class MultiSelectDropdown extends StatelessWidget {
-  final MultiSelectController<String> controller;
-  final String labelText;
-  final List<DropdownItem<String>> items;
-
-  const MultiSelectDropdown({
-    super.key,
-    required this.controller,
-    required this.labelText,
-    required this.items,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      SizedBox(child: Text(labelText, style: ProfileStyles.inputHeader)),
-      const SizedBox(width: 20),
-      SizedBox(
-          child: MultiDropdown(
-        items: items,
-        controller: controller,
-        dropdownDecoration: DropdownDecoration(
-            backgroundColor: Theme.of(context).colorScheme.primaryContainer),
-        dropdownItemDecoration: DropdownItemDecoration(
-            textColor: Theme.of(context).colorScheme.primaryFixed,
-            selectedBackgroundColor: Theme.of(context).colorScheme.primary,
-            selectedTextColor: Theme.of(context).colorScheme.primaryFixed),
-        fieldDecoration: FieldDecoration(
-            showClearIcon: false,
-            labelStyle:
-                TextStyle(color: Theme.of(context).colorScheme.primaryFixed),
-            backgroundColor: Theme.of(context).colorScheme.tertiaryContainer,
-            hintStyle: TextStyle(
-                color: Theme.of(context).colorScheme.primaryFixed,
-                fontSize: 18),
-            border: OutlineInputBorder(
-                borderSide:
-                    BorderSide(color: Theme.of(context).colorScheme.tertiary),
-                borderRadius: BorderRadius.circular(10)),
-            suffixIcon: Icon(Icons.arrow_drop_down,
-                color: Theme.of(context).colorScheme.primaryFixed)),
-        chipDecoration: ChipDecoration(
-            backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-            labelStyle:
-                TextStyle(color: Theme.of(context).colorScheme.primaryFixed),
-            deleteIcon: Icon(Icons.close,
-                color: Theme.of(context).colorScheme.primaryFixed, size: 15)),
-      ))
-    ]);
-  }
-}
-
-//custom single dropdown widget
-class SingleSelectDropDown extends StatelessWidget {
-  final String? value;
-  final List<String> items;
-  final String label;
-  final ValueChanged<String?> onChanged;
-
-  const SingleSelectDropDown({
-    super.key,
-    required this.value,
-    required this.label,
-    required this.items,
-    required this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-            child: Text(
-          label,
-          style: ProfileStyles.inputHeader,
-        )),
-        const SizedBox(width: 20),
-        SizedBox(
-          child: DropdownButton<String>(
-            hint: Text("Select",
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.primaryFixed)),
-            isExpanded: true,
-            value: value,
-            items: items
-                .map((status) => DropdownMenuItem<String>(
-                      value: status,
-                      child: Text(status),
-                    ))
-                .toList(),
-            onChanged: onChanged,
-            dropdownColor: Theme.of(context).colorScheme.primaryContainer,
-            style: TextStyle(
-                color: Theme.of(context).colorScheme.primaryFixed,
-                fontSize: 16),
-            icon: Icon(Icons.arrow_drop_down,
-                color: Theme.of(context).colorScheme.primaryFixed),
-            menuWidth: 280,
-            elevation: 1,
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-//widget for key info form
 class ProfileForm extends StatefulWidget {
   const ProfileForm({super.key});
 
@@ -323,10 +39,12 @@ class ProfileForm extends StatefulWidget {
 class _ProfileFormState extends State<ProfileForm> {
   //state for managing form
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _picker = ImagePicker();
 
   //conditions to set which process of profile creation the user is on
   bool keyInfo = true;
   bool additionalInfo = false;
+  bool isLoading = false;
 
   //text controllers
   final TextEditingController _nameController = TextEditingController();
@@ -348,183 +66,167 @@ class _ProfileFormState extends State<ProfileForm> {
   final MultiSelectController<String> interestsController =
       MultiSelectController<String>();
 
-  //instance of firebase
-  final firestoreInstance = FirebaseFirestore.instance;
+  //call ffire
+  final FirebaseService _firebaseService = FirebaseService();
+  final StorageService _storageService = StorageService();
 
-  //store info entered in form
-  late String _name;
-  late String
-      _age; //this will have to be made integer idk probs convert before submit
-  late String _height;
-  late List<String> _sexuality;
-  late List<String> _genderIdentity;
-  late List<String> _pronouns;
   String? _relationshipStatus;
   String? _relationshipStyle;
-  late List<String> _sexualPref;
-  late List<String> _genderPresentation;
-  late List<String> _interests;
   String? _lookingFor;
-  String? _bio;
 
   //need to figure out how to add to this from the seperate image picker thing
-  final List<File> _images = [];
+  final List<File?> _selectedImages = List.filled(5, null);
+    
+  // Upload progress tracking
+  double _uploadProgress = 0.0;
+  int _currentImageUploading = 0;
+  int _totalImages = 0;
 
-  File? _image1, _image2, _image3, _image4, _image5;
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _ageController.dispose();
+    _heightController.dispose();
+    _bioController.dispose();
+    sexualityController.dispose();
+    genderController.dispose();
+    pronounController.dispose();
+    sexualPrefController.dispose();
+    genderPresentationController.dispose();
+    interestsController.dispose();
+    super.dispose();
+  }
+  
+  Future<void> _pickImage(int index) async {
+    try {
+      final pickedImage = await _picker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 1920,
+        maxHeight: 1920,
+        imageQuality: 80,
+      );
+      if (pickedImage == null) return;
+      final imageFile = File(pickedImage.path);
 
-  //for conditional rendering of steps of the form
+      final sizeInMB = await imageFile.length() / (1024 * 1024);
+      if (sizeInMB > 10) {
+        if (mounted) {
+          _showSnackBar('Image size should not exceed 10 MB.');
+        }
+        return;
+      }
+      setState(() {
+        _selectedImages[index] = imageFile;
+      });
+    } catch (e) {
+      if (mounted) {
+        _showSnackBar('Error picking image: $e');
+      }
+    }
+  }
+
+  bool _validateKeyInfo() {
+    if (_selectedImages.every((img) => img == null)) {
+      _showSnackBar('Please add at least one photo');
+      return false;
+    }
+    if (_nameController.text.trim().isEmpty) {
+      _showSnackBar('Please enter your name');
+      return false;
+    }
+    if (_ageController.text.trim().isEmpty) {
+      _showSnackBar('Please enter your age');
+      return false;
+    }
+    return true;
+  }
+
   void _updateFormStep() {
+    if (!additionalInfo && !_validateKeyInfo()) {
+      return;
+    }
     setState(() {
       additionalInfo = !additionalInfo;
       keyInfo = !keyInfo;
     });
   }
 
-  void _submitForm() async {
-    //get values from multiselect drop down and convert them to type list
-    _name = _nameController.text;
-    _age = _ageController.text;
-    _height = _heightController.text;
-    _bio = _bioController.text;
-    _sexuality = sexualityController.selectedItems.map((e) => e.value).toList();
-    _genderIdentity =
-        genderController.selectedItems.map((e) => e.value).toList();
-    _pronouns = pronounController.selectedItems.map((e) => e.value).toList();
-    _sexualPref =
-        sexualPrefController.selectedItems.map((e) => e.value).toList();
-    _genderPresentation =
-        genderPresentationController.selectedItems.map((e) => e.value).toList();
-    _interests = interestsController.selectedItems.map((e) => e.value).toList();
-
-    //insert to database
-    await firestoreInstance.collection('users').add({
-      'name': _name,
-      'age': _age,
-      'height': _height,
-      'sexuality': _sexuality,
-      'gender': _genderIdentity,
-      'pronouns': _pronouns,
-      'relationship_status': _relationshipStatus,
-      'relationship_style': _relationshipStyle,
-      'expectations': _lookingFor,
-      'expression': _genderPresentation,
-      'interests': _interests,
-      'sexual_pref': _sexualPref,
-      'bio': _bio //,
-      // 'photoURL': _images
+  Future<void> _submitForm() async {
+    if (!_validateKeyInfo()) return;
+    setState(() {
+      isLoading = true;
     });
+    
+    try {
+      final userId = _firebaseService.currentUserId;
+      if (userId == null) {
+        throw Exception('No user logged in');
+      }
 
-    //reroute to home at first page of nav menu
-    if (mounted) {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const NavMenu()),
-          (route) => false);
+      final imagesToUpload = _selectedImages.whereType<File>().toList();
+      _totalImages = imagesToUpload.length;
+      
+      if (imagesToUpload.isEmpty) {
+        throw Exception('Please select at least one image');
+      }
+
+      List<String> imageUrls = await _storageService.uploadMultipleProfileImages(
+        imageFiles: imagesToUpload,
+        userId: userId,
+      );
+      if (imageUrls.isEmpty) {
+        throw Exception('Image upload failed');
+      }
+      final data = {
+        'name': _nameController.text.trim(),
+        'age': _ageController.text.trim(),
+        'height': _heightController.text.trim(),
+        'bio': _bioController.text.trim(),
+        'sexuality': sexualityController.selectedItems.map((e) => e.value).toList(),
+        'gender': genderController.selectedItems.map((e) => e.value).toList(),
+        'pronouns': pronounController.selectedItems.map((e) => e.value).toList(),
+        'relationship_status': _relationshipStatus ?? '',
+        'relationship_style': _relationshipStyle ?? '',
+        'expectations': _lookingFor ?? '',
+        'expression': genderPresentationController.selectedItems.map((e) => e.value).toList(),
+        'interests': interestsController.selectedItems.map((e) => e.value).toList(),
+        'sexual_pref': sexualPrefController.selectedItems.map((e) => e.value).toList(),
+        'profileImages': imageUrls,
+        'photoURL': imageUrls.first, // Primary profile photo
+      };
+
+      await _firebaseService.updateUserProfile(data: data);
+      //reroute to home at first page of nav menu
+      if (mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const NavMenu()),
+            (route) => false
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        _showSnackBar('Error submitting profile: $e');
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
+  }
+
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(seconds: 3),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    //list of sexualities fields drop down memebers we can add more LOL
-    var sexualities = [
-      DropdownItem(label: 'Aromantic', value: "Aromantic"),
-      DropdownItem(label: 'Asexual', value: "Asexual"),
-      DropdownItem(label: 'Bisexual', value: "Bisexual"),
-      DropdownItem(label: 'Demisexual', value: "Demisexual"),
-      DropdownItem(label: 'Gay', value: "Gay"),
-      DropdownItem(label: 'Lesbian', value: "Lesbian"),
-      DropdownItem(label: 'Other', value: "Other"),
-      DropdownItem(label: 'Pansexual', value: "Pansexual"),
-      DropdownItem(label: 'Polysexual', value: "Polysexual"),
-      DropdownItem(label: 'Queer', value: "Queer"),
-      DropdownItem(label: 'Sapphic', value: "Sapphic")
-    ];
-
-    //gender identity values for drop down again we can add more not to get canceled but im lazy
-    var genders = [
-      DropdownItem(label: 'Agender', value: "Agender"),
-      DropdownItem(label: 'Bigender', value: "Bigender"),
-      DropdownItem(label: 'Genderfluid', value: "Genderfluid"),
-      DropdownItem(label: 'Genderqueer', value: "Genderqueer"),
-      DropdownItem(label: 'Intersex', value: "Intersex"),
-      DropdownItem(label: 'Non-binary', value: "Non-binary"),
-      DropdownItem(label: 'Pangender', value: "Pangender"),
-      DropdownItem(label: 'Transgender', value: "Transgender"),
-      DropdownItem(label: 'Trans Man', value: "Trans Man"),
-      DropdownItem(label: 'Trans Woman', value: "Trans Woman"),
-      DropdownItem(label: 'Trans Masculine', value: "Trans Masculine"),
-      DropdownItem(label: 'Trans Feminine', value: "Trans Feminine"),
-      DropdownItem(label: 'Two-Spirit', value: "Two-Spirit"),
-      DropdownItem(label: 'Woman', value: "Woman")
-    ];
-
-    //pronouns ALSO NEED MORE BUT IM BUSY
-    var pronouns = [
-      DropdownItem(label: 'she/her', value: "she/her"),
-      DropdownItem(label: 'they/them', value: "they/them"),
-      DropdownItem(label: 'he/him', value: "he/him"),
-      DropdownItem(label: 'ze/zir', value: "ze/zir"),
-      DropdownItem(label: 'fae/faer', value: "fae/faer"),
-      DropdownItem(label: 'ae/aer', value: "ae/aer"),
-      DropdownItem(label: 'xe/xem', value: "xe/xem"),
-      DropdownItem(label: 'it/its', value: "it/its"),
-      DropdownItem(label: 'ask me', value: "ask me"),
-    ];
-
-    //relationship status for drop down
-    List<String> relationshipStatuses = [
-      'single',
-      'open relationship',
-      'in a relationship',
-    ];
-
-    //relationship style for drop down
-    List<String> relationshipStyles = [
-      'monogamous',
-      'polyamorous',
-      'ethical non monagamy',
-      'relationship anarchy',
-      'swinging',
-      'exploring'
-    ];
-
-    //what your looking for types for drop down
-    List<String> expectations = [
-      'hookups',
-      'long term relationship',
-      'short term relationship',
-      'casual dating',
-      'figuring it out'
-    ];
-
-    //sexual preferences for drop down
-    var sexualPrefs = [
-      DropdownItem(label: 'top', value: "top"),
-      DropdownItem(label: 'bottom', value: "bottom"),
-      DropdownItem(label: 'switch', value: "switch"),
-    ];
-
-    //gender presentations for drop down
-    var genderPresentations = [
-      DropdownItem(label: 'androgynous', value: "androgynous"),
-      DropdownItem(label: 'alien', value: "alien"),
-      DropdownItem(label: 'chapstick', value: "chapstick"),
-      DropdownItem(label: 'femme', value: "femme"),
-      DropdownItem(label: 'futch', value: "futch"),
-      DropdownItem(label: 'butch', value: "butch"),
-      DropdownItem(label: 'lipstick', value: "lipstick"),
-      DropdownItem(label: 'masc', value: "masc"),
-      DropdownItem(label: 'stud', value: "stud"),
-      DropdownItem(label: 'stemme', value: "stemme"),
-    ];
-
-    //interests for drop down
-    var interestOptions = [
-      DropdownItem(label: 'reading', value: "reading"),
-      DropdownItem(label: 'outdoors', value: "outdoors"),
-      DropdownItem(label: 'cooking', value: "cooking"),
-      DropdownItem(label: 'emo femmes', value: "emo femmes"),
-    ];
-
     return (SizedBox(
         width: ProfileStyles.formWidth,
         child: Form(
@@ -537,21 +239,22 @@ class _ProfileFormState extends State<ProfileForm> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        ImageButton(image: _image1, width: 200, height: 400),
+                        ImageButton(
+                          image: _selectedImages[0], width: 200, height: 400, onTap: () => _pickImage(0)),
                         const SizedBox(width: 5),
                         Column(
                           children: [
-                            ImageButton(image: _image2, width: 80, height: 190),
+                            ImageButton(image: _selectedImages[1], width: 80, height: 190, onTap: () => _pickImage(1)),
                             const SizedBox(height: 10),
-                            ImageButton(image: _image3, width: 80, height: 190),
+                            ImageButton(image: _selectedImages[2], width: 80, height: 190, onTap: () => _pickImage(2)),
                           ],
                         ),
                         const SizedBox(width: 5),
                         Column(
                           children: [
-                            ImageButton(image: _image4, width: 80, height: 190),
+                            ImageButton(image: _selectedImages[3], width: 80, height: 190, onTap: () => _pickImage(3)),
                             const SizedBox(height: 10),
-                            ImageButton(image: _image5, width: 80, height: 190),
+                            ImageButton(image: _selectedImages[4], width: 80, height: 190, onTap: () => _pickImage(4)),
                           ],
                         ),
                       ]),
@@ -577,7 +280,6 @@ class _ProfileFormState extends State<ProfileForm> {
                   )
                 ],
 
-                //ADDITIONAL INFO FORM CONTENTS HERE
                 if (additionalInfo) ...[
                   const SizedBox(height: 15),
                   TextInputField(
@@ -586,39 +288,29 @@ class _ProfileFormState extends State<ProfileForm> {
                       textType: "Height"),
                   const SizedBox(height: 15),
                   MultiSelectDropdown(
-                      controller: sexualityController,
-                      labelText: "Sexuality",
-                      items: sexualities),
+                      controller: sexualityController, labelText: "Sexuality"),
                   const SizedBox(height: 15),
                   MultiSelectDropdown(
                       controller: genderController,
-                      labelText: "Gender Identity",
-                      items: genders),
+                      labelText: "Gender Identity"),
                   const SizedBox(height: 15),
                   MultiSelectDropdown(
-                      controller: pronounController,
-                      labelText: "Pronouns",
-                      items: pronouns),
+                      controller: pronounController, labelText: "Pronouns"),
                   const SizedBox(height: 15),
                   MultiSelectDropdown(
                       controller: sexualPrefController,
-                      labelText: "Sexual Preferences",
-                      items: sexualPrefs),
+                      labelText: "Sexual Preferences"),
                   const SizedBox(height: 15),
                   MultiSelectDropdown(
                       controller: genderPresentationController,
-                      labelText: "Gender Presentation",
-                      items: genderPresentations),
+                      labelText: "Gender Presentation"),
                   const SizedBox(height: 15),
                   MultiSelectDropdown(
-                      controller: interestsController,
-                      labelText: "Interests",
-                      items: interestOptions),
+                      controller: interestsController, labelText: "Interests"),
                   const SizedBox(height: 15),
                   SingleSelectDropDown(
                     value: _relationshipStatus,
                     label: "Relationship Status",
-                    items: relationshipStatuses,
                     onChanged: (newVal) {
                       setState(() {
                         _relationshipStatus = newVal;
@@ -629,7 +321,6 @@ class _ProfileFormState extends State<ProfileForm> {
                   SingleSelectDropDown(
                     value: _relationshipStyle,
                     label: "Relationship Style",
-                    items: relationshipStyles,
                     onChanged: (newVal) {
                       setState(() {
                         _relationshipStyle = newVal;
@@ -639,7 +330,6 @@ class _ProfileFormState extends State<ProfileForm> {
                   SingleSelectDropDown(
                     value: _lookingFor,
                     label: "Looking For",
-                    items: expectations,
                     onChanged: (newVal) {
                       setState(() {
                         _lookingFor = newVal;

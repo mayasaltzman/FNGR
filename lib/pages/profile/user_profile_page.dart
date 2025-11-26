@@ -43,6 +43,7 @@ class HeaderElements extends StatelessWidget {
   final bool isUser;
   final String userId;
   final String photoURL;
+
   const HeaderElements({
     super.key,
     required this.name,
@@ -108,24 +109,81 @@ class HeaderElements extends StatelessWidget {
 }
 
 //image box
-class ProfileImage extends StatelessWidget {
+class ProfileImage extends StatefulWidget {
   final String? imageUrl;
-  const ProfileImage({super.key, this.imageUrl});
+  final List<dynamic>? profileImages;
+  
+  const ProfileImage({
+    super.key, 
+    this.imageUrl, 
+    this.profileImages
+  });
 
-
+ @override
+  State<ProfileImage> createState() => _ProfileImageState();
+}
+class _ProfileImageState extends State<ProfileImage> {
+  final PageController _pageController = PageController();
+  int _index = 0;
+  
   @override
   Widget build(BuildContext context) {
-    //doesn't render until data is loaded
+    final images = widget.profileImages ?? [];
+    final hasCarousel = images.isNotEmpty;
+
     return Container(
       height: 500,
       width: ProfileStyles.containerWidth,
       decoration: ProfileStyles.boxDecoration,
-      child: imageUrl != null && imageUrl!.isNotEmpty
-          ? Image.network(imageUrl!,fit: BoxFit.cover, errorBuilder: (context, error, stackTrace) => 
-                  const Icon(Icons.person, size: 100),
+      clipBehavior: Clip.hardEdge,
+      child: hasCarousel
+          ? Column (
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(images.length, (i) {
+                    return Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                      height: 4,
+                      width: 25,
+                      color: _index == i ? 
+                         Theme.of(context).colorScheme.tertiaryFixed: 
+                         Theme.of(context).colorScheme.tertiary,
+                    );
+                  }),
+                ),
+
+                Expanded(
+                  child: PageView(
+                    controller: _pageController,
+                    onPageChanged: (i) => setState(() => _index = i),
+                    children: images.map((img) {
+                      return Image.network(
+                        img,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) =>
+                            const Center(child: Icon(Icons.person, size: 100)),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ],
             )
-            : const Center( child: Icon(Icons.person, size: 100)),
+          : _buildSingleImageOrFallback(),
+          
     );
+  }
+  Widget _buildSingleImageOrFallback() {
+    if (widget.imageUrl != null && widget.imageUrl!.isNotEmpty) {
+      return Image.network(
+        widget.imageUrl!,
+        fit: BoxFit.cover,
+        errorBuilder: (_, __, ___) =>
+            const Center(child: Icon(Icons.person, size: 100)),
+      );
+    } else {
+      return const Center(child: Icon(Icons.person, size: 100));
+    }
   }
 }
 
@@ -426,7 +484,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         userId: userId,
                         photoURL: data['photoURL'] ?? '',
                       ),
-                      ProfileImage(imageUrl: data['photoURL'] ?? ''),
+                      ProfileImage(
+                        imageUrl: data['photoURL'] ?? '', 
+                        profileImages: data['profileImages'] ?? []
+                      ),
                       AboutMe(bio: data['bio'] ?? 'No bio available.'),
                       KeyInfo(
                         distance: distance.isFinite ? distance : null,
