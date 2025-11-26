@@ -3,7 +3,6 @@ import 'package:test_milestone/pages/auth/login_page.dart';
 import '../../services/firebase_service.dart';
 import '../../main.dart';
 import 'package:flutter/cupertino.dart';
-import '../../main.dart'; // Import Login Page
 
 //styles for the page
 abstract class ProfileStyles {
@@ -26,7 +25,6 @@ abstract class ProfileStyles {
   static TextStyle get boxHeader => const TextStyle(
       fontWeight: FontWeight.bold, color: Color(0xFFFF9B55), fontSize: 16);
 }
-
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -75,7 +73,7 @@ class _SettingsState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
+      backgroundColor: const Color(0xFFFFE0CA),
       body: SingleChildScrollView(
         child: Align(
           alignment: Alignment.topLeft,
@@ -241,49 +239,6 @@ class _SettingsState extends State<SettingsPage> {
                   ),
                 ),
 
-                const SizedBox(height: 35),
-                Text(
-                  "Settings",
-                  style: ProfileStyles.boxHeader.copyWith(
-                    fontSize: 40 / MediaQuery.of(context).textScaleFactor,
-                    color: const Color(0xFFFFFFFF),
-                  ),
-                ),
-                
-                Divider(
-                  thickness: 4,
-                  color: ProfileStyles.boxHeader.color,
-                  height: 40,
-                ),
-                
-                ElevatedButton(
-                  onPressed: isLoading ? null : () {
-                    print("great");
-                  },
-                  
-                  style: TextButton.styleFrom(
-                    fixedSize: Size(500, 50),
-                    side: BorderSide.none,
-                    backgroundColor: Color(0xFFFFE0CA),
-                    elevation: 0.0,
-                  ),
-                  
-                  child: Text(
-                    "Edit Profile",
-                    style: ProfileStyles.boxHeader,
-                  ),
-                ),
-
-                const SizedBox(height: 640),
-                ElevatedButton(
-                  onPressed: isLoading ? null : () {
-                    _signOut();
-                  },
-                  child: Text(
-                    "Logout",
-                    style: ProfileStyles.boxHeader,
-                  ),
-                ),
               ],
             ),
           )
