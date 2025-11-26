@@ -48,8 +48,8 @@ class MyApp extends StatelessWidget {
               bodySmall: TextStyle(fontSize: 14))),
       debugShowCheckedModeBanner: false,
       // home: const HomePage(),
-      //home: const LoginPage(),
       home: const SettingsPage(),
+      //home: const CreateProfilePage(),
     );
   }
 }

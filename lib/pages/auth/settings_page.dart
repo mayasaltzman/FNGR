@@ -5,8 +5,8 @@ import '../../main.dart'; // Import Login Page
 
 //styles for the page
 abstract class ProfileStyles {
-  //styles for boxes
-  static BoxDecoration boxDecoration = BoxDecoration(
+  //styles for boxes that store profile info
+  static BoxDecoration get boxDecoration => BoxDecoration(
       color: const Color(0xFFFFF0E6),
       borderRadius: BorderRadius.circular(15.0),
       border: Border.all(
@@ -14,13 +14,22 @@ abstract class ProfileStyles {
         width: 1,
       ));
 
+  //styles for boxes that are individual items in sexual preferences and interests
+  static BoxDecoration get itemBoxDecoration => BoxDecoration(
+      color: const Color(0xFFF9E7F2),
+      borderRadius: BorderRadius.circular(15.0),
+      border: Border.all(
+        color: const Color(0xFFAA4E85),
+        width: 1,
+      ));
+
   //text styles for headings in boxes
-  static TextStyle boxHeader = const TextStyle(
-      fontWeight: FontWeight.bold, color: Color(0xFFFF9B55), fontSize: 44);
+  static TextStyle get boxHeader => const TextStyle(
+      fontWeight: FontWeight.bold, color: Color(0xFFFF9B55), fontSize: 16);
 
   //text styles for text in boxes
-  static TextStyle boxText = const TextStyle(
-      fontWeight: FontWeight.normal, color: Color(0xFFAA4E85), fontSize: 16);
+  static TextStyle get boxText => const TextStyle(
+    fontWeight: FontWeight.w200, color: Color(0xFF1F1F1F), fontSize: 16);
 
   static const containerWidth = 375.0;
 
@@ -76,7 +85,7 @@ class _SettingsState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
+      backgroundColor: const Color(0xFFFFE0CA),
       body: SingleChildScrollView(
         child: Align(
           alignment: Alignment.topLeft,
@@ -89,15 +98,35 @@ class _SettingsState extends State<SettingsPage> {
                 Text(
                   "Settings",
                   style: ProfileStyles.boxHeader.copyWith(
-                    fontSize: 26 / MediaQuery.of(context).textScaleFactor,
+                    fontSize: 40 / MediaQuery.of(context).textScaleFactor,
+                    color: const Color(0xFFFFFFFF),
                   ),
                 ),
+                
                 Divider(
-                  thickness: 3,
-                  color: Theme.of(context).colorScheme.secondary,
+                  thickness: 4,
+                  color: ProfileStyles.boxHeader.color,
                   height: 40,
                 ),
                 
+                ElevatedButton(
+                  onPressed: isLoading ? null : () {
+                    print("great");
+                  },
+                  
+                  style: TextButton.styleFrom(
+                    fixedSize: Size(500, 50),
+                    side: BorderSide.none,
+                    backgroundColor: Color(0xFFFFE0CA),
+                    elevation: 0.0,
+                  ),
+                  
+                  child: Text(
+                    "Edit Profile",
+                    style: ProfileStyles.boxHeader,
+                  ),
+                ),
+
                 const SizedBox(height: 640),
                 ElevatedButton(
                   onPressed: isLoading ? null : () {
@@ -105,9 +134,11 @@ class _SettingsState extends State<SettingsPage> {
                   },
                   child: Text(
                     "Logout",
-                    style: ProfileStyles.boxText,
+                    style: ProfileStyles.boxHeader,
                   ),
                 ),
+
+
               ],
             ),
           )
