@@ -70,7 +70,7 @@ class SingleSelectDropDown extends StatelessWidget {
         const SizedBox(width: 20),
         SizedBox(
           child: DropdownButton<String>(
-            hint: Text(hintText != "" ? hintText! : "Select",
+            hint: Text(hintText != "" ? hintText ?? "Select" : "Select",
                 style: TextStyle(
                     color: Theme.of(context).colorScheme.primaryFixed)),
             isExpanded: true,
