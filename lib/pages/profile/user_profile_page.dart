@@ -436,13 +436,14 @@ class _UserProfilePageState extends State<UserProfilePage> {
       backgroundColor: Theme.of(context).colorScheme.primary,
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.secondary,
-        leading: BackButton(
-            color: Theme.of(context)
-                .colorScheme
-                .secondaryFixed), //need to make this actually do something and give it color change for press
+        leading: isUserProfile
+            ? null
+            : BackButton(
+                color: Theme.of(context).colorScheme.secondaryFixed,
+              ),
         centerTitle: true,
         title: Text(
-          'FNGR',
+          isUserProfile ? 'Profile' : 'FNGR',
           style:
               TextStyle(color: Theme.of(context).colorScheme.secondaryFixed),
         ),
