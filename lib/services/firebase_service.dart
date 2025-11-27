@@ -416,6 +416,19 @@ class FirebaseService {
     }
   }
 
+  Future<String> getInitiator(String chatId) async {
+    try {
+      final doc = await _firestore.collection('chats').doc(chatId).get();
+      if (doc.exists) {
+        final initiatorId = doc.get('initiatorId');
+        return initiatorId;
+      }
+      return "Unknown";
+    } catch (e) {
+      throw Exception('Failed to check initiator status: $e');
+    }
+  }
+
   // ============ UTILITY METHODS ============
 
   /// Check if user is authenticated
