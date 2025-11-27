@@ -76,6 +76,7 @@ class ApproveDeclineWidget extends StatefulWidget {
   final String chatId;
   final InMemoryChatController chatController;
   final FirebaseService firebaseService;
+  final String? userName;
 
   const ApproveDeclineWidget(
       {super.key,
@@ -83,7 +84,8 @@ class ApproveDeclineWidget extends StatefulWidget {
       required this.rejectChat,
       required this.chatId,
       required this.chatController,
-      required this.firebaseService});
+      required this.firebaseService,
+      required this.userName});
 
   @override
   ApproveDeclineWidgetState createState() => ApproveDeclineWidgetState();
@@ -98,7 +100,7 @@ class ApproveDeclineWidgetState extends State<ApproveDeclineWidget> {
           child: Column(
             children: [
               const Padding(padding: EdgeInsets.all(5)),
-              const Text("User wants to send you a message"),
+              Text("${widget.userName} wants to send you a message"),
               const SizedBox(height: 10),
               const Text(
                   "Do you want them to send you messages from now on? They’ll only known you’ve seen their request if you choose Allow.",
@@ -158,11 +160,13 @@ class MessageWidgetState extends State<MessageWidget> {
   bool _isLoading = true;
   bool _isAccepted = false;
   late bool _isInitiator;
+  late String? userName;
 
   @override
   void initState() {
     super.initState();
     _initializeChat();
+    //_getUsername();
   }
 
   Future<void> _initializeChat() async {
@@ -245,6 +249,19 @@ class MessageWidgetState extends State<MessageWidget> {
     }
   }
 
+  Future<String> _getUsername() async {
+    try {
+      final initID = await _firebaseService.getInitiator(_chatId);
+      final userDoc = await _firebaseService.getUserProfile(initID);
+      final userData = userDoc.data() as Map<String, dynamic>?;
+      final userName = userData?['name'] ?? '';
+      return userName;
+    } catch (e) {
+      print("failed to get username $e");
+      return '';
+    }
+  }
+
   @override
   void dispose() {
     _chatController.dispose();
@@ -255,20 +272,30 @@ class MessageWidgetState extends State<MessageWidget> {
   Widget build(BuildContext context) {
     if (_isLoading) return const Center(child: CircularProgressIndicator());
 
-    return _isAccepted
-        ? LoadChat(
-            chatId: _chatId,
-            chatController: _chatController,
-            sendMessage: _sendMessage,
-            firebaseService: _firebaseService,
-            isNewChat: _chatId.isEmpty,
-          )
-        : ApproveDeclineWidget(
-            acceptChat: _acceptChat,
-            rejectChat: _rejectChat,
-            chatId: _chatId,
-            chatController: _chatController,
-            firebaseService: _firebaseService);
+    return FutureBuilder<String>(
+        future: _getUsername(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          }
+          return _isAccepted || _isInitiator
+              ? LoadChat(
+                  chatId: _chatId,
+                  chatController: _chatController,
+                  sendMessage: _sendMessage,
+                  firebaseService: _firebaseService,
+                  isNewChat: _chatId.isEmpty,
+                )
+              : ApproveDeclineWidget(
+                  acceptChat: _acceptChat,
+                  rejectChat: _rejectChat,
+                  chatId: _chatId,
+                  chatController: _chatController,
+                  firebaseService: _firebaseService,
+                  userName: snapshot.data);
+        });
   }
 }
 
