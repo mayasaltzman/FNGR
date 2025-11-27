@@ -127,10 +127,10 @@ class _ProfileFormState extends State<ProfileForm> {
   }
 
   bool _validateKeyInfo() {
-    if (_selectedImages.every((img) => img == null)) {
-      _showSnackBar('Please add at least one photo');
-      return false;
-    }
+    // if (_selectedImages.every((img) => img == null)) {
+    //   _showSnackBar('Please add at least one photo');
+    //   return false;
+    // }
     if (_nameController.text.trim().isEmpty) {
       _showSnackBar('Please enter your name');
       return false;
@@ -166,18 +166,15 @@ class _ProfileFormState extends State<ProfileForm> {
 
       final imagesToUpload = _selectedImages.whereType<File>().toList();
       _totalImages = imagesToUpload.length;
-      
-      if (imagesToUpload.isEmpty) {
-        throw Exception('Please select at least one image');
-      }
+      List<String> imageUrls = [];
 
-      List<String> imageUrls = await _storageService.uploadMultipleProfileImages(
-        imageFiles: imagesToUpload,
+      if (imagesToUpload.isNotEmpty) {
+        imageUrls = await _storageService.uploadMultipleProfileImages(
+            imageFiles: imagesToUpload,
         userId: userId,
       );
-      if (imageUrls.isEmpty) {
-        throw Exception('Image upload failed');
       }
+
       final data = {
         'name': _nameController.text.trim(),
         'age': _ageController.text.trim(),
@@ -192,8 +189,8 @@ class _ProfileFormState extends State<ProfileForm> {
         'expression': genderPresentationController.selectedItems.map((e) => e.value).toList(),
         'interests': interestsController.selectedItems.map((e) => e.value).toList(),
         'sexual_pref': sexualPrefController.selectedItems.map((e) => e.value).toList(),
-        'profileImages': imageUrls,
-        'photoURL': imageUrls.first, // Primary profile photo
+        'profileImages': imageUrls ?? [],
+        'photoURL': imageUrls.isNotEmpty ? imageUrls.first : '', 
       };
 
       await _firebaseService.updateUserProfile(data: data);

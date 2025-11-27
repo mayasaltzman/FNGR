@@ -26,6 +26,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
         appBar: AppBar(
+          centerTitle: true,
           title: Text("FNGR",
               style: TextStyle(
                   color: Theme.of(context).colorScheme.secondaryFixed)),
