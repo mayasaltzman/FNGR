@@ -62,7 +62,7 @@ class TextInputField extends StatelessWidget {
                 ),
                 filled: true,
                 fillColor: Theme.of(context).colorScheme.tertiaryContainer,
-                labelText: labelText,
+                //labelText: labelText,
                 labelStyle: TextStyle(
                     color: Theme.of(context).colorScheme.primaryFixed,
                     fontSize: 16)),
@@ -75,11 +75,13 @@ class TextInputField extends StatelessWidget {
 class TextInputFieldLong extends StatelessWidget {
   final TextEditingController controller;
   final FormFieldValidator<String>? validator;
+  final String? bio;
 
   const TextInputFieldLong({
     super.key,
     required this.controller,
     this.validator,
+    this.bio,
   });
 
   @override
@@ -98,10 +100,11 @@ class TextInputFieldLong extends StatelessWidget {
                 color: Theme.of(context).colorScheme.primaryFixed,
                 fontSize: 16),
             decoration: InputDecoration(
-              labelText: "Tell us about yourself!",
+              labelText: bio,
               labelStyle: TextStyle(
                   color: Theme.of(context).colorScheme.primaryFixed,
                   fontSize: 16),
+              floatingLabelBehavior: FloatingLabelBehavior.never,
               filled: true,
               fillColor: Theme.of(context).colorScheme.tertiaryContainer,
               enabledBorder: OutlineInputBorder(

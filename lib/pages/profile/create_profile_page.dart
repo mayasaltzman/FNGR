@@ -31,6 +31,7 @@ abstract class ProfileStyles {
 
 class ProfileForm extends StatefulWidget {
   const ProfileForm({super.key});
+  
 
   @override
   State<ProfileForm> createState() => _ProfileFormState();
@@ -232,6 +233,7 @@ class _ProfileFormState extends State<ProfileForm> {
         child: Form(
             key: _formKey,
             child: Column(
+              spacing: 15,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (keyInfo) ...[
@@ -258,19 +260,15 @@ class _ProfileFormState extends State<ProfileForm> {
                           ],
                         ),
                       ]),
-                  const SizedBox(height: 15),
                   TextInputField(
                       controller: _nameController,
                       labelText: "Name",
                       textType: "Name"),
-                  const SizedBox(height: 15),
                   TextInputField(
                       controller: _ageController,
                       labelText: "Age",
                       textType: "Age"),
-                  const SizedBox(height: 15),
                   TextInputFieldLong(controller: _bioController),
-                  const SizedBox(height: 20),
                   Align(
                     alignment: Alignment.centerRight,
                     child: ElevatedButton(
@@ -281,33 +279,25 @@ class _ProfileFormState extends State<ProfileForm> {
                 ],
 
                 if (additionalInfo) ...[
-                  const SizedBox(height: 15),
                   TextInputField(
                       controller: _heightController,
                       labelText: "Height",
                       textType: "Height"),
-                  const SizedBox(height: 15),
                   MultiSelectDropdown(
                       controller: sexualityController, labelText: "Sexuality"),
-                  const SizedBox(height: 15),
                   MultiSelectDropdown(
                       controller: genderController,
                       labelText: "Gender Identity"),
-                  const SizedBox(height: 15),
                   MultiSelectDropdown(
                       controller: pronounController, labelText: "Pronouns"),
-                  const SizedBox(height: 15),
                   MultiSelectDropdown(
                       controller: sexualPrefController,
                       labelText: "Sexual Preferences"),
-                  const SizedBox(height: 15),
                   MultiSelectDropdown(
                       controller: genderPresentationController,
                       labelText: "Gender Presentation"),
-                  const SizedBox(height: 15),
                   MultiSelectDropdown(
                       controller: interestsController, labelText: "Interests"),
-                  const SizedBox(height: 15),
                   SingleSelectDropDown(
                     value: _relationshipStatus,
                     label: "Relationship Status",
@@ -317,7 +307,6 @@ class _ProfileFormState extends State<ProfileForm> {
                       });
                     },
                   ),
-                  const SizedBox(height: 15),
                   SingleSelectDropDown(
                     value: _relationshipStyle,
                     label: "Relationship Style",
@@ -336,7 +325,7 @@ class _ProfileFormState extends State<ProfileForm> {
                       });
                     },
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
