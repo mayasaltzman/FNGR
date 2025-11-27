@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:test_milestone/pages/auth/login_page.dart';
 import '../../services/firebase_service.dart';
-import '../../main.dart'; // Import Login Page
+import '../../main.dart';
 import 'package:flutter/cupertino.dart';
 
 //styles for the page
@@ -35,8 +35,6 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsState extends State<SettingsPage> {
   final FirebaseService _firebaseService = FirebaseService();
-  //final TextEditingController _emailController = TextEditingController();
-  //final TextEditingController _passwordController  = TextEditingController();
   bool isLoading = false;
   bool _allowNotifs = true;
   bool _allowLocation = true;
@@ -69,8 +67,6 @@ class _SettingsState extends State<SettingsPage> {
 
   @override
   void dispose() {
-    //_emailController.dispose();
-    //_passwordController.dispose();
     super.dispose();
   }
 
