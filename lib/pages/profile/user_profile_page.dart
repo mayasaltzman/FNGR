@@ -58,6 +58,7 @@ class BuildUserProfilePage extends StatefulWidget {
 }
 
 class _BuildUserProfilePageState extends State<BuildUserProfilePage> {
+
   //get data from firestore
   @override
   void initState() {
