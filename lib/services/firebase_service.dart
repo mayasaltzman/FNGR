@@ -284,10 +284,13 @@ class FirebaseService {
     }
     return _firestore
         .collection('chats')
-        .where('participants', arrayContains: currentUserId)
-        .where('acceptedMessage', isEqualTo: true)
-        //.where('initiatorId', isNotEqualTo: currentUserId)
-        //.orderBy('initiatorId')
+        .where(Filter.and(
+            Filter('participants', arrayContains: currentUserId),
+            Filter.or(
+                Filter.and(Filter('acceptedMessage', isEqualTo: true),
+                    Filter('initiatorId', isNotEqualTo: currentUserId)),
+                Filter('initiatorId', isEqualTo: currentUserId))))
+        .orderBy('initiatorId')
         .snapshots();
   }
 
