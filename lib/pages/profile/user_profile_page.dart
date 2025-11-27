@@ -144,19 +144,20 @@ class _UserProfilePageState extends State<UserProfilePage> {
   Widget build(BuildContext context) {
     final isUserProfile = userId == _firebaseService.currentUserId;
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        leading: isUserProfile
-            ? null
-            : BackButton(
-                color: Theme.of(context).colorScheme.secondaryFixed,
-              ),
-        centerTitle: true,
-        title: Text(
-          isUserProfile ? 'Profile' : 'FNGR',
-          style:
-              TextStyle(color: Theme.of(context).colorScheme.secondaryFixed),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.secondary,
+          leading: isUserProfile
+              ? null
+              : BackButton(
+                  color: Theme.of(context).colorScheme.secondaryFixed,
+                ),
+          centerTitle: true,
+          title: Text(
+            isUserProfile ? 'Profile' : 'FNGR',
+            style:
+                TextStyle(color: Theme.of(context).colorScheme.secondaryFixed),
+          ),
         ),
         body: FutureBuilder<DocumentSnapshot>(
             future: _firebaseService.getUserProfile(userId),
