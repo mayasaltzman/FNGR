@@ -58,7 +58,6 @@ class BuildUserProfilePage extends StatefulWidget {
 }
 
 class _BuildUserProfilePageState extends State<BuildUserProfilePage> {
-
   //get data from firestore
   @override
   void initState() {
@@ -224,7 +223,15 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                           rStyle:
                                               data['relationship_style'] ?? '',
                                           lookingFor:
-                                              data['expectations'] ?? ''),
+                                              data['expectations'] ?? '',
+                                          sexuality: data['sexuality'] ?? [],
+                                          gender: data['gender'] ?? [],
+                                          pronouns: data['pronouns'] ?? [],
+                                          presentation:
+                                              data['expression'] ?? [],
+                                          interests: data['interests'] ?? [],
+                                          preferences:
+                                              data['sexual_pref'] ?? []),
                                       SingleChildScrollView(
                                           child: Column(children: [
                                         BuildUserProfilePage(

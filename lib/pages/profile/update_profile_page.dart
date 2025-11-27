@@ -8,18 +8,32 @@ import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:image_picker/image_picker.dart';
 import './widgets/image_button_widget.dart';
 
+//MAYA STILL FINISHING THIS
+
 class UpdateProfilePage extends StatefulWidget {
   final String bio;
   final String rStatus;
   final String rStyle;
   final String lookingFor;
+  final List<dynamic> sexuality;
+  final List<dynamic> gender;
+  final List<dynamic> pronouns;
+  final List<dynamic> presentation;
+  final List<dynamic> interests;
+  final List<dynamic> preferences;
 
   const UpdateProfilePage(
       {super.key,
       required this.bio,
       required this.rStatus,
       required this.rStyle,
-      required this.lookingFor});
+      required this.lookingFor,
+      required this.sexuality,
+      required this.gender,
+      required this.pronouns,
+      required this.presentation,
+      required this.interests,
+      required this.preferences});
 
   @override
   State<UpdateProfilePage> createState() => _UpdateProfilePageState();
@@ -50,6 +64,9 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
   void initState() {
     super.initState();
     _firebaseService = FirebaseService();
+
+    // print(dropdownItems);
+    // sexualityController.setItems(dropdownItems);
   }
 
   @override
@@ -132,33 +149,57 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    List<DropdownItem<String>> dropdownItems =
+        widget.sexuality.map((dynamic item) {
+      return DropdownItem(label: item.toString(), value: item.toString());
+    }).toList();
+    print(dropdownItems);
     return SingleChildScrollView(
         child: Container(
             padding: EdgeInsets.all(10),
             child: Column(spacing: 15, children: [
               Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ImageButton(
+                        image: _selectedImages[0],
+                        width: 200,
+                        height: 400,
+                        onTap: () => _pickImage(0)),
+                    const SizedBox(width: 5),
+                    Column(
                       children: [
                         ImageButton(
-                          image: _selectedImages[0], width: 200, height: 400, onTap: () => _pickImage(0)),
-                        const SizedBox(width: 5),
-                        Column(
-                          children: [
-                            ImageButton(image: _selectedImages[1], width: 80, height: 190, onTap: () => _pickImage(1)),
-                            const SizedBox(height: 10),
-                            ImageButton(image: _selectedImages[2], width: 80, height: 190, onTap: () => _pickImage(2)),
-                          ],
-                        ),
-                        const SizedBox(width: 5),
-                        Column(
-                          children: [
-                            ImageButton(image: _selectedImages[3], width: 80, height: 190, onTap: () => _pickImage(3)),
-                            const SizedBox(height: 10),
-                            ImageButton(image: _selectedImages[4], width: 80, height: 190, onTap: () => _pickImage(4)),
-                          ],
-                        ),
-                      ]),
+                            image: _selectedImages[1],
+                            width: 80,
+                            height: 190,
+                            onTap: () => _pickImage(1)),
+                        const SizedBox(height: 10),
+                        ImageButton(
+                            image: _selectedImages[2],
+                            width: 80,
+                            height: 190,
+                            onTap: () => _pickImage(2)),
+                      ],
+                    ),
+                    const SizedBox(width: 5),
+                    Column(
+                      children: [
+                        ImageButton(
+                            image: _selectedImages[3],
+                            width: 80,
+                            height: 190,
+                            onTap: () => _pickImage(3)),
+                        const SizedBox(height: 10),
+                        ImageButton(
+                            image: _selectedImages[4],
+                            width: 80,
+                            height: 190,
+                            onTap: () => _pickImage(4)),
+                      ],
+                    ),
+                  ]),
               TextInputFieldLong(controller: _bioController, bio: widget.bio),
               MultiSelectDropdown(
                   controller: sexualityController, labelText: "Sexuality"),
