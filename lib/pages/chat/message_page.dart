@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_chat_core/flutter_chat_core.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+import 'package:test_milestone/pages/profile/user_profile_page.dart';
 import '../../services/firebase_service.dart';
 
 class MessagePage extends StatefulWidget {
@@ -36,15 +37,24 @@ class _MessagePageState extends State<MessagePage> {
         title: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CircleAvatar(
-              radius: 20,
-              backgroundImage: widget.recipientImage.isNotEmpty
-                  ? NetworkImage(widget.recipientImage)
-                  : null,
-              child: widget.recipientImage.isEmpty
-                  ? const Icon(Icons.person)
-                  : null,
-            ),
+            GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            UserProfilePage(userId: widget.recipientUid)),
+                  );
+                },
+                child: CircleAvatar(
+                  radius: 20,
+                  backgroundImage: widget.recipientImage.isNotEmpty
+                      ? NetworkImage(widget.recipientImage)
+                      : null,
+                  child: widget.recipientImage.isEmpty
+                      ? const Icon(Icons.person)
+                      : null,
+                )),
             Text(
               widget.recipientName,
               style: TextStyle(
