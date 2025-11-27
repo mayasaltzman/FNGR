@@ -31,6 +31,7 @@ abstract class ProfileStyles {
 
 class ProfileForm extends StatefulWidget {
   const ProfileForm({super.key});
+  
 
   @override
   State<ProfileForm> createState() => _ProfileFormState();
@@ -126,10 +127,10 @@ class _ProfileFormState extends State<ProfileForm> {
   }
 
   bool _validateKeyInfo() {
-    if (_selectedImages.every((img) => img == null)) {
-      _showSnackBar('Please add at least one photo');
-      return false;
-    }
+    // if (_selectedImages.every((img) => img == null)) {
+    //   _showSnackBar('Please add at least one photo');
+    //   return false;
+    // }
     if (_nameController.text.trim().isEmpty) {
       _showSnackBar('Please enter your name');
       return false;
@@ -165,18 +166,15 @@ class _ProfileFormState extends State<ProfileForm> {
 
       final imagesToUpload = _selectedImages.whereType<File>().toList();
       _totalImages = imagesToUpload.length;
-      
-      if (imagesToUpload.isEmpty) {
-        throw Exception('Please select at least one image');
-      }
+      List<String> imageUrls = [];
 
-      List<String> imageUrls = await _storageService.uploadMultipleProfileImages(
-        imageFiles: imagesToUpload,
+      if (imagesToUpload.isNotEmpty) {
+        imageUrls = await _storageService.uploadMultipleProfileImages(
+            imageFiles: imagesToUpload,
         userId: userId,
       );
-      if (imageUrls.isEmpty) {
-        throw Exception('Image upload failed');
       }
+
       final data = {
         'name': _nameController.text.trim(),
         'age': _ageController.text.trim(),
@@ -191,8 +189,8 @@ class _ProfileFormState extends State<ProfileForm> {
         'expression': genderPresentationController.selectedItems.map((e) => e.value).toList(),
         'interests': interestsController.selectedItems.map((e) => e.value).toList(),
         'sexual_pref': sexualPrefController.selectedItems.map((e) => e.value).toList(),
-        'profileImages': imageUrls,
-        'photoURL': imageUrls.first, // Primary profile photo
+        'profileImages': imageUrls ?? [],
+        'photoURL': imageUrls.isNotEmpty ? imageUrls.first : '', 
       };
 
       await _firebaseService.updateUserProfile(data: data);
@@ -232,6 +230,7 @@ class _ProfileFormState extends State<ProfileForm> {
         child: Form(
             key: _formKey,
             child: Column(
+              spacing: 15,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (keyInfo) ...[
@@ -258,19 +257,15 @@ class _ProfileFormState extends State<ProfileForm> {
                           ],
                         ),
                       ]),
-                  const SizedBox(height: 15),
                   TextInputField(
                       controller: _nameController,
                       labelText: "Name",
                       textType: "Name"),
-                  const SizedBox(height: 15),
                   TextInputField(
                       controller: _ageController,
                       labelText: "Age",
                       textType: "Age"),
-                  const SizedBox(height: 15),
                   TextInputFieldLong(controller: _bioController),
-                  const SizedBox(height: 20),
                   Align(
                     alignment: Alignment.centerRight,
                     child: ElevatedButton(
@@ -281,33 +276,25 @@ class _ProfileFormState extends State<ProfileForm> {
                 ],
 
                 if (additionalInfo) ...[
-                  const SizedBox(height: 15),
                   TextInputField(
                       controller: _heightController,
                       labelText: "Height",
                       textType: "Height"),
-                  const SizedBox(height: 15),
                   MultiSelectDropdown(
                       controller: sexualityController, labelText: "Sexuality"),
-                  const SizedBox(height: 15),
                   MultiSelectDropdown(
                       controller: genderController,
                       labelText: "Gender Identity"),
-                  const SizedBox(height: 15),
                   MultiSelectDropdown(
                       controller: pronounController, labelText: "Pronouns"),
-                  const SizedBox(height: 15),
                   MultiSelectDropdown(
                       controller: sexualPrefController,
                       labelText: "Sexual Preferences"),
-                  const SizedBox(height: 15),
                   MultiSelectDropdown(
                       controller: genderPresentationController,
                       labelText: "Gender Presentation"),
-                  const SizedBox(height: 15),
                   MultiSelectDropdown(
                       controller: interestsController, labelText: "Interests"),
-                  const SizedBox(height: 15),
                   SingleSelectDropDown(
                     value: _relationshipStatus,
                     label: "Relationship Status",
@@ -317,7 +304,6 @@ class _ProfileFormState extends State<ProfileForm> {
                       });
                     },
                   ),
-                  const SizedBox(height: 15),
                   SingleSelectDropDown(
                     value: _relationshipStyle,
                     label: "Relationship Style",
@@ -336,7 +322,7 @@ class _ProfileFormState extends State<ProfileForm> {
                       });
                     },
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

@@ -284,10 +284,13 @@ class FirebaseService {
     }
     return _firestore
         .collection('chats')
-        .where('participants', arrayContains: currentUserId)
-        .where('acceptedMessage', isEqualTo: true)
-        //.where('initiatorId', isNotEqualTo: currentUserId)
-        //.orderBy('initiatorId')
+        .where(Filter.and(
+            Filter('participants', arrayContains: currentUserId),
+            Filter.or(
+                Filter.and(Filter('acceptedMessage', isEqualTo: true),
+                    Filter('initiatorId', isNotEqualTo: currentUserId)),
+                Filter('initiatorId', isEqualTo: currentUserId))))
+        .orderBy('initiatorId')
         .snapshots();
   }
 
@@ -411,6 +414,19 @@ class FirebaseService {
         return initiatorId == currentUserId;
       }
       return false;
+    } catch (e) {
+      throw Exception('Failed to check initiator status: $e');
+    }
+  }
+
+  Future<String> getInitiator(String chatId) async {
+    try {
+      final doc = await _firestore.collection('chats').doc(chatId).get();
+      if (doc.exists) {
+        final initiatorId = doc.get('initiatorId');
+        return initiatorId;
+      }
+      return "Unknown";
     } catch (e) {
       throw Exception('Failed to check initiator status: $e');
     }

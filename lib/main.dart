@@ -8,6 +8,7 @@ import 'pages/profile/user_profile_page.dart';
 import 'pages/chat/chat_list_page.dart';
 import 'pages/auth/login_page.dart';
 import 'pages/profile/create_profile_page.dart';
+import 'pages/profile/edit_profile_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,7 +36,6 @@ class MyApp extends StatelessWidget {
               secondary: Color(0xFFD461A6), //header color
               secondaryFixed: Color(0xFFFFFFFF), //white
               tertiary: Color(0xFFFF9B55),
-
               tertiaryContainer: Color(0xFFFFF0E6),
               tertiaryFixed: Color(0xFFFFE0CA)),
           textTheme: const TextTheme(
@@ -48,8 +48,12 @@ class MyApp extends StatelessWidget {
               bodySmall: TextStyle(fontSize: 14))),
       debugShowCheckedModeBanner: false,
       // home: const HomePage(),
+
       //home: const LoginPage(),
-      home: const SettingsPage(),
+
+      home: const LoginPage(),
+      //home: const EditProfilePage(userId: "1a4dZXRtA80tkguo1REw"),
+
     );
   }
 }
@@ -73,8 +77,10 @@ class _NavMenuState extends State<NavMenu> {
 
     _pages = [
       const HomePage(),
-      UserProfilePage(userId: currentUserId),
       const ChatListPage(listType: "accepted"),
+      EditProfilePage(userId: currentUserId),
+
+      //EditProfilePage(userId: currentUserId)
     ];
   }
 
@@ -101,13 +107,13 @@ class _NavMenuState extends State<NavMenu> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.chat_bubble_rounded),
             label: 'Chat',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          )
         ],
       ),
     );

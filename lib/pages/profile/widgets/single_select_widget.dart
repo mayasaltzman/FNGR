@@ -21,13 +21,14 @@ class SingleSelectDropDown extends StatelessWidget {
   final String? value;
   final String label;
   final ValueChanged<String?> onChanged;
+  final String? hintText;
 
-  const SingleSelectDropDown({
-    super.key,
-    required this.value,
-    required this.label,
-    required this.onChanged,
-  });
+  const SingleSelectDropDown(
+      {super.key,
+      required this.value,
+      required this.label,
+      required this.onChanged,
+      this.hintText});
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +70,7 @@ class SingleSelectDropDown extends StatelessWidget {
         const SizedBox(width: 20),
         SizedBox(
           child: DropdownButton<String>(
-            hint: Text("Select",
+            hint: Text(hintText != "" ? hintText ?? "Select" : "Select",
                 style: TextStyle(
                     color: Theme.of(context).colorScheme.primaryFixed)),
             isExpanded: true,
