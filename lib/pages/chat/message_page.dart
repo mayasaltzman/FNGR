@@ -255,7 +255,7 @@ class MessageWidgetState extends State<MessageWidget> {
   Widget build(BuildContext context) {
     if (_isLoading) return const Center(child: CircularProgressIndicator());
 
-    return _isAccepted
+    return _isAccepted || _isInitiator
         ? LoadChat(
             chatId: _chatId,
             chatController: _chatController,
