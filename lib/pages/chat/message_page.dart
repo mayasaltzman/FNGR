@@ -85,7 +85,7 @@ class ApproveDeclineWidget extends StatefulWidget {
       required this.chatId,
       required this.chatController,
       required this.firebaseService,
-      this.userName});
+      required this.userName});
 
   @override
   ApproveDeclineWidgetState createState() => ApproveDeclineWidgetState();
@@ -160,13 +160,13 @@ class MessageWidgetState extends State<MessageWidget> {
   bool _isLoading = true;
   bool _isAccepted = false;
   late bool _isInitiator;
-  late String userName;
+  late String? userName;
 
   @override
   void initState() {
     super.initState();
     _initializeChat();
-    _getUsername();
+    //_getUsername();
   }
 
   Future<void> _initializeChat() async {
@@ -249,13 +249,17 @@ class MessageWidgetState extends State<MessageWidget> {
     }
   }
 
-  void _getUsername() async {
+  Future<String> _getUsername() async {
     try {
       final initID = await _firebaseService.getInitiator(_chatId);
       final userDoc = await _firebaseService.getUserProfile(initID);
       final userData = userDoc.data() as Map<String, dynamic>?;
-      userName = userData!['name'];
-    } catch (e) {}
+      final userName = userData?['name'] ?? '';
+      return userName;
+    } catch (e) {
+      print("failed to get username $e");
+      return '';
+    }
   }
 
   @override
@@ -268,20 +272,30 @@ class MessageWidgetState extends State<MessageWidget> {
   Widget build(BuildContext context) {
     if (_isLoading) return const Center(child: CircularProgressIndicator());
 
-    return _isAccepted || _isInitiator
-        ? LoadChat(
-            chatId: _chatId,
-            chatController: _chatController,
-            sendMessage: _sendMessage,
-            firebaseService: _firebaseService,
-            isNewChat: _chatId.isEmpty,
-          )
-        : ApproveDeclineWidget(
-            acceptChat: _acceptChat,
-            rejectChat: _rejectChat,
-            chatId: _chatId,
-            chatController: _chatController,
-            firebaseService: _firebaseService, userName: userName);
+    return FutureBuilder<String>(
+        future: _getUsername(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          }
+          return _isAccepted || _isInitiator
+              ? LoadChat(
+                  chatId: _chatId,
+                  chatController: _chatController,
+                  sendMessage: _sendMessage,
+                  firebaseService: _firebaseService,
+                  isNewChat: _chatId.isEmpty,
+                )
+              : ApproveDeclineWidget(
+                  acceptChat: _acceptChat,
+                  rejectChat: _rejectChat,
+                  chatId: _chatId,
+                  chatController: _chatController,
+                  firebaseService: _firebaseService,
+                  userName: snapshot.data);
+        });
   }
 }
 
