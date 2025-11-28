@@ -8,18 +8,18 @@ import 'package:flutter/cupertino.dart';
 abstract class ProfileStyles {
   //styles for setting buttons
   static ButtonStyle get settingsButton => ElevatedButton.styleFrom(
-      fixedSize: const Size(500, 50),
-      side: BorderSide.none,
-      backgroundColor: const Color(0xFFFFE0CA),
-      elevation: 0.0,
-    );
-  
+        fixedSize: const Size(500, 50),
+        side: BorderSide.none,
+        backgroundColor: const Color(0xFFFFE0CA),
+        elevation: 0.0,
+      );
+
   //styles for icons on buttons
   static Icon styledIcon() => const Icon(
-      Icons.arrow_forward_ios,
-      color: Color(0xFFD461A6),
-      size: 24,
-    );
+        Icons.arrow_forward_ios,
+        color: Color(0xFFD461A6),
+        size: 24,
+      );
 
   //style for text on buttons
   static TextStyle get boxHeader => const TextStyle(
@@ -60,10 +60,10 @@ class _SettingsState extends State<SettingsPage> {
   }
 
   void _showSnackBar(String message) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
-      );
-    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
 
   @override
   void dispose() {
@@ -74,50 +74,54 @@ class _SettingsState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFFE0CA),
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        leading: BackButton(
+          color: Theme.of(context).colorScheme.secondaryFixed,
+        ),
+      ),
       body: SingleChildScrollView(
         child: Align(
-          alignment: Alignment.topLeft,
-          child: Padding(
-            padding: const EdgeInsets.all(45.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 30),
-                  child: Text(
-                    "Settings",
-                    style: ProfileStyles.boxHeader.copyWith(
-                      fontSize: 40 / MediaQuery.of(context).textScaleFactor,
-                      color: const Color(0xFFFFFFFF),
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding: const EdgeInsets.all(45.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: Text(
+                      "Settings",
+                      style: ProfileStyles.boxHeader.copyWith(
+                        fontSize: 40 / MediaQuery.of(context).textScaleFactor,
+                        color: const Color(0xFFFFFFFF),
+                      ),
                     ),
                   ),
-                ),
-                
-                Divider(
-                  thickness: 4,
-                  color: ProfileStyles.boxHeader.color,
-                  height: 40,
-                ),
-
-
-                ElevatedButton(
-                  style: ProfileStyles.settingsButton,
-                  onPressed: isLoading ? null : () {
-                    _showSnackBar("Please press the toggle to alter notification settings");
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 0),
-                    child: Row (
-                      children: [
+                  Divider(
+                    thickness: 4,
+                    color: ProfileStyles.boxHeader.color,
+                    height: 40,
+                  ),
+                  ElevatedButton(
+                    style: ProfileStyles.settingsButton,
+                    onPressed: isLoading
+                        ? null
+                        : () {
+                            _showSnackBar(
+                                "Please press the toggle to alter notification settings");
+                          },
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 0),
+                      child: Row(children: [
                         Expanded(
                           child: Text(
                             "Allow notifications",
                             style: ProfileStyles.boxHeader,
                           ),
                         ),
-                      
                         Transform.scale(
-                        scale: 0.6,
+                          scale: 0.6,
                           child: CupertinoSwitch(
                             value: _allowNotifs,
                             onChanged: (bool newValue) {
@@ -125,32 +129,31 @@ class _SettingsState extends State<SettingsPage> {
                                 _allowNotifs = newValue;
                               });
                             },
-                            activeColor:Color(0xFFD461A6),
+                            activeColor: Color(0xFFD461A6),
                           ),
                         ),
-                      ]
+                      ]),
                     ),
                   ),
-                ),
-
-                ElevatedButton(
-                  style: ProfileStyles.settingsButton,
-                  onPressed: isLoading ? null : () {
-                    _showSnackBar("Please press the toggle to alter location settings");
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 0),
-                    child: Row (
-                      children: [
+                  ElevatedButton(
+                    style: ProfileStyles.settingsButton,
+                    onPressed: isLoading
+                        ? null
+                        : () {
+                            _showSnackBar(
+                                "Please press the toggle to alter location settings");
+                          },
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 0),
+                      child: Row(children: [
                         Expanded(
                           child: Text(
                             "Allow location access",
                             style: ProfileStyles.boxHeader,
                           ),
                         ),
-                      
                         Transform.scale(
-                        scale: 0.6,
+                          scale: 0.6,
                           child: CupertinoSwitch(
                             value: _allowLocation,
                             onChanged: (bool newValue) {
@@ -158,91 +161,86 @@ class _SettingsState extends State<SettingsPage> {
                                 _allowLocation = newValue;
                               });
                             },
-                            activeColor:Color(0xFFD461A6),
+                            activeColor: Color(0xFFD461A6),
                           ),
                         ),
-                      ]
+                      ]),
                     ),
                   ),
-                ),
-                                
-                ElevatedButton(
-                  style: ProfileStyles.settingsButton,
-                  onPressed: isLoading ? null : () {
-                    print("Insert filters page nav here");
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 0),
-                    child: Row (
-                      children: [
+                  ElevatedButton(
+                    style: ProfileStyles.settingsButton,
+                    onPressed: isLoading
+                        ? null
+                        : () {
+                            print("Insert filters page nav here");
+                          },
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 0),
+                      child: Row(children: [
                         Text(
                           "Edit Preferences",
                           style: ProfileStyles.boxHeader,
                         ),
                         Spacer(),
                         ProfileStyles.styledIcon(),
-                      ]
+                      ]),
                     ),
                   ),
-                ),
-
-                ElevatedButton(
-                  style: ProfileStyles.settingsButton,
-                  onPressed: isLoading ? null : () {
-                    print("Verify profile function appears");
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 0),
-                    child: Row (
-                      children: [
+                  ElevatedButton(
+                    style: ProfileStyles.settingsButton,
+                    onPressed: isLoading
+                        ? null
+                        : () {
+                            print("Verify profile function appears");
+                          },
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 0),
+                      child: Row(children: [
                         Text(
                           "Verify Profile",
                           style: ProfileStyles.boxHeader,
                         ),
                         Spacer(),
                         ProfileStyles.styledIcon(),
-                      ]
+                      ]),
                     ),
                   ),
-                ),
-
-                ElevatedButton(
-                  style: ProfileStyles.settingsButton,
-                  onPressed: isLoading ? null : () {
-                    print("Insert delete account functionality");
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 0),
-                    child: Row (
-                      children: [
+                  ElevatedButton(
+                    style: ProfileStyles.settingsButton,
+                    onPressed: isLoading
+                        ? null
+                        : () {
+                            print("Insert delete account functionality");
+                          },
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 0),
+                      child: Row(children: [
                         Text(
                           "Delete FNGR account",
                           style: ProfileStyles.boxHeader,
                         ),
                         Spacer(),
                         ProfileStyles.styledIcon(),
-                      ]
+                      ]),
                     ),
                   ),
-                ),
-                
-                Padding(
-                  padding: const EdgeInsets.only(top: 380, right: 190),
-                  child: ElevatedButton(
-                    onPressed: isLoading ? null : () {
-                      _signOut();
-                    },
-                    child: Text(
-                      "Logout",
-                      style: ProfileStyles.boxHeader,
+                  Padding(
+                    padding: const EdgeInsets.only(top: 360, right: 190),
+                    child: ElevatedButton(
+                      onPressed: isLoading
+                          ? null
+                          : () {
+                              _signOut();
+                            },
+                      child: Text(
+                        "Logout",
+                        style: ProfileStyles.boxHeader,
+                      ),
                     ),
                   ),
-                ),
-
-              ],
-            ),
-          )
-        ),
+                ],
+              ),
+            )),
       ),
     );
   }
