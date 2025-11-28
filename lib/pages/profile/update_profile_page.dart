@@ -162,29 +162,23 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
       'bio': _bioController.text.trim().isEmpty
           ? widget.bio
           : _bioController.text.trim(),
-      'sexuality': sexualityController.selectedItems.isEmpty
-          ? widget.sexuality
-          : sexualityController.selectedItems.map((e) => e.value).toList(),
-      'gender': genderController.selectedItems.isEmpty
-          ? widget.gender
-          : genderController.selectedItems.map((e) => e.value).toList(),
-      'pronouns': pronounController.selectedItems.isEmpty
-          ? widget.pronouns
-          : pronounController.selectedItems.map((e) => e.value).toList(),
+      'sexuality':
+          sexualityController.selectedItems.map((e) => e.value).toList(),
+      'gender': genderController.selectedItems.map((e) => e.value).toList(),
+      'pronouns': pronounController.selectedItems.map((e) => e.value).toList(),
       'relationship_status': _relationshipStatus ?? widget.rStatus,
       'relationship_style': _relationshipStyle ?? widget.rStyle,
       'expectations': _lookingFor ?? widget.lookingFor,
-      'expression': genderPresentationController.selectedItems.isEmpty
-          ? widget.presentation
-          : genderPresentationController.selectedItems
-              .map((e) => e.value)
-              .toList(),
-      'interests': interestsController.selectedItems.isEmpty
-          ? widget.interests
-          : interestsController.selectedItems.map((e) => e.value).toList(),
-      'sexual_pref': sexualPrefController.selectedItems.isEmpty
-          ? widget.preferences
-          : sexualPrefController.selectedItems.map((e) => e.value).toList(),
+      'expression': genderPresentationController.selectedItems
+          .map((e) => e.value)
+          .toList(),
+      'interests':
+          interestsController.selectedItems.map((e) => e.value).toList(),
+      'sexual_pref':
+          sexualPrefController.selectedItems.map((e) => e.value).toList(),
+      // 'sexual_pref': sexualPrefController.selectedItems.isEmpty
+      //     ? widget.preferences
+      //     : sexualPrefController.selectedItems.map((e) => e.value).toList(),
       //'profileImages': imageUrls,
       //'photoURL': imageUrls.first, // Primary profile photo
     };
@@ -193,8 +187,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
 
     if (mounted) {
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-              builder: (context) => NavMenu(selectedIndex: 2)),
+          MaterialPageRoute(builder: (context) => NavMenu(selectedIndex: 2)),
           (route) => false);
     }
 
