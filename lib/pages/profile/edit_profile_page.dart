@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_chat_core/flutter_chat_core.dart';
 import '../../services/firebase_service.dart';
 import './user_profile_page.dart';
+import '../auth/settings_page.dart';
 
 abstract class ProfileStyles {
   //styles for boxes that store profile info
@@ -164,7 +165,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
           backgroundColor: Theme.of(context).colorScheme.secondary,
           actions: [
             IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SettingsPage()),
+                  );
+                },
                 icon: Icon(Icons.settings, color: Colors.white))
           ],
         ),
