@@ -53,20 +53,21 @@ class MyApp extends StatelessWidget {
 
       home: const LoginPage(),
       //home: const EditProfilePage(userId: "1a4dZXRtA80tkguo1REw"),
-
     );
   }
 }
 
 class NavMenu extends StatefulWidget {
-  const NavMenu({super.key});
+  int selectedIndex;
+
+  NavMenu({super.key, this.selectedIndex = 0});
 
   @override
   State<NavMenu> createState() => _NavMenuState();
 }
 
 class _NavMenuState extends State<NavMenu> {
-  int _selectedIndex = 0;
+  //nt _selectedIndex = 0;
   late List<Widget> _pages;
 
   @override
@@ -86,7 +87,7 @@ class _NavMenuState extends State<NavMenu> {
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      widget.selectedIndex = index;
     });
   }
 
@@ -94,12 +95,12 @@ class _NavMenuState extends State<NavMenu> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primaryFixed,
-      body: _pages[_selectedIndex],
+      body: _pages[widget.selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Theme.of(context).colorScheme.secondary,
         selectedItemColor: Theme.of(context).colorScheme.primary,
         unselectedItemColor: Theme.of(context).colorScheme.primaryFixed,
-        currentIndex: _selectedIndex,
+        currentIndex: widget.selectedIndex,
         onTap: _onItemTapped,
         items: const [
           BottomNavigationBarItem(
