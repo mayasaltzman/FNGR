@@ -74,7 +74,7 @@ class _LoginState extends State<LoginPage> {
       );
       if (mounted) {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const NavMenu()),
+          MaterialPageRoute(builder: (context) =>  NavMenu()),
         );
       }
     } catch (e) {

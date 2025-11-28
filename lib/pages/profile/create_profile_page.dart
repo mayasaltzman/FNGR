@@ -197,7 +197,7 @@ class _ProfileFormState extends State<ProfileForm> {
       //reroute to home at first page of nav menu
       if (mounted) {
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => const NavMenu()),
+            MaterialPageRoute(builder: (context) => NavMenu()),
             (route) => false
         );
       }

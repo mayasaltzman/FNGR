@@ -7,10 +7,13 @@ import '../../services/firebase_service.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:image_picker/image_picker.dart';
 import './widgets/image_button_widget.dart';
+import './edit_profile_page.dart';
+import '../../main.dart';
 
 //MAYA STILL FINISHING THIS
 
 class UpdateProfilePage extends StatefulWidget {
+  final String userId;
   final String bio;
   final String rStatus;
   final String rStyle;
@@ -27,6 +30,7 @@ class UpdateProfilePage extends StatefulWidget {
 
   const UpdateProfilePage(
       {super.key,
+      required this.userId,
       required this.bio,
       required this.rStatus,
       required this.rStyle,
@@ -159,14 +163,14 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
           ? widget.bio
           : _bioController.text.trim(),
       'sexuality': sexualityController.selectedItems.isEmpty
-      ? widget.sexuality
-      : sexualityController.selectedItems.map((e) => e.value).toList(),
-      'gender': genderController.selectedItems.isEmpty 
-      ? widget.gender
-      : genderController.selectedItems.map((e) => e.value).toList(),
+          ? widget.sexuality
+          : sexualityController.selectedItems.map((e) => e.value).toList(),
+      'gender': genderController.selectedItems.isEmpty
+          ? widget.gender
+          : genderController.selectedItems.map((e) => e.value).toList(),
       'pronouns': pronounController.selectedItems.isEmpty
-      ? widget.pronouns
-      : pronounController.selectedItems.map((e) => e.value).toList(),
+          ? widget.pronouns
+          : pronounController.selectedItems.map((e) => e.value).toList(),
       'relationship_status': _relationshipStatus ?? widget.rStatus,
       'relationship_style': _relationshipStyle ?? widget.rStyle,
       'expectations': _lookingFor ?? widget.lookingFor,
@@ -187,7 +191,17 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
 
     await _firebaseService.updateUserProfile(data: data);
 
+    if (mounted) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+              builder: (context) => NavMenu(selectedIndex: 2)),
+          (route) => false);
+    }
 
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(builder: (context) =>  EditProfilePage(userId: widget.userId)),
+    // );
   }
 
   @override

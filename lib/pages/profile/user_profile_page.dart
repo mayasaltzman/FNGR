@@ -221,6 +221,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                     Expanded(
                                         child: TabBarView(children: [
                                       UpdateProfilePage(
+                                        userId: userId,
                                           bio: data['bio'] ?? '',
                                           rStatus:
                                               data['relationship_status'] ?? '',
