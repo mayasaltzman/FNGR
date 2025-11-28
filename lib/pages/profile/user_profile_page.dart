@@ -148,7 +148,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
         backgroundColor: Theme.of(context).colorScheme.primary,
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.secondary,
-          //leading: !isUserProfile
+          //leading: //!isUserProfile
           //? null
           leading: BackButton(
             color: Theme.of(context).colorScheme.secondaryFixed,
@@ -235,7 +235,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                               data['expression'] ?? [],
                                           interests: data['interests'] ?? [],
                                           preferences:
-                                              data['sexual_pref'] ?? []),
+                                              data['sexual_pref'] ?? [],
+                                          name: data['name'] ?? '',
+                                          age: data['age'] ?? '',
+                                          height: data['height'] ?? ''),
                                       SingleChildScrollView(
                                           child: Column(children: [
                                         BuildUserProfilePage(

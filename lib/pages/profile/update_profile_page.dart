@@ -21,6 +21,9 @@ class UpdateProfilePage extends StatefulWidget {
   final List<dynamic> presentation;
   final List<dynamic> interests;
   final List<dynamic> preferences;
+  final String name;
+  final String age;
+  final String height;
 
   const UpdateProfilePage(
       {super.key,
@@ -33,7 +36,10 @@ class UpdateProfilePage extends StatefulWidget {
       required this.pronouns,
       required this.presentation,
       required this.interests,
-      required this.preferences});
+      required this.preferences,
+      required this.name,
+      required this.age,
+      required this.height});
 
   @override
   State<UpdateProfilePage> createState() => _UpdateProfilePageState();
@@ -60,13 +66,19 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
   String? _relationshipStatus;
   String? _lookingFor;
   final List<File?> _selectedImages = List.filled(5, null);
+
   @override
   void initState() {
     super.initState();
     _firebaseService = FirebaseService();
 
-    // print(dropdownItems);
-    // sexualityController.setItems(dropdownItems);
+    //pre populate multi select drop downs
+    preSelectItems(sexualityController, widget.sexuality);
+    preSelectItems(genderController, widget.gender);
+    preSelectItems(pronounController, widget.pronouns);
+    preSelectItems(sexualPrefController, widget.preferences);
+    preSelectItems(genderPresentationController, widget.presentation);
+    preSelectItems(interestsController, widget.interests);
   }
 
   @override
@@ -79,6 +91,24 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
     genderPresentationController.dispose();
     interestsController.dispose();
     super.dispose();
+  }
+
+  //I cant find a better way to do this without the loop right now but this will due for M03
+  void preSelectItems(
+      MultiSelectController<String> controller, List<dynamic> dropDownType) {
+    List<DropdownItem<String>> dropdownItems = dropDownType.map((dynamic item) {
+      return DropdownItem(label: item.toString(), value: item.toString());
+    }).toList();
+
+    controller.setItems(dropdownItems);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      for (var value in dropDownType) {
+        controller.selectWhere(
+          (item) => item.label == value.toString(),
+        );
+      }
+    });
   }
 
   //eventually will move this so it can be reused as same function in create and update profile
@@ -121,39 +151,47 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
   }
 
   Future<void> _submitUpdates() async {
-    // final data = {
-    //   'name': _nameController.text.trim(),
-    //   'age': _ageController.text.trim(),
-    //   'height': _heightController.text.trim(),
-    //   'bio': _bioController.text.trim(),
-    //   'sexuality':
-    //       sexualityController.selectedItems.map((e) => e.value).toList(),
-    //   'gender': genderController.selectedItems.map((e) => e.value).toList(),
-    //   'pronouns': pronounController.selectedItems.map((e) => e.value).toList(),
-    //   'relationship_status': _relationshipStatus ?? '',
-    //   'relationship_style': _relationshipStyle ?? '',
-    //   'expectations': _lookingFor ?? '',
-    //   'expression': genderPresentationController.selectedItems
-    //       .map((e) => e.value)
-    //       .toList(),
-    //   'interests':
-    //       interestsController.selectedItems.map((e) => e.value).toList(),
-    //   'sexual_pref':
-    //       sexualPrefController.selectedItems.map((e) => e.value).toList(),
-    // 'profileImages': imageUrls,
-    // 'photoURL': imageUrls.first, // Primary profile photo
-    //};
+    final data = {
+      'name': widget.name.trim(),
+      'age': widget.age.trim(),
+      'height': widget.height.trim(),
+      'bio': _bioController.text.trim().isEmpty
+          ? widget.bio
+          : _bioController.text.trim(),
+      'sexuality': sexualityController.selectedItems.isEmpty
+      ? widget.sexuality
+      : sexualityController.selectedItems.map((e) => e.value).toList(),
+      'gender': genderController.selectedItems.isEmpty 
+      ? widget.gender
+      : genderController.selectedItems.map((e) => e.value).toList(),
+      'pronouns': pronounController.selectedItems.isEmpty
+      ? widget.pronouns
+      : pronounController.selectedItems.map((e) => e.value).toList(),
+      'relationship_status': _relationshipStatus ?? widget.rStatus,
+      'relationship_style': _relationshipStyle ?? widget.rStyle,
+      'expectations': _lookingFor ?? widget.lookingFor,
+      'expression': genderPresentationController.selectedItems.isEmpty
+          ? widget.presentation
+          : genderPresentationController.selectedItems
+              .map((e) => e.value)
+              .toList(),
+      'interests': interestsController.selectedItems.isEmpty
+          ? widget.interests
+          : interestsController.selectedItems.map((e) => e.value).toList(),
+      'sexual_pref': sexualPrefController.selectedItems.isEmpty
+          ? widget.preferences
+          : sexualPrefController.selectedItems.map((e) => e.value).toList(),
+      //'profileImages': imageUrls,
+      //'photoURL': imageUrls.first, // Primary profile photo
+    };
 
-    //await _firebaseService.updateUserProfile(data: data);
+    await _firebaseService.updateUserProfile(data: data);
+
+
   }
 
   @override
   Widget build(BuildContext context) {
-    List<DropdownItem<String>> dropdownItems =
-        widget.sexuality.map((dynamic item) {
-      return DropdownItem(label: item.toString(), value: item.toString());
-    }).toList();
-    print(dropdownItems);
     return SingleChildScrollView(
         child: Container(
             padding: EdgeInsets.all(10),
@@ -248,7 +286,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
               Container(
                 alignment: Alignment.bottomRight,
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: _submitUpdates,
                   child: Text("Save"),
                   style: TextButton.styleFrom(
                     foregroundColor:
