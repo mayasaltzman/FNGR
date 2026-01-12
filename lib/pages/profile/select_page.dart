@@ -26,7 +26,7 @@ class _SelectPageState extends State<SelectPage> {
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.primary,
         appBar: AppBar(
-          title: Text("Create Profile",
+          title: Text(widget.fieldType,
               style: TextStyle(
                   color: Theme.of(context).colorScheme.secondaryFixed)),
           backgroundColor: Theme.of(context).colorScheme.secondary,
@@ -48,9 +48,13 @@ class _SelectPageState extends State<SelectPage> {
 
                 Map<String, dynamic> data = documentSnapshot.data();
 
-                return ListTile(
-                  title: Text(data['label']),
-                );
+                return ElevatedButton(
+                    onPressed: () {}, child: Text(data['label']));
+
+                // return ListTile(
+                //   title: Text(data['label']),
+
+                // );
               },
             );
           },
