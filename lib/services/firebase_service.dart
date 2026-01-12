@@ -165,6 +165,18 @@ class FirebaseService {
     }
   }
 
+  // Query options for drop down filters
+  Future<void> getProfileDropDownFields(String fieldType) async {
+    try {
+      await _firestore
+          .collection('users')
+          .where('field_type', isEqualTo: fieldType)
+          .get();
+    } catch (e) {
+      throw Exception('Failed to get dropdown fields: $e');
+    }
+  }
+
   // ============ CHAT METHODS ============
 
   /// Get or create a chat between two users
