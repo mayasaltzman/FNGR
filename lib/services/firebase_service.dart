@@ -166,10 +166,11 @@ class FirebaseService {
   }
 
   // Query options for drop down filters
-  Future<void> getProfileDropDownFields(String fieldType) async {
+  Future<QuerySnapshot<Map<String, dynamic>>> getProfileDropDownFields(
+      String fieldType) async {
     try {
-      await _firestore
-          .collection('users')
+      return await _firestore
+          .collection('profile_fields')
           .where('field_type', isEqualTo: fieldType)
           .get();
     } catch (e) {

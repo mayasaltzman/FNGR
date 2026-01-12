@@ -9,6 +9,7 @@ import 'pages/chat/chat_list_page.dart';
 import 'pages/auth/login_page.dart';
 import 'pages/profile/create_profile_page.dart';
 import 'pages/profile/edit_profile_page.dart';
+import 'pages/profile/select_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,8 +52,9 @@ class MyApp extends StatelessWidget {
 
       //home: const LoginPage(),
 
-      home: const LoginPage(),
+      //home: const LoginPage(),
       //home: const EditProfilePage(userId: "1a4dZXRtA80tkguo1REw"),
+      home: const SelectPage(fieldType: 'sexuality'),
     );
   }
 }
