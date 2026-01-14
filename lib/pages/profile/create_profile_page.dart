@@ -10,6 +10,7 @@ import './widgets/text_input_widgets.dart';
 import './widgets/image_button_widget.dart';
 import '../../services/firebase_service.dart';
 import '../../services/storage_service.dart';
+import './select_page.dart';
 
 //styles for profile page
 abstract class ProfileStyles {
@@ -31,7 +32,6 @@ abstract class ProfileStyles {
 
 class ProfileForm extends StatefulWidget {
   const ProfileForm({super.key});
-  
 
   @override
   State<ProfileForm> createState() => _ProfileFormState();
@@ -77,7 +77,7 @@ class _ProfileFormState extends State<ProfileForm> {
 
   //need to figure out how to add to this from the seperate image picker thing
   final List<File?> _selectedImages = List.filled(5, null);
-    
+
   // Upload progress tracking
   double _uploadProgress = 0.0;
   int _currentImageUploading = 0;
@@ -97,7 +97,7 @@ class _ProfileFormState extends State<ProfileForm> {
     interestsController.dispose();
     super.dispose();
   }
-  
+
   Future<void> _pickImage(int index) async {
     try {
       final pickedImage = await _picker.pickImage(
@@ -157,7 +157,7 @@ class _ProfileFormState extends State<ProfileForm> {
     setState(() {
       isLoading = true;
     });
-    
+
     try {
       final userId = _firebaseService.currentUserId;
       if (userId == null) {
@@ -170,9 +170,9 @@ class _ProfileFormState extends State<ProfileForm> {
 
       if (imagesToUpload.isNotEmpty) {
         imageUrls = await _storageService.uploadMultipleProfileImages(
-            imageFiles: imagesToUpload,
-        userId: userId,
-      );
+          imageFiles: imagesToUpload,
+          userId: userId,
+        );
       }
 
       final data = {
@@ -180,17 +180,23 @@ class _ProfileFormState extends State<ProfileForm> {
         'age': _ageController.text.trim(),
         'height': _heightController.text.trim(),
         'bio': _bioController.text.trim(),
-        'sexuality': sexualityController.selectedItems.map((e) => e.value).toList(),
+        'sexuality':
+            sexualityController.selectedItems.map((e) => e.value).toList(),
         'gender': genderController.selectedItems.map((e) => e.value).toList(),
-        'pronouns': pronounController.selectedItems.map((e) => e.value).toList(),
+        'pronouns':
+            pronounController.selectedItems.map((e) => e.value).toList(),
         'relationship_status': _relationshipStatus ?? '',
         'relationship_style': _relationshipStyle ?? '',
         'expectations': _lookingFor ?? '',
-        'expression': genderPresentationController.selectedItems.map((e) => e.value).toList(),
-        'interests': interestsController.selectedItems.map((e) => e.value).toList(),
-        'sexual_pref': sexualPrefController.selectedItems.map((e) => e.value).toList(),
+        'expression': genderPresentationController.selectedItems
+            .map((e) => e.value)
+            .toList(),
+        'interests':
+            interestsController.selectedItems.map((e) => e.value).toList(),
+        'sexual_pref':
+            sexualPrefController.selectedItems.map((e) => e.value).toList(),
         'profileImages': imageUrls ?? [],
-        'photoURL': imageUrls.isNotEmpty ? imageUrls.first : '', 
+        'photoURL': imageUrls.isNotEmpty ? imageUrls.first : '',
       };
 
       await _firebaseService.updateUserProfile(data: data);
@@ -198,8 +204,7 @@ class _ProfileFormState extends State<ProfileForm> {
       if (mounted) {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => NavMenu()),
-            (route) => false
-        );
+            (route) => false);
       }
     } catch (e) {
       if (mounted) {
@@ -239,21 +244,40 @@ class _ProfileFormState extends State<ProfileForm> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         ImageButton(
-                          image: _selectedImages[0], width: 200, height: 400, onTap: () => _pickImage(0)),
+                            image: _selectedImages[0],
+                            width: 200,
+                            height: 400,
+                            onTap: () => _pickImage(0)),
                         const SizedBox(width: 5),
                         Column(
                           children: [
-                            ImageButton(image: _selectedImages[1], width: 80, height: 190, onTap: () => _pickImage(1)),
+                            ImageButton(
+                                image: _selectedImages[1],
+                                width: 80,
+                                height: 190,
+                                onTap: () => _pickImage(1)),
                             const SizedBox(height: 10),
-                            ImageButton(image: _selectedImages[2], width: 80, height: 190, onTap: () => _pickImage(2)),
+                            ImageButton(
+                                image: _selectedImages[2],
+                                width: 80,
+                                height: 190,
+                                onTap: () => _pickImage(2)),
                           ],
                         ),
                         const SizedBox(width: 5),
                         Column(
                           children: [
-                            ImageButton(image: _selectedImages[3], width: 80, height: 190, onTap: () => _pickImage(3)),
+                            ImageButton(
+                                image: _selectedImages[3],
+                                width: 80,
+                                height: 190,
+                                onTap: () => _pickImage(3)),
                             const SizedBox(height: 10),
-                            ImageButton(image: _selectedImages[4], width: 80, height: 190, onTap: () => _pickImage(4)),
+                            ImageButton(
+                                image: _selectedImages[4],
+                                width: 80,
+                                height: 190,
+                                onTap: () => _pickImage(4)),
                           ],
                         ),
                       ]),
@@ -274,14 +298,29 @@ class _ProfileFormState extends State<ProfileForm> {
                         child: const Text("Next")),
                   )
                 ],
-
                 if (additionalInfo) ...[
                   TextInputField(
                       controller: _heightController,
                       labelText: "Height",
                       textType: "Height"),
-                  MultiSelectDropdown(
-                      controller: sexualityController, labelText: "Sexuality"),
+                  //updating these drop down fields to icon buttons
+                  ElevatedButton.icon(
+                    icon: const Icon(Icons.arrow_forward_ios),
+                    label: const Text('Sexuality'),
+                    onPressed: () {
+                      if (mounted) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const SelectPage(fieldType: 'Sexuality')),
+                        );
+                      }
+                    },
+                    iconAlignment: IconAlignment.end,
+                  ),
+                  // MultiSelectDropdown(
+                  //     controller: sexualityController, labelText: "Sexuality"),
                   MultiSelectDropdown(
                       controller: genderController,
                       labelText: "Gender Identity"),
