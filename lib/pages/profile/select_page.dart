@@ -14,11 +14,25 @@ class SelectPage extends StatefulWidget {
 
 class _SelectPageState extends State<SelectPage> {
   late FirebaseService _firebaseService;
+  Set<String> selectedFields = {};
+  final Map<String, ValueNotifier<bool>> _pressedNotifiers = {};
 
   @override
   void initState() {
     super.initState();
     _firebaseService = FirebaseService();
+  }
+
+  ValueNotifier<bool> _getNotifier(String id) {
+    return _pressedNotifiers.putIfAbsent(
+      id,
+      () => ValueNotifier<bool>(false),
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -34,55 +48,99 @@ class _SelectPageState extends State<SelectPage> {
             color: Theme.of(context).colorScheme.secondaryFixed,
           ),
         ),
-        body: Column(children: [
-          FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
-            future: _firebaseService.getProfileDropDownFields(widget.fieldType),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              return Column(
-                spacing: 10.0,
-                children: [
-                  Wrap(
-                    spacing: 8.0,
-                    runSpacing: 8.0,
-                    children: snapshot.data == null
-                        ? []
-                        : snapshot.data!.docs.map((documentSnapshot) {
-                            final data = documentSnapshot.data();
-                            return ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: Theme.of(context)
+        body: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(children: [
+              FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                future:
+                    _firebaseService.getProfileDropDownFields(widget.fieldType),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  return Column(
+                    spacing: 10.0,
+                    children: [
+                      Wrap(
+                        spacing: 8.0,
+                        runSpacing: 8.0,
+                        children: snapshot.data == null
+                            ? []
+                            : snapshot.data!.docs.map((documentSnapshot) {
+                                final data = documentSnapshot.data();
+                                final id = documentSnapshot.id;
+                                final notifier = _getNotifier(id);
+                                return ValueListenableBuilder<bool>(
+                                    valueListenable: notifier,
+                                    builder: (context, isPressed, child) {
+                                      return ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor: isPressed
+                                                ? Theme.of(context)
+                                                    .colorScheme
+                                                    .primaryFixed
+                                                : Theme.of(context)
+                                                    .colorScheme
+                                                    .primaryContainer,
+                                            side: BorderSide(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primaryFixed)),
+                                        child: Text(data['label'],
+                                            style: TextStyle(
+                                                color: isPressed
+                                                    ? Theme.of(context)
+                                                        .colorScheme
+                                                        .secondaryFixed
+                                                    : Theme.of(context)
+                                                        .colorScheme
+                                                        .primaryFixed)),
+                                        onPressed: () {
+                                          notifier.value = !notifier.value;
+                                          if (notifier.value) {
+                                            selectedFields.remove(id);
+                                          } else {
+                                            selectedFields.add(id);
+                                          }
+                                        },
+                                      );
+                                    });
+                              }).toList(),
+                      ),
+                      ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                              minimumSize: const Size(double.infinity, 50),
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.primaryFixed,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                              )),
+                          child: const Text("Save")),
+                      ElevatedButton(
+                          onPressed: () {
+                            for (final notifier in _pressedNotifiers.values) {
+                              notifier.value = false;
+                            }
+                            selectedFields.clear();
+                          },
+                          style: ElevatedButton.styleFrom(
+                              minimumSize: const Size(double.infinity, 50),
+                              backgroundColor: Theme.of(context)
+                                  .colorScheme
+                                  .primaryContainer,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                              )),
+                          child: Text("Reset",
+                              style: TextStyle(
+                                  color: Theme.of(context)
                                       .colorScheme
-                                      .primaryContainer,
-                                  side: BorderSide(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primaryFixed)),
-                              child: Text(data['label'],
-                                  style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primaryFixed)),
-                            );
-                          }).toList(),
-                  ),
-                  ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                          minimumSize: Size(double.infinity, 50)),
-                      child: Text("Save")),
-                  ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                          minimumSize: Size(double.infinity, 50)),
-                      child: Text("Reset"))
-                ],
-              );
-            },
-          )
-        ]));
+                                      .primaryFixed)))
+                    ],
+                  );
+                },
+              )
+            ])));
   }
 }
