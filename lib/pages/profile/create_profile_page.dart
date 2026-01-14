@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
@@ -299,41 +300,80 @@ class _ProfileFormState extends State<ProfileForm> {
                   )
                 ],
                 if (additionalInfo) ...[
-                  TextInputField(
-                      controller: _heightController,
-                      labelText: "Height",
-                      textType: "Height"),
-                  //updating these drop down fields to icon buttons
-                  ElevatedButton.icon(
-                    icon: const Icon(Icons.arrow_forward_ios),
-                    label: const Text('Sexuality'),
-                    onPressed: () {
-                      if (mounted) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  const SelectPage(fieldType: 'Sexuality')),
+                  FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                      future: _firebaseService.getProfileFieldsAll(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+
+                        return Column(
+                          children: snapshot.data == null
+                              ? []
+                              : snapshot.data!.docs.map((documentSnapshot) {
+                                  final data = documentSnapshot.data();
+                                  final field_types = data['field_type'];
+                                  print(field_types);
+
+                                  return ElevatedButton(
+                                      onPressed: () {}, child: Text("test"));
+                                }).toList(),
+
+                          // ElevatedButton.icon(
+                          //   icon: const Icon(Icons.arrow_forward_ios),
+                          //   label: const Text('Sexuality'),
+                          //   onPressed: () {
+                          //     if (mounted) {
+                          //       Navigator.push(
+                          //         context,
+                          //         MaterialPageRoute(
+                          //             builder: (context) => const SelectPage(
+                          //                 fieldType: 'Sexuality')),
+                          //       );
+                          //     }
+                          //   },
+                          //   iconAlignment: IconAlignment.end,
+                          // ),
                         );
-                      }
-                    },
-                    iconAlignment: IconAlignment.end,
-                  ),
+                      }),
+
+                  // TextInputField(
+                  //     controller: _heightController,
+                  //     labelText: "Height",
+                  //     textType: "Height"),
+                  // //updating these drop down fields to icon buttons
+                  // ElevatedButton.icon(
+                  //   icon: const Icon(Icons.arrow_forward_ios),
+                  //   label: const Text('Sexuality'),
+                  //   onPressed: () {
+                  //     if (mounted) {
+                  //       Navigator.push(
+                  //         context,
+                  //         MaterialPageRoute(
+                  //             builder: (context) =>
+                  //                 const SelectPage(fieldType: 'Sexuality')),
+                  //       );
+                  //     }
+                  //   },
+                  //   iconAlignment: IconAlignment.end,
+                  // ),
+                  // // MultiSelectDropdown(
+                  // //     controller: sexualityController, labelText: "Sexuality"),
                   // MultiSelectDropdown(
-                  //     controller: sexualityController, labelText: "Sexuality"),
-                  MultiSelectDropdown(
-                      controller: genderController,
-                      labelText: "Gender Identity"),
-                  MultiSelectDropdown(
-                      controller: pronounController, labelText: "Pronouns"),
-                  MultiSelectDropdown(
-                      controller: sexualPrefController,
-                      labelText: "Sexual Preferences"),
-                  MultiSelectDropdown(
-                      controller: genderPresentationController,
-                      labelText: "Gender Presentation"),
-                  MultiSelectDropdown(
-                      controller: interestsController, labelText: "Interests"),
+                  //     controller: genderController,
+                  //     labelText: "Gender Identity"),
+                  // MultiSelectDropdown(
+                  //     controller: pronounController, labelText: "Pronouns"),
+                  // MultiSelectDropdown(
+                  //     controller: sexualPrefController,
+                  //     labelText: "Sexual Preferences"),
+                  // MultiSelectDropdown(
+                  //     controller: genderPresentationController,
+                  //     labelText: "Gender Presentation"),
+                  // MultiSelectDropdown(
+                  //     controller: interestsController, labelText: "Interests"),
                   SingleSelectDropDown(
                     value: _relationshipStatus,
                     label: "Relationship Status",

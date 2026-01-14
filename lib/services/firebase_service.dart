@@ -179,6 +179,15 @@ class FirebaseService {
     }
   }
 
+  //Query entire profile_fields
+  Future<QuerySnapshot<Map<String, dynamic>>> getProfileFieldsAll() async {
+    try {
+      return await _firestore.collection('profile_fields').get();
+    } catch (e) {
+      throw Exception('Failed to get dropdown fields: $e');
+    }
+  }
+
   // ============ CHAT METHODS ============
 
   /// Get or create a chat between two users
