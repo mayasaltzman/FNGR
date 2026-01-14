@@ -172,6 +172,7 @@ class FirebaseService {
       return await _firestore
           .collection('profile_fields')
           .where('field_type', isEqualTo: fieldType)
+          .orderBy('label')
           .get();
     } catch (e) {
       throw Exception('Failed to get dropdown fields: $e');

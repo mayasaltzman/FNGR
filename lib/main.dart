@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
 
       //home: const LoginPage(),
       //home: const EditProfilePage(userId: "1a4dZXRtA80tkguo1REw"),
-      home: const SelectPage(fieldType: 'sexuality'),
+      home: const SelectPage(fieldType: 'Sexuality'),
     );
   }
 }

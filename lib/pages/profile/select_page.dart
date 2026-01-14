@@ -34,30 +34,55 @@ class _SelectPageState extends State<SelectPage> {
             color: Theme.of(context).colorScheme.secondaryFixed,
           ),
         ),
-        body: FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
-          future: _firebaseService.getProfileDropDownFields(widget.fieldType),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            }
-
-            return ListView.builder(
-              itemCount: snapshot.data!.docs.length,
-              itemBuilder: (context, index) {
-                var documentSnapshot = snapshot.data!.docs[index];
-
-                Map<String, dynamic> data = documentSnapshot.data();
-
-                return ElevatedButton(
-                    onPressed: () {}, child: Text(data['label']));
-
-                // return ListTile(
-                //   title: Text(data['label']),
-
-                // );
-              },
-            );
-          },
-        ));
+        body: Column(children: [
+          FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
+            future: _firebaseService.getProfileDropDownFields(widget.fieldType),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              return Column(
+                spacing: 10.0,
+                children: [
+                  Wrap(
+                    spacing: 8.0,
+                    runSpacing: 8.0,
+                    children: snapshot.data == null
+                        ? []
+                        : snapshot.data!.docs.map((documentSnapshot) {
+                            final data = documentSnapshot.data();
+                            return ElevatedButton(
+                              onPressed: () {},
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: Theme.of(context)
+                                      .colorScheme
+                                      .primaryContainer,
+                                  side: BorderSide(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primaryFixed)),
+                              child: Text(data['label'],
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primaryFixed)),
+                            );
+                          }).toList(),
+                  ),
+                  ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                          minimumSize: Size(double.infinity, 50)),
+                      child: Text("Save")),
+                  ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                          minimumSize: Size(double.infinity, 50)),
+                      child: Text("Reset"))
+                ],
+              );
+            },
+          )
+        ]));
   }
 }
