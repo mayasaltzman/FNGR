@@ -301,7 +301,7 @@ class _ProfileFormState extends State<ProfileForm> {
                 ],
                 if (additionalInfo) ...[
                   FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                      future: _firebaseService.getProfileFieldsAll(),
+                      future: _firebaseService.getProfileFieldTypes(),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
@@ -314,28 +314,23 @@ class _ProfileFormState extends State<ProfileForm> {
                               ? []
                               : snapshot.data!.docs.map((documentSnapshot) {
                                   final data = documentSnapshot.data();
-                                  final field_types = data['field_type'];
-                                  print(field_types);
-
-                                  return ElevatedButton(
-                                      onPressed: () {}, child: Text("test"));
+                                  return ElevatedButton.icon(
+                                      icon: const Icon(Icons.arrow_forward_ios),
+                                      label: Text(data['field_type']),
+                                      iconAlignment: IconAlignment.end,
+                                      onPressed: () {
+                                        if (mounted) {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    SelectPage(
+                                                        fieldType: data[
+                                                            'field_type'])),
+                                          );
+                                        }
+                                      });
                                 }).toList(),
-
-                          // ElevatedButton.icon(
-                          //   icon: const Icon(Icons.arrow_forward_ios),
-                          //   label: const Text('Sexuality'),
-                          //   onPressed: () {
-                          //     if (mounted) {
-                          //       Navigator.push(
-                          //         context,
-                          //         MaterialPageRoute(
-                          //             builder: (context) => const SelectPage(
-                          //                 fieldType: 'Sexuality')),
-                          //       );
-                          //     }
-                          //   },
-                          //   iconAlignment: IconAlignment.end,
-                          // ),
                         );
                       }),
 
