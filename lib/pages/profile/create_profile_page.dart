@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../main.dart';
-import './widgets/multi_select_widget.dart';
+import 'widgets/multi_select_widget_OLD.dart';
 import './widgets/single_select_widget.dart';
 import './widgets/text_input_widgets.dart';
 import './widgets/image_button_widget.dart';
@@ -36,6 +36,8 @@ class ProfileForm extends StatefulWidget {
 
   @override
   State<ProfileForm> createState() => _ProfileFormState();
+
+  //adding parameters that will have state of form like what page, 
 }
 
 class _ProfileFormState extends State<ProfileForm> {
@@ -310,14 +312,40 @@ class _ProfileFormState extends State<ProfileForm> {
                         }
 
                         return Column(
-                          children: snapshot.data == null
+                          spacing: 15,
+                          //this probably need to go into its own widget thing so I can reuse it again
+                          children: 
+                          snapshot.data == null
                               ? []
                               : snapshot.data!.docs.map((documentSnapshot) {
                                   final data = documentSnapshot.data();
                                   return ElevatedButton.icon(
-                                      icon: const Icon(Icons.arrow_forward_ios),
-                                      label: Text(data['field_type']),
+                                      icon: Icon(Icons.arrow_forward_ios,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primaryFixed),
+                                      label: Text(
+                                        data['field_type'],
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primaryFixed),
+                                      ),
                                       iconAlignment: IconAlignment.end,
+                                      style: ElevatedButton.styleFrom(
+                                          minimumSize:
+                                              const Size(double.infinity, 50),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(15.0),
+                                          ),
+                                          backgroundColor: Theme.of(context)
+                                              .colorScheme
+                                              .primaryContainer,
+                                          side: BorderSide(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primaryFixed)),
                                       onPressed: () {
                                         if (mounted) {
                                           Navigator.push(
@@ -334,68 +362,6 @@ class _ProfileFormState extends State<ProfileForm> {
                         );
                       }),
 
-                  // TextInputField(
-                  //     controller: _heightController,
-                  //     labelText: "Height",
-                  //     textType: "Height"),
-                  // //updating these drop down fields to icon buttons
-                  // ElevatedButton.icon(
-                  //   icon: const Icon(Icons.arrow_forward_ios),
-                  //   label: const Text('Sexuality'),
-                  //   onPressed: () {
-                  //     if (mounted) {
-                  //       Navigator.push(
-                  //         context,
-                  //         MaterialPageRoute(
-                  //             builder: (context) =>
-                  //                 const SelectPage(fieldType: 'Sexuality')),
-                  //       );
-                  //     }
-                  //   },
-                  //   iconAlignment: IconAlignment.end,
-                  // ),
-                  // // MultiSelectDropdown(
-                  // //     controller: sexualityController, labelText: "Sexuality"),
-                  // MultiSelectDropdown(
-                  //     controller: genderController,
-                  //     labelText: "Gender Identity"),
-                  // MultiSelectDropdown(
-                  //     controller: pronounController, labelText: "Pronouns"),
-                  // MultiSelectDropdown(
-                  //     controller: sexualPrefController,
-                  //     labelText: "Sexual Preferences"),
-                  // MultiSelectDropdown(
-                  //     controller: genderPresentationController,
-                  //     labelText: "Gender Presentation"),
-                  // MultiSelectDropdown(
-                  //     controller: interestsController, labelText: "Interests"),
-                  SingleSelectDropDown(
-                    value: _relationshipStatus,
-                    label: "Relationship Status",
-                    onChanged: (newVal) {
-                      setState(() {
-                        _relationshipStatus = newVal;
-                      });
-                    },
-                  ),
-                  SingleSelectDropDown(
-                    value: _relationshipStyle,
-                    label: "Relationship Style",
-                    onChanged: (newVal) {
-                      setState(() {
-                        _relationshipStyle = newVal;
-                      });
-                    },
-                  ),
-                  SingleSelectDropDown(
-                    value: _lookingFor,
-                    label: "Looking For",
-                    onChanged: (newVal) {
-                      setState(() {
-                        _lookingFor = newVal;
-                      });
-                    },
-                  ),
                   const SizedBox(height: 10),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -416,6 +382,7 @@ class _ProfileFormState extends State<ProfileForm> {
 }
 
 class CreateProfilePage extends StatefulWidget {
+
   const CreateProfilePage({super.key});
 
   @override
@@ -446,6 +413,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              //split here into two forms and render info depending on which state var
               SizedBox(height: 5),
               ProfileForm(),
               SizedBox(height: 30)

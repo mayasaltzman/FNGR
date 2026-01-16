@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import './widgets/text_input_widgets.dart';
 import './widgets/single_select_widget.dart';
-import './widgets/multi_select_widget.dart';
+import 'widgets/multi_select_widget_OLD.dart';
 import '../../services/firebase_service.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:image_picker/image_picker.dart';
