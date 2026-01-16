@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:test_milestone/pages/profile/widgets/multi_select_widget.dart';
 import '../../main.dart';
 import 'widgets/multi_select_widget_OLD.dart';
 import './widgets/single_select_widget.dart';
@@ -37,7 +38,7 @@ class ProfileForm extends StatefulWidget {
   @override
   State<ProfileForm> createState() => _ProfileFormState();
 
-  //adding parameters that will have state of form like what page, 
+  //adding parameters that will have state of form like what page,
 }
 
 class _ProfileFormState extends State<ProfileForm> {
@@ -302,66 +303,7 @@ class _ProfileFormState extends State<ProfileForm> {
                   )
                 ],
                 if (additionalInfo) ...[
-                  FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                      future: _firebaseService.getProfileFieldTypes(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
-
-                        return Column(
-                          spacing: 15,
-                          //this probably need to go into its own widget thing so I can reuse it again
-                          children: 
-                          snapshot.data == null
-                              ? []
-                              : snapshot.data!.docs.map((documentSnapshot) {
-                                  final data = documentSnapshot.data();
-                                  return ElevatedButton.icon(
-                                      icon: Icon(Icons.arrow_forward_ios,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primaryFixed),
-                                      label: Text(
-                                        data['field_type'],
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primaryFixed),
-                                      ),
-                                      iconAlignment: IconAlignment.end,
-                                      style: ElevatedButton.styleFrom(
-                                          minimumSize:
-                                              const Size(double.infinity, 50),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(15.0),
-                                          ),
-                                          backgroundColor: Theme.of(context)
-                                              .colorScheme
-                                              .primaryContainer,
-                                          side: BorderSide(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primaryFixed)),
-                                      onPressed: () {
-                                        if (mounted) {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    SelectPage(
-                                                        fieldType: data[
-                                                            'field_type'])),
-                                          );
-                                        }
-                                      });
-                                }).toList(),
-                        );
-                      }),
-
+                  MultiSelect(),
                   const SizedBox(height: 10),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -382,7 +324,6 @@ class _ProfileFormState extends State<ProfileForm> {
 }
 
 class CreateProfilePage extends StatefulWidget {
-
   const CreateProfilePage({super.key});
 
   @override
