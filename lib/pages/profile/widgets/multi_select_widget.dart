@@ -20,49 +20,52 @@ class _MultiSelectState extends State<MultiSelect> {
         future: _firebaseService.getProfileFieldTypes(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          return Column(
-            spacing: 15,
-            //this probably need to go into its own widget thing so I can reuse it again
-            children: snapshot.data == null
-                ? []
-                : snapshot.data!.docs.map((documentSnapshot) {
-                    final data = documentSnapshot.data();
-                    return ElevatedButton.icon(
-                        icon: Icon(Icons.arrow_forward_ios,
-                            color: Theme.of(context).colorScheme.primaryFixed),
-                        label: Text(
-                          data['field_type'],
-                          style: TextStyle(
+            return Center(
+                child: CircularProgressIndicator(
+                    color: Theme.of(context).colorScheme.primaryFixed));
+          } else {
+            return Column(
+              spacing: 15,
+              children: snapshot.data == null
+                  ? []
+                  : snapshot.data!.docs.map((documentSnapshot) {
+                      final data = documentSnapshot.data();
+                      return ElevatedButton.icon(
+                          icon: Icon(Icons.arrow_forward_ios,
                               color:
                                   Theme.of(context).colorScheme.primaryFixed),
-                        ),
-                        iconAlignment: IconAlignment.end,
-                        style: ElevatedButton.styleFrom(
-                            minimumSize: const Size(double.infinity, 50),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15.0),
-                            ),
-                            backgroundColor:
-                                Theme.of(context).colorScheme.primaryContainer,
-                            side: BorderSide(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .primaryFixed)),
-                        onPressed: () {
-                          if (mounted) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SelectPage(
-                                      fieldType: data['field_type'])),
-                            );
-                          }
-                        });
-                  }).toList(),
-          );
+                          label: Text(
+                            data['field_type'],
+                            style: TextStyle(
+                                color:
+                                    Theme.of(context).colorScheme.primaryFixed),
+                          ),
+                          iconAlignment: IconAlignment.end,
+                          style: ElevatedButton.styleFrom(
+                              minimumSize: const Size(double.infinity, 50),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                              backgroundColor: Theme.of(context)
+                                  .colorScheme
+                                  .primaryContainer,
+                              side: BorderSide(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primaryFixed)),
+                          onPressed: () {
+                            if (mounted) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SelectPage(
+                                        fieldType: data['field_type'])),
+                              );
+                            }
+                          });
+                    }).toList(),
+            );
+          }
         });
   }
 }
