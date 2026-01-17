@@ -13,6 +13,7 @@ class MultiSelect extends StatefulWidget {
 
 class _MultiSelectState extends State<MultiSelect> {
   final FirebaseService _firebaseService = FirebaseService();
+  Map<String, String> test = {'Sexuality': 'Lesbian, Queer', 'Gender Identity': 'Woman'};
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,7 @@ class _MultiSelectState extends State<MultiSelect> {
                               color:
                                   Theme.of(context).colorScheme.primaryFixed),
                           label: Text(
-                            data['field_type'],
+                            test[data['field_type']] ?? data['field_type'],
                             style: TextStyle(
                                 color:
                                     Theme.of(context).colorScheme.primaryFixed),

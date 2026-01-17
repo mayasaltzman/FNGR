@@ -15,7 +15,9 @@ class SelectPage extends StatefulWidget {
 class _SelectPageState extends State<SelectPage> {
   late FirebaseService _firebaseService;
   Set<String> selectedFields = {};
+  Set<String> selectedLabels = {};
   final Map<String, ValueNotifier<bool>> _pressedNotifiers = {};
+  String selectedString = "";
 
   @override
   void initState() {
@@ -25,7 +27,7 @@ class _SelectPageState extends State<SelectPage> {
 
   ValueNotifier<bool> _getNotifier(String id) {
     return _pressedNotifiers.putIfAbsent(
-      id,
+      id, //need to put label here somehow
       () => ValueNotifier<bool>(false),
     );
   }
@@ -69,7 +71,9 @@ class _SelectPageState extends State<SelectPage> {
                             : snapshot.data!.docs.map((documentSnapshot) {
                                 final data = documentSnapshot.data();
                                 final id = documentSnapshot.id;
+                                final label = data['label'];
                                 final notifier = _getNotifier(id);
+
                                 return ValueListenableBuilder<bool>(
                                     valueListenable: notifier,
                                     builder: (context, isPressed, child) {
@@ -97,10 +101,12 @@ class _SelectPageState extends State<SelectPage> {
                                                         .primaryFixed)),
                                         onPressed: () {
                                           notifier.value = !notifier.value;
-                                          if (notifier.value) {
+                                          if (!notifier.value) {
                                             selectedFields.remove(id);
+                                            selectedLabels.remove(label);
                                           } else {
                                             selectedFields.add(id);
+                                            selectedLabels.add(label);
                                           }
                                         },
                                       );
@@ -108,7 +114,13 @@ class _SelectPageState extends State<SelectPage> {
                               }).toList(),
                       ),
                       ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            selectedString = selectedLabels
+                                .toString()
+                                .replaceAll('{', '')
+                                .replaceAll('}', '');
+                            print(selectedString);
+                          },
                           style: ElevatedButton.styleFrom(
                               minimumSize: const Size(double.infinity, 50),
                               backgroundColor:
@@ -123,6 +135,7 @@ class _SelectPageState extends State<SelectPage> {
                               notifier.value = false;
                             }
                             selectedFields.clear();
+                            selectedLabels.clear();
                           },
                           style: ElevatedButton.styleFrom(
                               minimumSize: const Size(double.infinity, 50),
