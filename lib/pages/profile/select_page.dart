@@ -120,6 +120,7 @@ class _SelectPageState extends State<SelectPage> {
                                 .replaceAll('{', '')
                                 .replaceAll('}', '');
                             print(selectedString);
+                            
                           },
                           style: ElevatedButton.styleFrom(
                               minimumSize: const Size(double.infinity, 50),

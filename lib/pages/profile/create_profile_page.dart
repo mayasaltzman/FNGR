@@ -33,7 +33,8 @@ abstract class ProfileStyles {
 //custom image button widget to get images from user
 
 class ProfileForm extends StatefulWidget {
-  const ProfileForm({super.key});
+  final int formState;
+  const ProfileForm({super.key, required this.formState});
 
   @override
   State<ProfileForm> createState() => _ProfileFormState();
@@ -47,6 +48,7 @@ class _ProfileFormState extends State<ProfileForm> {
   final _picker = ImagePicker();
 
   //conditions to set which process of profile creation the user is on
+
   bool keyInfo = true;
   bool additionalInfo = false;
   bool isLoading = false;
@@ -234,6 +236,14 @@ class _ProfileFormState extends State<ProfileForm> {
 
   @override
   Widget build(BuildContext context) {
+    // if (widget.formState == 0) {
+    //   keyInfo = true;
+    //   additionalInfo = false;
+    // } else {
+    //   additionalInfo = true;
+    //   keyInfo = false;
+    // }
+
     return (SizedBox(
         width: ProfileStyles.formWidth,
         child: Form(
@@ -331,6 +341,7 @@ class CreateProfilePage extends StatefulWidget {
 }
 
 class _CreateProfilePageState extends State<CreateProfilePage> {
+  //create param here to track the selected fields 
   @override
   void initState() {
     super.initState();
@@ -356,7 +367,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
             children: [
               //split here into two forms and render info depending on which state var
               SizedBox(height: 5),
-              ProfileForm(),
+              ProfileForm(formState: 0), //pass the param from create profile from selected fields here too and then pass that to the widget
               SizedBox(height: 30)
             ],
           )),
