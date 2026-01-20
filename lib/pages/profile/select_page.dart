@@ -120,14 +120,9 @@ class _SelectPageState extends State<SelectPage> {
                                 .toString()
                                 .replaceAll('{', '')
                                 .replaceAll('}', '');
-                            print(selectedString);
 
-                            if (mounted) {
-                              Navigator.of(context).pushAndRemoveUntil(
-                                  MaterialPageRoute(
-                                      builder: (context) => CreateProfilePage()),
-                                  (route) => false);
-                            }
+                            //returns selected back to widget to display
+                            Navigator.pop(context, selectedString);
                           },
                           style: ElevatedButton.styleFrom(
                               minimumSize: const Size(double.infinity, 50),

@@ -26,6 +26,14 @@ class _MultiSelectState extends State<MultiSelect> {
       MaterialPageRoute<String>(
           builder: (context) => SelectPage(fieldType: fieldType)),
     );
+
+    if (!context.mounted) return;
+
+    // After the Selection Screen returns a result, hide any previous snackbars
+    // and show the new result.
+    ScaffoldMessenger.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text('$result')));
   }
 
   @override
