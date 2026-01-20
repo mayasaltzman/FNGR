@@ -121,7 +121,6 @@ class _SelectPageState extends State<SelectPage> {
                                 .replaceAll('{', '')
                                 .replaceAll('}', '');
 
-                            //returns selected back to widget to display
                             Navigator.pop(context, selectedString);
                           },
                           style: ElevatedButton.styleFrom(

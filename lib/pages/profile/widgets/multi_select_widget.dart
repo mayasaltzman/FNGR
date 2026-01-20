@@ -13,10 +13,7 @@ class MultiSelect extends StatefulWidget {
 
 class _MultiSelectState extends State<MultiSelect> {
   final FirebaseService _firebaseService = FirebaseService();
-  Map<String, String> test = {
-    'Sexuality': 'Lesbian, Queer',
-    'Gender Identity': 'Woman'
-  };
+  Map<String, String> selected = {};
 
   //function taken from flutter docs
   Future<void> _navigateAndDisplaySelection(
@@ -29,11 +26,9 @@ class _MultiSelectState extends State<MultiSelect> {
 
     if (!context.mounted) return;
 
-    // After the Selection Screen returns a result, hide any previous snackbars
-    // and show the new result.
-    ScaffoldMessenger.of(context)
-      ..removeCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text('$result')));
+    selected[fieldType] = result!;
+
+    setState(() {});
   }
 
   @override
@@ -57,7 +52,10 @@ class _MultiSelectState extends State<MultiSelect> {
                               color:
                                   Theme.of(context).colorScheme.primaryFixed),
                           label: Text(
-                            test[data['field_type']] ?? data['field_type'],
+                            selected[data['field_type']] != ''
+                                ? selected[data['field_type']] ??
+                                    data['field_type']
+                                : data['field_type'],
                             style: TextStyle(
                                 color:
                                     Theme.of(context).colorScheme.primaryFixed),
