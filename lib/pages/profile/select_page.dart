@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:test_milestone/pages/profile/create_profile_page.dart';
 import '../../services/firebase_service.dart';
 
 class SelectPage extends StatefulWidget {
@@ -120,7 +121,13 @@ class _SelectPageState extends State<SelectPage> {
                                 .replaceAll('{', '')
                                 .replaceAll('}', '');
                             print(selectedString);
-                            
+
+                            if (mounted) {
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (context) => CreateProfilePage()),
+                                  (route) => false);
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                               minimumSize: const Size(double.infinity, 50),

@@ -13,7 +13,20 @@ class MultiSelect extends StatefulWidget {
 
 class _MultiSelectState extends State<MultiSelect> {
   final FirebaseService _firebaseService = FirebaseService();
-  Map<String, String> test = {'Sexuality': 'Lesbian, Queer', 'Gender Identity': 'Woman'};
+  Map<String, String> test = {
+    'Sexuality': 'Lesbian, Queer',
+    'Gender Identity': 'Woman'
+  };
+
+  //function taken from flutter docs
+  Future<void> _navigateAndDisplaySelection(
+      BuildContext context, String fieldType) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute<String>(
+          builder: (context) => SelectPage(fieldType: fieldType)),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,14 +68,8 @@ class _MultiSelectState extends State<MultiSelect> {
                                       .colorScheme
                                       .primaryFixed)),
                           onPressed: () {
-                            if (mounted) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => SelectPage(
-                                        fieldType: data['field_type'])),
-                              );
-                            }
+                            _navigateAndDisplaySelection(
+                                context, data['field_type']);
                           });
                     }).toList(),
             );
