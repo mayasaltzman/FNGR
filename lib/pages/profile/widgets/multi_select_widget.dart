@@ -14,19 +14,29 @@ class MultiSelect extends StatefulWidget {
 class _MultiSelectState extends State<MultiSelect> {
   final FirebaseService _firebaseService = FirebaseService();
   Map<String, String> selected = {};
+  Set<String> selectedFields = {};
+  Set<String> selectedLabels = {};
 
   //function taken from flutter docs
   Future<void> _navigateAndDisplaySelection(
       BuildContext context, String fieldType) async {
     final result = await Navigator.push(
       context,
-      MaterialPageRoute<String>(
-          builder: (context) => SelectPage(fieldType: fieldType)),
+      MaterialPageRoute(
+          builder: (context) => SelectPage(
+                fieldType: fieldType,
+                selectedFields: selectedFields,
+                selectedLabels: selectedLabels,
+              )),
     );
 
     if (!context.mounted) return;
 
-    selected[fieldType] = result!;
+    if (result != null) {
+      selected[fieldType] = result.$1;
+      selectedFields = result.$2;
+      selectedLabels = result.$3;
+    }
 
     setState(() {});
   }

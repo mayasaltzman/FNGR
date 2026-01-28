@@ -7,7 +7,13 @@ import '../../services/firebase_service.dart';
 
 class SelectPage extends StatefulWidget {
   final String fieldType;
-  const SelectPage({super.key, required this.fieldType});
+  final Set<String> selectedFields;
+  final Set<String> selectedLabels;
+  const SelectPage(
+      {super.key,
+      required this.fieldType,
+      required this.selectedFields,
+      required this.selectedLabels});
 
   @override
   State<SelectPage> createState() => _SelectPageState();
@@ -15,8 +21,6 @@ class SelectPage extends StatefulWidget {
 
 class _SelectPageState extends State<SelectPage> {
   late FirebaseService _firebaseService;
-  Set<String> selectedFields = {};
-  Set<String> selectedLabels = {};
   final Map<String, ValueNotifier<bool>> _pressedNotifiers = {};
   String selectedString = "";
 
@@ -24,18 +28,25 @@ class _SelectPageState extends State<SelectPage> {
   void initState() {
     super.initState();
     _firebaseService = FirebaseService();
-  }
 
-  ValueNotifier<bool> _getNotifier(String id) {
-    return _pressedNotifiers.putIfAbsent(
-      id, //need to put label here somehow
-      () => ValueNotifier<bool>(false),
-    );
+    for (final field in widget.selectedFields) {
+      _pressedNotifiers[field] = ValueNotifier<bool>(true);
+    }
   }
 
   @override
   void dispose() {
+    for (final notifier in _pressedNotifiers.values) {
+      notifier.dispose();
+    }
     super.dispose();
+  }
+
+  ValueNotifier<bool> _getNotifier(String id) {
+    return _pressedNotifiers.putIfAbsent(
+      id,
+      () => ValueNotifier<bool>(false),
+    );
   }
 
   @override
@@ -103,11 +114,11 @@ class _SelectPageState extends State<SelectPage> {
                                         onPressed: () {
                                           notifier.value = !notifier.value;
                                           if (!notifier.value) {
-                                            selectedFields.remove(id);
-                                            selectedLabels.remove(label);
+                                            widget.selectedFields.remove(id);
+                                            widget.selectedLabels.remove(label);
                                           } else {
-                                            selectedFields.add(id);
-                                            selectedLabels.add(label);
+                                            widget.selectedFields.add(id);
+                                            widget.selectedLabels.add(label);
                                           }
                                         },
                                       );
@@ -116,12 +127,16 @@ class _SelectPageState extends State<SelectPage> {
                       ),
                       ElevatedButton(
                           onPressed: () {
-                            selectedString = selectedLabels
+                            selectedString = widget.selectedLabels
                                 .toString()
                                 .replaceAll('{', '')
                                 .replaceAll('}', '');
 
-                            Navigator.pop(context, selectedString);
+                            Navigator.pop(context, (
+                              selectedString,
+                              widget.selectedFields,
+                              widget.selectedLabels
+                            ));
                           },
                           style: ElevatedButton.styleFrom(
                               minimumSize: const Size(double.infinity, 50),
@@ -136,8 +151,8 @@ class _SelectPageState extends State<SelectPage> {
                             for (final notifier in _pressedNotifiers.values) {
                               notifier.value = false;
                             }
-                            selectedFields.clear();
-                            selectedLabels.clear();
+                            widget.selectedFields.clear();
+                            widget.selectedLabels.clear();
                           },
                           style: ElevatedButton.styleFrom(
                               minimumSize: const Size(double.infinity, 50),
