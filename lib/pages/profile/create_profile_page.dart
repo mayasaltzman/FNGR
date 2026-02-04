@@ -13,11 +13,10 @@ import './widgets/image_button_widget.dart';
 import '../../services/firebase_service.dart';
 import '../../services/storage_service.dart';
 import './select_page.dart';
-
+import './create_profile_steps/profile_intro_page.dart';
 
 /* CURRENT TO DO
 1 - reorganize this form shit cause I hate it
-2 - order the way the multi selects show
 3 - have the multi selects keep the same from page to page 
 4 - get shit to properly save and think about how I want to reorganize the db */
 
@@ -39,6 +38,7 @@ abstract class ProfileStyles {
 }
 //custom image button widget to get images from user
 
+/*
 class ProfileForm extends StatefulWidget {
   final int formState;
   const ProfileForm({super.key, required this.formState});
@@ -259,6 +259,8 @@ class _ProfileFormState extends State<ProfileForm> {
               spacing: 15,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+
+                /*
                 if (keyInfo) ...[
                   Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -335,10 +337,12 @@ class _ProfileFormState extends State<ProfileForm> {
                             child: const Text("Finish"))
                       ]),
                 ]
+                */
               ],
             ))));
   }
 }
+*/
 
 class CreateProfilePage extends StatefulWidget {
   const CreateProfilePage({super.key});
@@ -348,7 +352,7 @@ class CreateProfilePage extends StatefulWidget {
 }
 
 class _CreateProfilePageState extends State<CreateProfilePage> {
-  //create param here to track the selected fields 
+  //create param here to track the selected fields
   @override
   void initState() {
     super.initState();
@@ -357,27 +361,29 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        appBar: AppBar(
-          title: Text("Create Profile",
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.secondaryFixed)),
-          backgroundColor: Theme.of(context).colorScheme.secondary,
-          leading: BackButton(
-            color: Theme.of(context).colorScheme.secondaryFixed,
-          ),
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      appBar: AppBar(
+        title: Text("Create Profile",
+            style:
+                TextStyle(color: Theme.of(context).colorScheme.secondaryFixed)),
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        leading: BackButton(
+          color: Theme.of(context).colorScheme.secondaryFixed,
         ),
-        body: const Center(
-          child: SingleChildScrollView(
-              child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              //split here into two forms and render info depending on which state var
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Expanded(child: ProfileIntroPage())
+          //ProfileIntroPage()
+          //split here into two forms and render info depending on which state var
+          /*
               SizedBox(height: 5),
               ProfileForm(formState: 0), //pass the param from create profile from selected fields here too and then pass that to the widget
               SizedBox(height: 30)
-            ],
-          )),
-        ));
+              */
+        ],
+      ),
+    );
   }
 }

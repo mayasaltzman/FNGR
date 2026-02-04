@@ -53,15 +53,15 @@ class TextInputField extends StatelessWidget {
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                   borderSide:
-                      BorderSide(color: Theme.of(context).colorScheme.tertiary),
+                      BorderSide(color: Theme.of(context).colorScheme.primaryFixed),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                   borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.tertiary, width: 2),
+                      color: Theme.of(context).colorScheme.primaryFixed, width: 2),
                 ),
                 filled: true,
-                fillColor: Theme.of(context).colorScheme.tertiaryContainer,
+                fillColor: Theme.of(context).colorScheme.primary,
                 //labelText: labelText,
                 labelStyle: TextStyle(
                     color: Theme.of(context).colorScheme.primaryFixed,
@@ -120,5 +120,145 @@ class TextInputFieldLong extends StatelessWidget {
             ),
           ))
     ]);
+  }
+}
+
+class TextInputFieldBirthday extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text("Your birthday", style: ProfileStyles.inputHeader),
+      Row(
+        spacing: 10,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Day",
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.primaryFixed)),
+              SizedBox(
+                  width: 80,
+                  height: 50,
+                  child: TextFormField(
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.primaryFixed,
+                          fontSize: 16),
+                      decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).colorScheme.tertiary),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).colorScheme.tertiary,
+                                width: 2),
+                          ),
+                          filled: true,
+                          fillColor:
+                              Theme.of(context).colorScheme.tertiaryContainer,
+                          labelStyle: TextStyle(
+                              color: Theme.of(context).colorScheme.primaryFixed,
+                              fontSize: 16))))
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Month",
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.primaryFixed)),
+              SizedBox(
+                  width: 80,
+                  height: 50,
+                  child: TextFormField(
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.primaryFixed,
+                          fontSize: 16),
+                      decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).colorScheme.tertiary),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).colorScheme.tertiary,
+                                width: 2),
+                          ),
+                          filled: true,
+                          fillColor:
+                              Theme.of(context).colorScheme.tertiaryContainer,
+                          labelStyle: TextStyle(
+                              color: Theme.of(context).colorScheme.primaryFixed,
+                              fontSize: 16))))
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Year",
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.primaryFixed)),
+              SizedBox(
+                  width: 150,
+                  height: 50,
+                  child: TextFormField(
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.primaryFixed,
+                          fontSize: 16),
+                      decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).colorScheme.tertiary),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).colorScheme.tertiary,
+                                width: 2),
+                          ),
+                          filled: true,
+                          fillColor:
+                              Theme.of(context).colorScheme.tertiaryContainer,
+                          labelStyle: TextStyle(
+                              color: Theme.of(context).colorScheme.primaryFixed,
+                              fontSize: 16))))
+            ],
+          )
+        ],
+      )
+    ]);
+    /*
+    Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      SizedBox(
+          height: 50,
+          child: TextFormField(
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.primaryFixed,
+                fontSize: 16),
+            decoration: InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide:
+                      BorderSide(color: Theme.of(context).colorScheme.tertiary),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.tertiary, width: 2),
+                ),
+                filled: true,
+                fillColor: Theme.of(context).colorScheme.tertiaryContainer,
+                labelStyle: TextStyle(
+                    color: Theme.of(context).colorScheme.primaryFixed,
+                    fontSize: 16)),
+          ))
+    ]);
+    */
   }
 }
