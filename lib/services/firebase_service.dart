@@ -182,7 +182,7 @@ class FirebaseService {
   //Query entire profile_fields
   Future<QuerySnapshot<Map<String, dynamic>>> getProfileFieldTypes() async {
     try {
-      return await _firestore.collection('field_types').get();
+      return await _firestore.collection('field_types').orderBy('order').get();
     } catch (e) {
       throw Exception('Failed to get dropdown fields: $e');
     }

@@ -14,6 +14,13 @@ import '../../services/firebase_service.dart';
 import '../../services/storage_service.dart';
 import './select_page.dart';
 
+
+/* CURRENT TO DO
+1 - reorganize this form shit cause I hate it
+2 - order the way the multi selects show
+3 - have the multi selects keep the same from page to page 
+4 - get shit to properly save and think about how I want to reorganize the db */
+
 //styles for profile page
 abstract class ProfileStyles {
   static const formWidth = 375.0;

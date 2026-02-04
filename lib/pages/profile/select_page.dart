@@ -72,7 +72,8 @@ class _SelectPageState extends State<SelectPage> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   }
-                  return Column(
+                  return Expanded(
+                      child: Column(
                     spacing: 10.0,
                     children: [
                       Wrap(
@@ -125,6 +126,7 @@ class _SelectPageState extends State<SelectPage> {
                                     });
                               }).toList(),
                       ),
+                      const Spacer(),
                       ElevatedButton(
                           onPressed: () {
                             selectedString = widget.selectedLabels
@@ -168,7 +170,7 @@ class _SelectPageState extends State<SelectPage> {
                                       .colorScheme
                                       .primaryFixed)))
                     ],
-                  );
+                  ));
                 },
               )
             ])));
