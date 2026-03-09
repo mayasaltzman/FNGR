@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../widgets/text_input_widgets.dart';
 
+//make elements on this page mandatory for an account when doing backend
+//the rest of elements on other pages can be skippable
 class ProfileIntroPage extends StatelessWidget {
   final TextEditingController _nameController = TextEditingController();
 
