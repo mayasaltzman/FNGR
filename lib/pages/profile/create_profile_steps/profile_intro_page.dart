@@ -32,7 +32,7 @@ class ProfileIntroPage extends StatelessWidget {
               alignment: Alignment.bottomRight,
               child: IconButton(
                 onPressed: () {}, //on submit we will send an alert asking are you sure birthday cannot be changed
-                icon: Icon(Icons.arrow_forward_ios),
+                icon: Icon(Icons.arrow_forward_ios), style: IconButton.styleFrom(foregroundColor: Theme.of(context).colorScheme.primaryFixed),
               ))
         ],
       ),
