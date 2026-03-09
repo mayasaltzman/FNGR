@@ -8,16 +8,16 @@ class ProfileAdditionalPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<String> fieldTypes = ['Sexuality', 'Gender Identity', 'Pronouns'];
+    List<String> fieldTypes = ['Sexual Preferences', 'Kink', 'Relationship Style', 'Relationship Status', 'Interests', 'Looking For', 'Gender Presentation'];
     return Padding(
         padding: EdgeInsets.all(20),
         child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: 30,
+            spacing: 10,
             children: [
               Text(
-                  "Lets get a bit more information to help build your profile!",
+                  "Almost there!",
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Color(0xFFAA4E85),

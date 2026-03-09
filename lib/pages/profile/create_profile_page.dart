@@ -17,6 +17,7 @@ import './create_profile_steps/profile_intro_page.dart';
 import './create_profile_steps/profile_sexuality_page.dart';
 import './create_profile_steps/profile_photo_page.dart';
 import './create_profile_steps/profile_bio_page.dart';
+import './create_profile_steps/profile_additional_page.dart';
 
 /* CURRENT TO DO
 1 - reorganize this form shit cause I hate it
@@ -377,7 +378,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Expanded(child: ProfileBioPage())
+          Expanded(child: ProfileAdditionalPage())
           //ProfileIntroPage()
           //split here into two forms and render info depending on which state var
           /*
