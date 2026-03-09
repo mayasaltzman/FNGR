@@ -17,7 +17,7 @@ class ProfileIntroPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 30,
         children: [
-          Text("Weclome! Why don't you introduce yourself",
+          Text("Weclome! Why don't you introduce yourself 😊:",
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Color(0xFFAA4E85),
@@ -31,7 +31,7 @@ class ProfileIntroPage extends StatelessWidget {
           Align(
               alignment: Alignment.bottomRight,
               child: IconButton(
-                onPressed: () {},
+                onPressed: () {}, //on submit we will send an alert asking are you sure birthday cannot be changed
                 icon: Icon(Icons.arrow_forward_ios),
               ))
         ],

@@ -52,13 +52,14 @@ class TextInputField extends StatelessWidget {
             decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
-                  borderSide:
-                      BorderSide(color: Theme.of(context).colorScheme.primaryFixed),
+                  borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.primaryFixed),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                   borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.primaryFixed, width: 2),
+                      color: Theme.of(context).colorScheme.primaryFixed,
+                      width: 2),
                 ),
                 filled: true,
                 fillColor: Theme.of(context).colorScheme.primary,
@@ -127,7 +128,7 @@ class TextInputFieldBirthday extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text("Your birthday", style: ProfileStyles.inputHeader),
+      Text("Your birthday: DD-MM-YYYY", style: ProfileStyles.inputHeader),
       Row(
         spacing: 10,
         children: [
@@ -148,7 +149,8 @@ class TextInputFieldBirthday extends StatelessWidget {
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
                             borderSide: BorderSide(
-                                color: Theme.of(context).colorScheme.tertiary),
+                                color:
+                                    Theme.of(context).colorScheme.primaryFixed),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
@@ -156,9 +158,6 @@ class TextInputFieldBirthday extends StatelessWidget {
                                 color: Theme.of(context).colorScheme.tertiary,
                                 width: 2),
                           ),
-                          filled: true,
-                          fillColor:
-                              Theme.of(context).colorScheme.tertiaryContainer,
                           labelStyle: TextStyle(
                               color: Theme.of(context).colorScheme.primaryFixed,
                               fontSize: 16))))
@@ -181,7 +180,8 @@ class TextInputFieldBirthday extends StatelessWidget {
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
                             borderSide: BorderSide(
-                                color: Theme.of(context).colorScheme.tertiary),
+                                color:
+                                    Theme.of(context).colorScheme.primaryFixed),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
@@ -189,9 +189,6 @@ class TextInputFieldBirthday extends StatelessWidget {
                                 color: Theme.of(context).colorScheme.tertiary,
                                 width: 2),
                           ),
-                          filled: true,
-                          fillColor:
-                              Theme.of(context).colorScheme.tertiaryContainer,
                           labelStyle: TextStyle(
                               color: Theme.of(context).colorScheme.primaryFixed,
                               fontSize: 16))))
@@ -204,7 +201,7 @@ class TextInputFieldBirthday extends StatelessWidget {
                   style: TextStyle(
                       color: Theme.of(context).colorScheme.primaryFixed)),
               SizedBox(
-                  width: 150,
+                  width: 190,
                   height: 50,
                   child: TextFormField(
                       style: TextStyle(
@@ -214,7 +211,8 @@ class TextInputFieldBirthday extends StatelessWidget {
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
                             borderSide: BorderSide(
-                                color: Theme.of(context).colorScheme.tertiary),
+                                color:
+                                    Theme.of(context).colorScheme.primaryFixed),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
@@ -222,43 +220,14 @@ class TextInputFieldBirthday extends StatelessWidget {
                                 color: Theme.of(context).colorScheme.tertiary,
                                 width: 2),
                           ),
-                          filled: true,
-                          fillColor:
-                              Theme.of(context).colorScheme.tertiaryContainer,
                           labelStyle: TextStyle(
                               color: Theme.of(context).colorScheme.primaryFixed,
                               fontSize: 16))))
             ],
-          )
+          ),
         ],
-      )
+      ),
+      Text("You cannot update your birthday later", style: TextStyle(color: Theme.of(context).colorScheme.primaryFixed))
     ]);
-    /*
-    Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      SizedBox(
-          height: 50,
-          child: TextFormField(
-            style: TextStyle(
-                color: Theme.of(context).colorScheme.primaryFixed,
-                fontSize: 16),
-            decoration: InputDecoration(
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide:
-                      BorderSide(color: Theme.of(context).colorScheme.tertiary),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.tertiary, width: 2),
-                ),
-                filled: true,
-                fillColor: Theme.of(context).colorScheme.tertiaryContainer,
-                labelStyle: TextStyle(
-                    color: Theme.of(context).colorScheme.primaryFixed,
-                    fontSize: 16)),
-          ))
-    ]);
-    */
   }
 }
