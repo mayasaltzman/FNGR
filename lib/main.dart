@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           fontFamily: "Gilroy-bold",
           colorScheme: const ColorScheme.light(
-              primary: Color(0xFFFBEFF6), //app background
+              primary: Color(0xFFFAF5F8), //app background
               primaryContainer:
                   Color(0xFFF9E7F2), //to distinguish from background
               primaryFixed: Color(0xFFAA4E85), //pink dark text
