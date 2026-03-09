@@ -209,22 +209,16 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                   children: [
                     ImageButton(
                         image: _selectedImages[0],
-                        width: 200,
-                        height: 400,
                         onTap: () => _pickImage(0)),
                     const SizedBox(width: 5),
                     Column(
                       children: [
                         ImageButton(
                             image: _selectedImages[1],
-                            width: 80,
-                            height: 190,
                             onTap: () => _pickImage(1)),
                         const SizedBox(height: 10),
                         ImageButton(
                             image: _selectedImages[2],
-                            width: 80,
-                            height: 190,
                             onTap: () => _pickImage(2)),
                       ],
                     ),
@@ -233,14 +227,10 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                       children: [
                         ImageButton(
                             image: _selectedImages[3],
-                            width: 80,
-                            height: 190,
                             onTap: () => _pickImage(3)),
                         const SizedBox(height: 10),
                         ImageButton(
                             image: _selectedImages[4],
-                            width: 80,
-                            height: 190,
                             onTap: () => _pickImage(4)),
                       ],
                     ),

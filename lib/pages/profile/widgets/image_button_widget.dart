@@ -4,15 +4,11 @@ import 'package:flutter/material.dart';
 
 class ImageButton extends StatelessWidget {
   final File? image;
-  final double width;
-  final double height;
   final VoidCallback onTap;
 
   const ImageButton({
     super.key,
     required this.image,
-    required this.width,
-    required this.height, 
     required this.onTap
   });
 
@@ -21,8 +17,8 @@ class ImageButton extends StatelessWidget {
     return Column(
       children: [
         SizedBox(
-          width: width,
-          height: height,
+          width: 180,
+          height: 280,
           child: InkWell(
             onTap: onTap,
             borderRadius: BorderRadius.circular(15),
