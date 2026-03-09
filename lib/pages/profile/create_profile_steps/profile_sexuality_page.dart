@@ -30,6 +30,7 @@ class ProfileSexualityPage extends StatelessWidget {
                       onPressed: () {},
                       label: Text("Skip"),
                       icon: Icon(Icons.arrow_forward_ios),
+                      iconAlignment: IconAlignment.end,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFFAA4E85),
                         foregroundColor: Colors.white,
