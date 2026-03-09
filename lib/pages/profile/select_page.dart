@@ -49,6 +49,57 @@ class _SelectPageState extends State<SelectPage> {
     );
   }
 
+  Future showDialogBox(BuildContext context, String type) {
+    String helpText = "";
+    String title = "";
+
+    if (type == "Sexuality") {
+      title = "What is Sexuality";
+      helpText =
+          "Sexuality or sexual orientation is ones identity in relation to the genders they are typically attracted to or not attracted to.";
+    } else if (type == "Gender Identity") {
+      title = "What is Gender Identity";
+      helpText =
+          "Gender identity is the personal sense of one's own gender and is one's internal and individual sense of their gender.";
+    } else if (type == "Pronouns") {
+      title = "What are Pronouns";
+      helpText =
+          "Pronouns are how one refer to themself and other people. Pronouns can be related to gender identity and expression.";
+    }
+
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title,
+              style:
+                  TextStyle(color: Theme.of(context).colorScheme.primaryFixed)),
+          content: SizedBox(
+            height: 150,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(helpText,
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.primaryFixed)),
+              ],
+            ),
+          ),
+          actions: [
+            InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Text('Close',
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.primaryFixed)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,15 +127,16 @@ class _SelectPageState extends State<SelectPage> {
                       child: Column(
                     spacing: 10.0,
                     children: [
-                      //currently not visible:
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          showDialogBox(context, widget.fieldType);
+                        },
                         style: TextButton.styleFrom(
-                          foregroundColor: Colors.blue,
+                          foregroundColor:
+                              Theme.of(context).colorScheme.primaryFixed,
                           textStyle: const TextStyle(
-                            decoration:
-                                TextDecoration.underline, // Underline effect
-                          ),
+                              decoration: TextDecoration.underline,
+                              fontSize: 15),
                         ),
                         child: Text("What Does ${widget.fieldType} Mean"),
                       ),
