@@ -76,6 +76,18 @@ class _SelectPageState extends State<SelectPage> {
                       child: Column(
                     spacing: 10.0,
                     children: [
+                      //currently not visible:
+                      TextButton(
+                        onPressed: () {},
+                        style: TextButton.styleFrom(
+                          foregroundColor: Colors.blue,
+                          textStyle: const TextStyle(
+                            decoration:
+                                TextDecoration.underline, // Underline effect
+                          ),
+                        ),
+                        child: Text("What Does ${widget.fieldType} Mean"),
+                      ),
                       Wrap(
                         spacing: 8.0,
                         runSpacing: 8.0,
