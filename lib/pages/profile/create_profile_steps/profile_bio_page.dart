@@ -6,6 +6,7 @@ import '../widgets/text_input_widgets.dart';
 class ProfileBioPage extends StatelessWidget {
   final TextEditingController _bioController = TextEditingController();
 
+
   ProfileBioPage({
     super.key,
   });
@@ -19,12 +20,13 @@ class ProfileBioPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 30,
         children: [
-          Text("Add a quick description about yourself for your bio:",
+          Text("Add a quick description about yourself:",
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Color(0xFFAA4E85),
                   fontSize: 25)),
           TextInputFieldLong(controller: _bioController),
+
           Spacer(),
           Align(
               alignment: Alignment.bottomRight,

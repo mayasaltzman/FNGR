@@ -85,42 +85,60 @@ class TextInputFieldLong extends StatelessWidget {
     this.bio,
   });
 
+  final int maxChars = 200;
   @override
   Widget build(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text("About me", style: ProfileStyles.inputHeader),
-      const SizedBox(height: 15),
-      SizedBox(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("About me", style: ProfileStyles.inputHeader),
+        SizedBox(
           width: 400,
-          child: TextFormField(
-            controller: controller,
-            keyboardType: TextInputType.multiline,
-            minLines: 3,
-            maxLines: null,
-            style: TextStyle(
-                color: Theme.of(context).colorScheme.primaryFixed,
-                fontSize: 16),
-            decoration: InputDecoration(
-              labelText: bio,
-              labelStyle: TextStyle(
+          child: ValueListenableBuilder<TextEditingValue>(
+            valueListenable: controller,
+            builder: (context, value, child) {
+              final remaining = maxChars - value.text.length;
+
+              return TextFormField(
+                controller: controller,
+                keyboardType: TextInputType.multiline,
+                minLines: 5,
+                maxLines: 20,
+                maxLength: maxChars,
+                style: TextStyle(
                   color: Theme.of(context).colorScheme.primaryFixed,
-                  fontSize: 16),
-              floatingLabelBehavior: FloatingLabelBehavior.never,
-              filled: true,
-              fillColor: Theme.of(context).colorScheme.tertiaryContainer,
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide:
-                    BorderSide(color: Theme.of(context).colorScheme.tertiary),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.tertiary, width: 2),
-              ),
-            ),
-          ))
-    ]);
+                  fontSize: 16,
+                ),
+                decoration: InputDecoration(
+                    labelText: bio,
+                    labelStyle: TextStyle(
+                      color: Theme.of(context).colorScheme.primaryFixed,
+                      fontSize: 16,
+                    ),
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.primaryFixed,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.primaryFixed,
+                        width: 2,
+                      ),
+                    ),
+                    counterText: "$remaining characters remaining",
+                    counterStyle: TextStyle(
+                        color: Theme.of(context).colorScheme.primaryFixed)),
+              );
+            },
+          ),
+        ),
+        
+      ],
+    );
   }
 }
 
@@ -227,7 +245,8 @@ class TextInputFieldBirthday extends StatelessWidget {
           ),
         ],
       ),
-      Text("You cannot update your birthday later", style: TextStyle(color: Theme.of(context).colorScheme.primaryFixed))
+      Text("You cannot update your birthday later",
+          style: TextStyle(color: Theme.of(context).colorScheme.primaryFixed))
     ]);
   }
 }
