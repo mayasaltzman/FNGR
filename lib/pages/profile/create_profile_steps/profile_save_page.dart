@@ -9,43 +9,54 @@ class ProfileSavePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(20),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        spacing: 20,
-        children: [
-          Text("Insert FNGR Logo/Animation Here",
+    return Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        appBar: AppBar(
+          title: Text("Create Profile",
               style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFFAA4E85),
-                  fontSize: 25),
-              textAlign: TextAlign.center),
-          Text("Your all good to go! Happy FNGRing!",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFFAA4E85),
-                  fontSize: 25),
-              textAlign: TextAlign.center),
-          ElevatedButton(
-              onPressed: () {},
-              child: Text("Save", style: TextStyle(fontSize: 20)),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFFAA4E85),
-                foregroundColor: Colors.white,
-                fixedSize: const Size(150, 50),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              )),
-          Text("You can update this info later",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFFAA4E85),
-                  fontSize: 15),
-              textAlign: TextAlign.center),
-        ],
-      ),
-    );
+                  color: Theme.of(context).colorScheme.secondaryFixed)),
+          backgroundColor: Theme.of(context).colorScheme.secondary,
+          leading: BackButton(
+            color: Theme.of(context).colorScheme.secondaryFixed,
+          ),
+        ),
+        body: Padding(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            spacing: 20,
+            children: [
+              Text("Insert FNGR Logo/Animation Here",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFAA4E85),
+                      fontSize: 25),
+                  textAlign: TextAlign.center),
+              Text("Your all good to go! Happy FNGRing!",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFAA4E85),
+                      fontSize: 25),
+                  textAlign: TextAlign.center),
+              ElevatedButton(
+                  onPressed: () {},
+                  child: Text("Save", style: TextStyle(fontSize: 20)),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFFAA4E85),
+                    foregroundColor: Colors.white,
+                    fixedSize: const Size(150, 50),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
+                  )),
+              Text("You can update this info later",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFAA4E85),
+                      fontSize: 15),
+                  textAlign: TextAlign.center),
+            ],
+          ),
+        ));
   }
 }
