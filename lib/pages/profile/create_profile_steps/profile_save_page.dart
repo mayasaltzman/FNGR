@@ -12,29 +12,38 @@ class ProfileSavePage extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(20),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: 30,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        spacing: 20,
         children: [
-          Text("Add a quick description about yourself:",
+          Text("Insert FNGR Logo/Animation Here",
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Color(0xFFAA4E85),
-                  fontSize: 25)),
-          Spacer(),
-          Align(
-              alignment: Alignment.bottomRight,
-              child: ElevatedButton.icon(
-                  onPressed: () {},
-                  label: Text("Skip"),
-                  icon: Icon(Icons.arrow_forward_ios),
-                  iconAlignment: IconAlignment.end,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFFAA4E85),
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
-                  )))
+                  fontSize: 25),
+              textAlign: TextAlign.center),
+          Text("Your all good to go! Happy FNGRing!",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFFAA4E85),
+                  fontSize: 25),
+              textAlign: TextAlign.center),
+          ElevatedButton(
+              onPressed: () {},
+              child: Text("Save", style: TextStyle(fontSize: 20)),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFFAA4E85),
+                foregroundColor: Colors.white,
+                fixedSize: const Size(150, 50),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              )),
+          Text("You can update this info later",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFFAA4E85),
+                  fontSize: 15),
+              textAlign: TextAlign.center),
         ],
       ),
     );
