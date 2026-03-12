@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/text_input_widgets.dart';
+import './profile_photo_page.dart';
 
-//make elements on this page mandatory for an account when doing backend
-//the rest of elements on other pages can be skippable
 class ProfileBioPage extends StatelessWidget {
   final TextEditingController _bioController = TextEditingController();
 
@@ -40,7 +39,13 @@ class ProfileBioPage extends StatelessWidget {
             Align(
                 alignment: Alignment.bottomRight,
                 child: ElevatedButton.icon(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ProfilePhotoPage()),
+                      );
+                    },
                     label: Text("Skip"),
                     icon: Icon(Icons.arrow_forward_ios),
                     iconAlignment: IconAlignment.end,

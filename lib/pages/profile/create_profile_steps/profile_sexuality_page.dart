@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/multi_select_widget.dart';
+import './profile_bio_page.dart';
 
 class ProfileSexualityPage extends StatelessWidget {
   ProfileSexualityPage({
@@ -38,7 +39,13 @@ class ProfileSexualityPage extends StatelessWidget {
                 Align(
                     alignment: Alignment.bottomRight,
                     child: ElevatedButton.icon(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ProfileBioPage()),
+                          );
+                        },
                         label: Text("Skip"),
                         icon: Icon(Icons.arrow_forward_ios),
                         iconAlignment: IconAlignment.end,

@@ -17,15 +17,6 @@ class ProfileIntroPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        appBar: AppBar(
-          title: Text("Create Profile",
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.secondaryFixed)),
-          backgroundColor: Theme.of(context).colorScheme.secondary,
-          leading: BackButton(
-            color: Theme.of(context).colorScheme.secondaryFixed,
-          ),
-        ),
         body: Padding(
           padding: EdgeInsets.all(20),
           child: Column(

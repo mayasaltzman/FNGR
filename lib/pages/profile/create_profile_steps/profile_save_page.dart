@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './profile_save_page.dart';
 
 //make elements on this page mandatory for an account when doing backend
 //the rest of elements on other pages can be skippable
@@ -40,7 +41,13 @@ class ProfileSavePage extends StatelessWidget {
                       fontSize: 25),
                   textAlign: TextAlign.center),
               ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ProfileSavePage()),
+                    );
+                  },
                   child: Text("Save", style: TextStyle(fontSize: 20)),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFFAA4E85),

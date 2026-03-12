@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/multi_select_widget.dart';
+import './profile_save_page.dart';
 
 class ProfileAdditionalPage extends StatelessWidget {
   ProfileAdditionalPage({
@@ -45,7 +46,13 @@ class ProfileAdditionalPage extends StatelessWidget {
                 Align(
                     alignment: Alignment.bottomRight,
                     child: ElevatedButton.icon(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ProfileSavePage()),
+                          );
+                        },
                         label: Text("Skip"),
                         icon: Icon(Icons.arrow_forward_ios),
                         iconAlignment: IconAlignment.end,

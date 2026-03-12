@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../widgets/image_button_widget.dart';
 import 'dart:io';
+import './profile_additional_page.dart';
 
 //make elements on this page mandatory for an account when doing backend
 //the rest of elements on other pages can be skippable
@@ -109,7 +110,13 @@ class ProfilePhotoPage extends StatelessWidget {
               Align(
                   alignment: Alignment.bottomRight,
                   child: ElevatedButton.icon(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProfileAdditionalPage()),
+                        );
+                      },
                       label: Text("Skip"),
                       icon: Icon(Icons.arrow_forward_ios),
                       iconAlignment: IconAlignment.end,
