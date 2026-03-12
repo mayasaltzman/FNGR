@@ -5,6 +5,7 @@ import '../widgets/text_input_widgets.dart';
 //the rest of elements on other pages can be skippable
 class ProfileIntroPage extends StatelessWidget {
   final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
 
   ProfileIntroPage({
     super.key,
@@ -29,13 +30,24 @@ class ProfileIntroPage extends StatelessWidget {
               labelText: "Name",
               textType: "Your first name"),
           TextInputFieldBirthday(),
+          TextInputField(
+              controller: _locationController,
+              labelText: "Location",
+              textType: "Where are you from?"),
           Spacer(),
           Align(
               alignment: Alignment.bottomRight,
-              child: IconButton(
-                onPressed: () {}, //on submit we will send an alert asking are you sure birthday cannot be changed
-                icon: Icon(Icons.arrow_forward_ios), style: IconButton.styleFrom(foregroundColor: Theme.of(context).colorScheme.primaryFixed),
-              ))
+              child: ElevatedButton.icon(
+                  onPressed: () {},
+                  label: Text("Next"),
+                  icon: Icon(Icons.arrow_forward_ios),
+                  iconAlignment: IconAlignment.end,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFFAA4E85),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
+                  )))
         ],
       ),
     );

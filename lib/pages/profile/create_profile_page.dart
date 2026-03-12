@@ -378,7 +378,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Expanded(child: ProfileAdditionalPage())
+          Expanded(child: ProfileIntroPage())
           //ProfileIntroPage()
           //split here into two forms and render info depending on which state var
           /*
