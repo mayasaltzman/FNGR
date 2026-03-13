@@ -9,7 +9,7 @@ import 'pages/chat/chat_list_page.dart';
 import 'pages/auth/login_page.dart';
 import 'pages/profile/create_profile_page.dart';
 import 'pages/profile/edit_profile_page.dart';
-import 'pages/profile/widgets/select_menu_widget.dart';
+import 'pages/profile/widgets/multi_select_widget.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

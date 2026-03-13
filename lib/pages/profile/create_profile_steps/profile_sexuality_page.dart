@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/multi_select_widget.dart';
+import '../widgets/multi_select_menu_widget.dart';
 import './profile_bio_page.dart';
 import './styles/create_profile_styles.dart';
 
