@@ -11,7 +11,7 @@ import './widgets/text_input_widgets.dart';
 import './widgets/image_button_widget.dart';
 import '../../services/firebase_service.dart';
 import '../../services/storage_service.dart';
-import './select_page.dart';
+import 'widgets/select_menu_widget.dart';
 import './create_profile_steps/profile_intro_page.dart';
 import './create_profile_steps/profile_sexuality_page.dart';
 import './create_profile_steps/profile_photo_page.dart';

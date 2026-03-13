@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../profile/select_page.dart';
+import 'select_menu_widget.dart';
 import '../../../services/firebase_service.dart';
 
 class MultiSelect extends StatefulWidget {

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:test_milestone/pages/profile/create_profile_page.dart';
-import '../../services/firebase_service.dart';
+import '../../../services/firebase_service.dart';
 
 class SelectPage extends StatefulWidget {
   final String fieldType;
