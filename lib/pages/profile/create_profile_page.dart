@@ -6,7 +6,6 @@ import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:test_milestone/pages/profile/widgets/multi_select_widget.dart';
 import '../../main.dart';
-import 'widgets/multi_select_widget_OLD.dart';
 import './widgets/single_select_widget.dart';
 import './widgets/text_input_widgets.dart';
 import './widgets/image_button_widget.dart';

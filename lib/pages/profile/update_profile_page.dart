@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import './widgets/text_input_widgets.dart';
 import './widgets/single_select_widget.dart';
-import 'widgets/multi_select_widget_OLD.dart';
 import '../../services/firebase_service.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:image_picker/image_picker.dart';
@@ -236,20 +235,20 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                     ),
                   ]),
               TextInputFieldLong(controller: _bioController, bio: widget.bio),
-              MultiSelectDropdown(
-                  controller: sexualityController, labelText: "Sexuality"),
-              MultiSelectDropdown(
-                  controller: genderController, labelText: "Gender Identity"),
-              MultiSelectDropdown(
-                  controller: pronounController, labelText: "Pronouns"),
-              MultiSelectDropdown(
-                  controller: sexualPrefController,
-                  labelText: "Sexual Preferences"),
-              MultiSelectDropdown(
-                  controller: genderPresentationController,
-                  labelText: "Gender Presentation"),
-              MultiSelectDropdown(
-                  controller: interestsController, labelText: "Interests"),
+              // MultiSelectDropdown(
+              //     controller: sexualityController, labelText: "Sexuality"),
+              // MultiSelectDropdown(
+              //     controller: genderController, labelText: "Gender Identity"),
+              // MultiSelectDropdown(
+              //     controller: pronounController, labelText: "Pronouns"),
+              // MultiSelectDropdown(
+              //     controller: sexualPrefController,
+              //     labelText: "Sexual Preferences"),
+              // MultiSelectDropdown(
+              //     controller: genderPresentationController,
+              //     labelText: "Gender Presentation"),
+              // MultiSelectDropdown(
+              //     controller: interestsController, labelText: "Interests"),
               SingleSelectDropDown(
                 value: _relationshipStyle,
                 label: "Relationship Style",
