@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/multi_select_widget.dart';
 import './profile_save_page.dart';
+import './styles/create_profile_styles.dart';
 
 class ProfileAdditionalPage extends StatelessWidget {
   ProfileAdditionalPage({
@@ -30,17 +31,13 @@ class ProfileAdditionalPage extends StatelessWidget {
         ),
       ),
       body: Padding(
-          padding: EdgeInsets.all(20),
+          padding: EdgeInsets.all(ProfileStyles.formPadding),
           child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 10,
               children: [
-                Text("Almost there!",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFFAA4E85),
-                        fontSize: 25)),
+                Text("Almost there!", style: ProfileStyles.pageHeader(context)),
                 MultiSelect(fieldTypes: fieldTypes),
                 Spacer(),
                 Align(
@@ -56,12 +53,7 @@ class ProfileAdditionalPage extends StatelessWidget {
                         label: Text("Skip"),
                         icon: Icon(Icons.arrow_forward_ios),
                         iconAlignment: IconAlignment.end,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFFAA4E85),
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
-                        )))
+                        style: ProfileStyles.nextButton(context)))
               ])),
     );
   }

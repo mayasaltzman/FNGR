@@ -21,7 +21,7 @@ class ProfileIntroPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: 30,
+            spacing: ProfileStyles.spacing,
             children: [
               Text("Weclome! Why don't you introduce yourself 😊",
                   style: ProfileStyles.pageHeader(context)),

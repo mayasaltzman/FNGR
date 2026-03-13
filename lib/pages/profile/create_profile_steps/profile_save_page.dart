@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import './profile_save_page.dart';
+import './styles/create_profile_styles.dart';
 
-//make elements on this page mandatory for an account when doing backend
-//the rest of elements on other pages can be skippable
 class ProfileSavePage extends StatelessWidget {
   ProfileSavePage({
     super.key,
@@ -22,23 +21,17 @@ class ProfileSavePage extends StatelessWidget {
           ),
         ),
         body: Padding(
-          padding: EdgeInsets.all(20),
+          padding: EdgeInsets.all(ProfileStyles.formPadding),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             spacing: 20,
             children: [
               Text("Insert FNGR Logo/Animation Here",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFFAA4E85),
-                      fontSize: 25),
+                  style: ProfileStyles.pageHeader(context),
                   textAlign: TextAlign.center),
               Text("Your all good to go! Happy FNGRing!",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFFAA4E85),
-                      fontSize: 25),
+                  style: ProfileStyles.pageHeader(context),
                   textAlign: TextAlign.center),
               ElevatedButton(
                   onPressed: () {
@@ -49,18 +42,9 @@ class ProfileSavePage extends StatelessWidget {
                     );
                   },
                   child: Text("Save", style: TextStyle(fontSize: 20)),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFFAA4E85),
-                    foregroundColor: Colors.white,
-                    fixedSize: const Size(150, 50),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
-                  )),
+                  style: ProfileStyles.saveButton(context)),
               Text("You can update this info later",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFFAA4E85),
-                      fontSize: 15),
+                  style: ProfileStyles.subText(context),
                   textAlign: TextAlign.center),
             ],
           ),

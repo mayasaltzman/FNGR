@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/text_input_widgets.dart';
 import './profile_photo_page.dart';
+import './styles/create_profile_styles.dart';
 
 class ProfileBioPage extends StatelessWidget {
   final TextEditingController _bioController = TextEditingController();
@@ -23,17 +24,14 @@ class ProfileBioPage extends StatelessWidget {
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.all(ProfileStyles.formPadding),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 30,
+          spacing: ProfileStyles.spacing,
           children: [
             Text("Add a quick description about yourself:",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFFAA4E85),
-                    fontSize: 25)),
+                style: ProfileStyles.pageHeader(context)),
             TextInputFieldLong(controller: _bioController),
             Spacer(),
             Align(
@@ -49,12 +47,7 @@ class ProfileBioPage extends StatelessWidget {
                     label: Text("Skip"),
                     icon: Icon(Icons.arrow_forward_ios),
                     iconAlignment: IconAlignment.end,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFAA4E85),
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                    )))
+                    style: ProfileStyles.nextButton(context)))
           ],
         ),
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/multi_select_widget.dart';
 import './profile_bio_page.dart';
+import './styles/create_profile_styles.dart';
 
 class ProfileSexualityPage extends StatelessWidget {
   ProfileSexualityPage({
@@ -22,7 +23,7 @@ class ProfileSexualityPage extends StatelessWidget {
         ),
       ),
       body: Padding(
-          padding: EdgeInsets.all(20),
+          padding: EdgeInsets.all(ProfileStyles.formPadding),
           child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -30,31 +31,24 @@ class ProfileSexualityPage extends StatelessWidget {
               children: [
                 Text(
                     "Lets get a bit more information to help build your profile!",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFFAA4E85),
-                        fontSize: 25)),
+                    style: ProfileStyles.pageHeader(context)),
                 MultiSelect(fieldTypes: fieldTypes),
                 Spacer(),
                 Align(
                     alignment: Alignment.bottomRight,
                     child: ElevatedButton.icon(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ProfileBioPage()),
-                          );
-                        },
-                        label: Text("Skip"),
-                        icon: Icon(Icons.arrow_forward_ios),
-                        iconAlignment: IconAlignment.end,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFFAA4E85),
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
-                        )))
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProfileBioPage()),
+                        );
+                      },
+                      label: Text("Skip"),
+                      icon: Icon(Icons.arrow_forward_ios),
+                      iconAlignment: IconAlignment.end,
+                      style: ProfileStyles.nextButton(context),
+                    ))
               ])),
     );
   }
