@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-//styles for profile page
-abstract class ProfileStyles {
+// //styles for profile page
+abstract class Styles {
   static const formWidth = 375.0;
   static const textInputWidth = 250.0;
 
@@ -37,7 +37,7 @@ class TextInputField extends StatelessWidget {
       SizedBox(
         child: Text(
           textType,
-          style: ProfileStyles.inputHeader,
+          style: Styles.inputHeader,
           softWrap: true,
         ),
       ),
@@ -91,7 +91,7 @@ class TextInputFieldLong extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("About me", style: ProfileStyles.inputHeader),
+        Text("About me", style: Styles.inputHeader),
         SizedBox(
           width: 400,
           child: ValueListenableBuilder<TextEditingValue>(
@@ -146,7 +146,7 @@ class TextInputFieldBirthday extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text("Your birthday: DD-MM-YYYY", style: ProfileStyles.inputHeader),
+      Text("Your birthday: DD-MM-YYYY", style: Styles.inputHeader),
       Row(
         spacing: 10,
         children: [

@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import '../widgets/text_input_widgets.dart';
 import 'dart:io';
 import './profile_sexuality_page.dart';
+import './styles/create_profile_styles.dart';
 
-//make elements on this page mandatory for an account when doing backend
-//the rest of elements on other pages can be skippable
 class ProfileIntroPage extends StatelessWidget {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
@@ -18,17 +17,14 @@ class ProfileIntroPage extends StatelessWidget {
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.primary,
         body: Padding(
-          padding: EdgeInsets.all(20),
+          padding: EdgeInsets.all(ProfileStyles.formPadding),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 30,
             children: [
-              Text("Weclome! Why don't you introduce yourself 😊:",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFFAA4E85),
-                      fontSize: 25)),
+              Text("Weclome! Why don't you introduce yourself 😊",
+                  style: ProfileStyles.pageHeader(context)),
               TextInputField(
                   controller: _nameController,
                   labelText: "Name",
@@ -52,12 +48,7 @@ class ProfileIntroPage extends StatelessWidget {
                       label: Text("Next"),
                       icon: Icon(Icons.arrow_forward_ios),
                       iconAlignment: IconAlignment.end,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFFAA4E85),
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10),
-                      )))
+                      style: ProfileStyles.nextButton(context)))
             ],
           ),
         ));
