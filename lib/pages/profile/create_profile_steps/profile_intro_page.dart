@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import '../widgets/text_input_widgets.dart';
+import 'dart:io';
+import './profile_sexuality_page.dart';
+import './styles/create_profile_styles.dart';
 
 class ProfileIntroPage extends StatelessWidget {
   final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
 
   ProfileIntroPage({
     super.key,
@@ -10,32 +14,43 @@ class ProfileIntroPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(20),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: 30,
-        children: [
-          Text("Weclome! Why don't you introduce yourself",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFFAA4E85),
-                  fontSize: 25)),
-          TextInputField(
-              controller: _nameController,
-              labelText: "Name",
-              textType: "Your first name"),
-          TextInputFieldBirthday(),
-          Spacer(),
-          Align(
-              alignment: Alignment.bottomRight,
-              child: IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.arrow_forward_ios),
-              ))
-        ],
-      ),
-    );
+    return Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        body: Padding(
+          padding: EdgeInsets.all(ProfileStyles.formPadding),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: ProfileStyles.spacing,
+            children: [
+              Text("Weclome! Why don't you introduce yourself 😊",
+                  style: ProfileStyles.pageHeader(context)),
+              TextInputField(
+                  controller: _nameController,
+                  labelText: "Name",
+                  textType: "Your first name"),
+              TextInputFieldBirthday(),
+              TextInputField(
+                  controller: _locationController,
+                  labelText: "Location",
+                  textType: "Where are you from?"),
+              Spacer(),
+              Align(
+                  alignment: Alignment.bottomRight,
+                  child: ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProfileSexualityPage()),
+                        );
+                      },
+                      label: Text("Next"),
+                      icon: Icon(Icons.arrow_forward_ios),
+                      iconAlignment: IconAlignment.end,
+                      style: ProfileStyles.nextButton(context)))
+            ],
+          ),
+        ));
   }
 }

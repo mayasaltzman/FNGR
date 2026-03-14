@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import './widgets/text_input_widgets.dart';
 import './widgets/single_select_widget.dart';
-import 'widgets/multi_select_widget_OLD.dart';
 import '../../services/firebase_service.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:image_picker/image_picker.dart';
@@ -209,22 +208,16 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                   children: [
                     ImageButton(
                         image: _selectedImages[0],
-                        width: 200,
-                        height: 400,
                         onTap: () => _pickImage(0)),
                     const SizedBox(width: 5),
                     Column(
                       children: [
                         ImageButton(
                             image: _selectedImages[1],
-                            width: 80,
-                            height: 190,
                             onTap: () => _pickImage(1)),
                         const SizedBox(height: 10),
                         ImageButton(
                             image: _selectedImages[2],
-                            width: 80,
-                            height: 190,
                             onTap: () => _pickImage(2)),
                       ],
                     ),
@@ -233,33 +226,29 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                       children: [
                         ImageButton(
                             image: _selectedImages[3],
-                            width: 80,
-                            height: 190,
                             onTap: () => _pickImage(3)),
                         const SizedBox(height: 10),
                         ImageButton(
                             image: _selectedImages[4],
-                            width: 80,
-                            height: 190,
                             onTap: () => _pickImage(4)),
                       ],
                     ),
                   ]),
               TextInputFieldLong(controller: _bioController, bio: widget.bio),
-              MultiSelectDropdown(
-                  controller: sexualityController, labelText: "Sexuality"),
-              MultiSelectDropdown(
-                  controller: genderController, labelText: "Gender Identity"),
-              MultiSelectDropdown(
-                  controller: pronounController, labelText: "Pronouns"),
-              MultiSelectDropdown(
-                  controller: sexualPrefController,
-                  labelText: "Sexual Preferences"),
-              MultiSelectDropdown(
-                  controller: genderPresentationController,
-                  labelText: "Gender Presentation"),
-              MultiSelectDropdown(
-                  controller: interestsController, labelText: "Interests"),
+              // MultiSelectDropdown(
+              //     controller: sexualityController, labelText: "Sexuality"),
+              // MultiSelectDropdown(
+              //     controller: genderController, labelText: "Gender Identity"),
+              // MultiSelectDropdown(
+              //     controller: pronounController, labelText: "Pronouns"),
+              // MultiSelectDropdown(
+              //     controller: sexualPrefController,
+              //     labelText: "Sexual Preferences"),
+              // MultiSelectDropdown(
+              //     controller: genderPresentationController,
+              //     labelText: "Gender Presentation"),
+              // MultiSelectDropdown(
+              //     controller: interestsController, labelText: "Interests"),
               SingleSelectDropDown(
                 value: _relationshipStyle,
                 label: "Relationship Style",

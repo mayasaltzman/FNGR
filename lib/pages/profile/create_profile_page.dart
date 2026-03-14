@@ -4,16 +4,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:test_milestone/pages/profile/widgets/multi_select_widget.dart';
+import 'package:test_milestone/pages/profile/widgets/multi_select_menu_widget.dart';
 import '../../main.dart';
-import 'widgets/multi_select_widget_OLD.dart';
 import './widgets/single_select_widget.dart';
 import './widgets/text_input_widgets.dart';
 import './widgets/image_button_widget.dart';
 import '../../services/firebase_service.dart';
 import '../../services/storage_service.dart';
-import './select_page.dart';
+import 'widgets/multi_select_widget.dart';
 import './create_profile_steps/profile_intro_page.dart';
+import './create_profile_steps/profile_sexuality_page.dart';
+import './create_profile_steps/profile_photo_page.dart';
+import './create_profile_steps/profile_bio_page.dart';
+import './create_profile_steps/profile_additional_page.dart';
+import './create_profile_steps/profile_save_page.dart';
 
 /* CURRENT TO DO
 1 - reorganize this form shit cause I hate it
@@ -241,106 +245,6 @@ class _ProfileFormState extends State<ProfileForm> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    // if (widget.formState == 0) {
-    //   keyInfo = true;
-    //   additionalInfo = false;
-    // } else {
-    //   additionalInfo = true;
-    //   keyInfo = false;
-    // }
-
-    return (SizedBox(
-        width: ProfileStyles.formWidth,
-        child: Form(
-            key: _formKey,
-            child: Column(
-              spacing: 15,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-
-                /*
-                if (keyInfo) ...[
-                  Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ImageButton(
-                            image: _selectedImages[0],
-                            width: 200,
-                            height: 400,
-                            onTap: () => _pickImage(0)),
-                        const SizedBox(width: 5),
-                        Column(
-                          children: [
-                            ImageButton(
-                                image: _selectedImages[1],
-                                width: 80,
-                                height: 190,
-                                onTap: () => _pickImage(1)),
-                            const SizedBox(height: 10),
-                            ImageButton(
-                                image: _selectedImages[2],
-                                width: 80,
-                                height: 190,
-                                onTap: () => _pickImage(2)),
-                          ],
-                        ),
-                        const SizedBox(width: 5),
-                        Column(
-                          children: [
-                            ImageButton(
-                                image: _selectedImages[3],
-                                width: 80,
-                                height: 190,
-                                onTap: () => _pickImage(3)),
-                            const SizedBox(height: 10),
-                            ImageButton(
-                                image: _selectedImages[4],
-                                width: 80,
-                                height: 190,
-                                onTap: () => _pickImage(4)),
-                          ],
-                        ),
-                      ]),
-                  TextInputField(
-                      controller: _nameController,
-                      labelText: "Name",
-                      textType: "Name"),
-                  TextInputField(
-                      controller: _ageController,
-                      labelText: "Age",
-                      textType: "Age"),
-                  TextInputFieldLong(controller: _bioController),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: ElevatedButton(
-                        onPressed: _updateFormStep,
-                        style: ProfileStyles.button,
-                        child: const Text("Next")),
-                  )
-                ],
-                if (additionalInfo) ...[
-                  MultiSelect(),
-                  const SizedBox(height: 10),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ElevatedButton(
-                            onPressed: _updateFormStep,
-                            style: ProfileStyles.button,
-                            child: const Text("Previous")),
-                        ElevatedButton(
-                            onPressed: _submitForm,
-                            style: ProfileStyles.button,
-                            child: const Text("Finish"))
-                      ]),
-                ]
-                */
-              ],
-            ))));
-  }
 }
 */
 

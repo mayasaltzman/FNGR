@@ -1,21 +1,5 @@
 import 'package:flutter/material.dart';
-
-//styles for profile page
-abstract class ProfileStyles {
-  static const formWidth = 375.0;
-  static const textInputWidth = 250.0;
-
-  static TextStyle inputHeader = const TextStyle(
-      fontWeight: FontWeight.bold, color: Color(0xFFAA4E85), fontSize: 18);
-
-  static final ButtonStyle button = ElevatedButton.styleFrom(
-    backgroundColor: const Color(0xFFD461A6),
-    fixedSize: const Size(110, 50),
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(Radius.circular(12)),
-    ),
-  );
-}
+import '../create_profile_steps/styles/create_profile_styles.dart';
 
 class TextInputField extends StatelessWidget {
   final TextEditingController controller;
@@ -37,7 +21,7 @@ class TextInputField extends StatelessWidget {
       SizedBox(
         child: Text(
           textType,
-          style: ProfileStyles.inputHeader,
+          style: ProfileStyles.inputHeader(context),
           softWrap: true,
         ),
       ),
@@ -46,26 +30,8 @@ class TextInputField extends StatelessWidget {
           height: 50,
           child: TextFormField(
             controller: controller,
-            style: TextStyle(
-                color: Theme.of(context).colorScheme.primaryFixed,
-                fontSize: 16),
-            decoration: InputDecoration(
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide:
-                      BorderSide(color: Theme.of(context).colorScheme.primaryFixed),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.primaryFixed, width: 2),
-                ),
-                filled: true,
-                fillColor: Theme.of(context).colorScheme.primary,
-                //labelText: labelText,
-                labelStyle: TextStyle(
-                    color: Theme.of(context).colorScheme.primaryFixed,
-                    fontSize: 16)),
+            style: ProfileStyles.inputText(context),
+            decoration: ProfileStyles.inputDecoration(context),
             validator: validator,
           ))
     ]);
@@ -84,42 +50,34 @@ class TextInputFieldLong extends StatelessWidget {
     this.bio,
   });
 
+  final int maxChars = 200;
   @override
   Widget build(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text("About me", style: ProfileStyles.inputHeader),
-      const SizedBox(height: 15),
-      SizedBox(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("About me", style: ProfileStyles.inputHeader(context)),
+        SizedBox(
           width: 400,
-          child: TextFormField(
-            controller: controller,
-            keyboardType: TextInputType.multiline,
-            minLines: 3,
-            maxLines: null,
-            style: TextStyle(
-                color: Theme.of(context).colorScheme.primaryFixed,
-                fontSize: 16),
-            decoration: InputDecoration(
-              labelText: bio,
-              labelStyle: TextStyle(
-                  color: Theme.of(context).colorScheme.primaryFixed,
-                  fontSize: 16),
-              floatingLabelBehavior: FloatingLabelBehavior.never,
-              filled: true,
-              fillColor: Theme.of(context).colorScheme.tertiaryContainer,
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide:
-                    BorderSide(color: Theme.of(context).colorScheme.tertiary),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.tertiary, width: 2),
-              ),
-            ),
-          ))
-    ]);
+          child: ValueListenableBuilder<TextEditingValue>(
+            valueListenable: controller,
+            builder: (context, value, child) {
+              final remaining = maxChars - value.text.length;
+
+              return TextFormField(
+                controller: controller,
+                keyboardType: TextInputType.multiline,
+                minLines: 5,
+                maxLines: 20,
+                maxLength: maxChars,
+                style: ProfileStyles.inputText(context),
+                decoration: ProfileStyles.bioInputDecoration(context, bio, remaining),
+              );
+            },
+          ),
+        ),
+      ],
+    );
   }
 }
 
@@ -127,138 +85,51 @@ class TextInputFieldBirthday extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text("Your birthday", style: ProfileStyles.inputHeader),
+      Text("Your birthday: DD-MM-YYYY",
+          style: ProfileStyles.inputHeader(context)),
       Row(
         spacing: 10,
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Day",
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.primaryFixed)),
+              Text("Day", style: ProfileStyles.inputText(context)),
               SizedBox(
                   width: 80,
                   height: 50,
                   child: TextFormField(
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.primaryFixed,
-                          fontSize: 16),
-                      decoration: InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            borderSide: BorderSide(
-                                color: Theme.of(context).colorScheme.tertiary),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            borderSide: BorderSide(
-                                color: Theme.of(context).colorScheme.tertiary,
-                                width: 2),
-                          ),
-                          filled: true,
-                          fillColor:
-                              Theme.of(context).colorScheme.tertiaryContainer,
-                          labelStyle: TextStyle(
-                              color: Theme.of(context).colorScheme.primaryFixed,
-                              fontSize: 16))))
+                      style: ProfileStyles.inputText(context),
+                      decoration: ProfileStyles.inputDecoration(context)))
             ],
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Month",
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.primaryFixed)),
+              Text("Month", style: ProfileStyles.inputText(context)),
               SizedBox(
                   width: 80,
                   height: 50,
                   child: TextFormField(
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.primaryFixed,
-                          fontSize: 16),
-                      decoration: InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            borderSide: BorderSide(
-                                color: Theme.of(context).colorScheme.tertiary),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            borderSide: BorderSide(
-                                color: Theme.of(context).colorScheme.tertiary,
-                                width: 2),
-                          ),
-                          filled: true,
-                          fillColor:
-                              Theme.of(context).colorScheme.tertiaryContainer,
-                          labelStyle: TextStyle(
-                              color: Theme.of(context).colorScheme.primaryFixed,
-                              fontSize: 16))))
+                      style: ProfileStyles.inputText(context),
+                      decoration: ProfileStyles.inputDecoration(context)))
             ],
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Year",
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.primaryFixed)),
+              Text("Year", style: ProfileStyles.inputText(context)),
               SizedBox(
-                  width: 150,
+                  width: 190,
                   height: 50,
                   child: TextFormField(
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.primaryFixed,
-                          fontSize: 16),
-                      decoration: InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            borderSide: BorderSide(
-                                color: Theme.of(context).colorScheme.tertiary),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            borderSide: BorderSide(
-                                color: Theme.of(context).colorScheme.tertiary,
-                                width: 2),
-                          ),
-                          filled: true,
-                          fillColor:
-                              Theme.of(context).colorScheme.tertiaryContainer,
-                          labelStyle: TextStyle(
-                              color: Theme.of(context).colorScheme.primaryFixed,
-                              fontSize: 16))))
+                      style: ProfileStyles.inputText(context),
+                      decoration: ProfileStyles.inputDecoration(context)))
             ],
-          )
+          ),
         ],
-      )
+      ),
+      Text("You cannot update your birthday later",
+          style: ProfileStyles.inputText(context))
     ]);
-    /*
-    Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      SizedBox(
-          height: 50,
-          child: TextFormField(
-            style: TextStyle(
-                color: Theme.of(context).colorScheme.primaryFixed,
-                fontSize: 16),
-            decoration: InputDecoration(
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide:
-                      BorderSide(color: Theme.of(context).colorScheme.tertiary),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.tertiary, width: 2),
-                ),
-                filled: true,
-                fillColor: Theme.of(context).colorScheme.tertiaryContainer,
-                labelStyle: TextStyle(
-                    color: Theme.of(context).colorScheme.primaryFixed,
-                    fontSize: 16)),
-          ))
-    ]);
-    */
   }
 }

@@ -9,7 +9,7 @@ import 'pages/chat/chat_list_page.dart';
 import 'pages/auth/login_page.dart';
 import 'pages/profile/create_profile_page.dart';
 import 'pages/profile/edit_profile_page.dart';
-import 'pages/profile/select_page.dart';
+import 'pages/profile/widgets/multi_select_widget.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,9 +30,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           fontFamily: "Gilroy-bold",
           colorScheme: const ColorScheme.light(
-              primary: Color(0xFFFBEFF6), //app background
+              primary: Color(0xFFFAF5F8), //app background
               primaryContainer:
-                  Color(0xFFF9E7F2), //to distinguish from background
+                  Color.fromARGB(255, 249, 237, 245), //to distinguish from background
               primaryFixed: Color(0xFFAA4E85), //pink dark text
               secondary: Color(0xFFD461A6), //header color
               secondaryFixed: Color(0xFFFFFFFF), //white
@@ -50,12 +50,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       // home: const HomePage(),
 
-      //home: const LoginPage(),
+      home: const LoginPage(),
 
       //home: const LoginPage(),
       //home: const EditProfilePage(userId: "1a4dZXRtA80tkguo1REw"),
       //home: const SelectPage(fieldType: 'Sexuality'),
-      home: const CreateProfilePage(),
+      //home: const CreateProfilePage(),
     );
   }
 }
