@@ -50,12 +50,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       // home: const HomePage(),
 
-      //home: const LoginPage(),
+      home: const LoginPage(),
 
       //home: const LoginPage(),
       //home: const EditProfilePage(userId: "1a4dZXRtA80tkguo1REw"),
       //home: const SelectPage(fieldType: 'Sexuality'),
-      home: const CreateProfilePage(),
+      //home: const CreateProfilePage(),
     );
   }
 }
