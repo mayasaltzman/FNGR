@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import './profile_save_page.dart';
 import './styles/create_profile_styles.dart';
+import '../../../main.dart';
 
 class ProfileSavePage extends StatelessWidget {
   ProfileSavePage({
@@ -35,11 +36,9 @@ class ProfileSavePage extends StatelessWidget {
                   textAlign: TextAlign.center),
               ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ProfileSavePage()),
-                    );
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (context) => NavMenu()),
+                        (route) => false);
                   },
                   child: Text("Save", style: TextStyle(fontSize: 20)),
                   style: ProfileStyles.saveButton(context)),

@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
           colorScheme: const ColorScheme.light(
               primary: Color(0xFFFAF5F8), //app background
               primaryContainer:
-                  Color(0xFFF9E7F2), //to distinguish from background
+                  Color.fromARGB(255, 249, 237, 245), //to distinguish from background
               primaryFixed: Color(0xFFAA4E85), //pink dark text
               secondary: Color(0xFFD461A6), //header color
               secondaryFixed: Color(0xFFFFFFFF), //white
