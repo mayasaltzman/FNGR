@@ -44,13 +44,6 @@ abstract class LogInStyles {
         fontSize: 16);
   }
 
-  static TextStyle boxText(BuildContext context) {
-    return TextStyle(
-        fontWeight: FontWeight.w200,
-        color: Theme.of(context).colorScheme.primaryFixed,
-        fontSize: 16);
-  }
-
   static TextStyle buttonText(BuildContext context) {
     return TextStyle(
         fontWeight: FontWeight.w900,
@@ -156,11 +149,11 @@ class _LoginState extends State<LoginPage> {
                 width: LogInStyles.containerWidth,
                 child: TextField(
                   controller: _emailController,
-                  style: LogInStyles.boxText(context),
+                  style: LogInStyles.instructionText(context),
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: 'Enter your email',
-                    hintStyle: LogInStyles.boxText(context),
+                    hintStyle: LogInStyles.instructionText(context),
                   ),
                 ),
               ),
@@ -180,12 +173,12 @@ class _LoginState extends State<LoginPage> {
                 width: LogInStyles.containerWidth,
                 child: TextField(
                   controller: _passwordController,
-                  style: LogInStyles.boxText(context),
+                  style: LogInStyles.instructionText(context),
                   obscureText: true,
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: 'Enter your password',
-                    hintStyle: LogInStyles.boxText(context),
+                    hintStyle: LogInStyles.instructionText(context),
                   ),
                 ),
               ),
