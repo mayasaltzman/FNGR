@@ -143,13 +143,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
   @override
   Widget build(BuildContext context) {
     final isUserProfile = userId == _firebaseService.currentUserId;
-    print(userId);
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.primary,
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.secondary,
-          //leading: //!isUserProfile
-          //? null
           leading: BackButton(
             color: Theme.of(context).colorScheme.secondaryFixed,
           ),
