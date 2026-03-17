@@ -314,7 +314,6 @@ class KeyInfo extends StatelessWidget {
   }
 }
 
-//sexual preferences and interests field box
 class FieldsBox extends StatelessWidget {
   final List<dynamic> items;
   final String label;
@@ -324,6 +323,10 @@ class FieldsBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (items.isEmpty) return const SizedBox();
+
+    // Convert list to comma-separated string
+    final String formattedItems = items.join(', ');
+
     return Container(
       width: ProfileStyles.containerWidth,
       decoration: ProfileStyles.boxDecoration(context),
@@ -331,28 +334,18 @@ class FieldsBox extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            child: Column(
-              children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    label,
-                    style: ProfileStyles.boxHeader(context),
-                  ),
-                ),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ...items.map((i) => Container(
-                          alignment: Alignment.center,
-                          width: 75,
-                          decoration: ProfileStyles.itemBoxDecoration,
-                          child: Text(i, style: ProfileStyles.boxText(context))))
-                    ]),
-              ],
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              label,
+              style: ProfileStyles.boxHeader(context),
             ),
-          )
+          ),
+          const SizedBox(height: 8),
+          Text(
+            formattedItems,
+            style: ProfileStyles.boxText(context),
+          ),
         ],
       ),
     );

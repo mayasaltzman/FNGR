@@ -14,15 +14,6 @@ abstract class ProfileStyles {
         ));
   }
 
-  //styles for boxes that are individual items in sexual preferences and interests
-  static BoxDecoration itemBoxDecoration = BoxDecoration(
-      color: const Color(0xFFF9E7F2),
-      borderRadius: BorderRadius.circular(15.0),
-      border: Border.all(
-        color: const Color(0xFFAA4E85),
-        width: 1,
-      ));
-
   //text styles for headings in boxes
   static TextStyle boxHeader(BuildContext context) {
     return TextStyle(
