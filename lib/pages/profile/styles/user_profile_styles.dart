@@ -3,13 +3,16 @@ import 'package:flutter/material.dart';
 //styles for the page
 abstract class ProfileStyles {
   //styles for boxes that store profile info
-  static BoxDecoration boxDecoration = BoxDecoration(
-      color: const Color(0xFFFFF0E6),
-      borderRadius: BorderRadius.circular(15.0),
-      border: Border.all(
-        color: const Color(0xFFFF9B55),
-        width: 1,
-      ));
+
+  static BoxDecoration boxDecoration(BuildContext context) {
+    return BoxDecoration(
+        color: Theme.of(context).colorScheme.primaryContainer,
+        borderRadius: BorderRadius.circular(15.0),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.primaryFixed,
+          width: 1,
+        ));
+  }
 
   //styles for boxes that are individual items in sexual preferences and interests
   static BoxDecoration itemBoxDecoration = BoxDecoration(
@@ -21,12 +24,19 @@ abstract class ProfileStyles {
       ));
 
   //text styles for headings in boxes
-  static TextStyle boxHeader = const TextStyle(
-      fontWeight: FontWeight.bold, color: Color(0xFFFF9B55), fontSize: 16);
+  static TextStyle boxHeader(BuildContext context) {
+    return TextStyle(
+        fontWeight: FontWeight.bold,
+        color: Theme.of(context).colorScheme.primaryFixed,
+        fontSize: 16);
+  }
 
-  //text styles for text in boxes
-  static TextStyle boxText = const TextStyle(
-      fontWeight: FontWeight.normal, color: Color(0xFFAA4E85), fontSize: 16);
+  static TextStyle boxText(BuildContext context) {
+    return TextStyle(
+        fontWeight: FontWeight.normal,
+        color: Theme.of(context).colorScheme.primaryFixed,
+        fontSize: 16);
+  }
 
   static const containerWidth = 375.0;
 

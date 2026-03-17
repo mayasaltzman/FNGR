@@ -1,38 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../chat/message_page.dart';
+import '../styles/user_profile_styles.dart';
 
-//styles for the page
-abstract class ProfileStyles {
-  //styles for boxes that store profile info
-  static BoxDecoration boxDecoration = BoxDecoration(
-      color: const Color(0xFFFFF0E6),
-      borderRadius: BorderRadius.circular(15.0),
-      border: Border.all(
-        color: const Color(0xFFFF9B55),
-        width: 1,
-      ));
-
-  //styles for boxes that are individual items in sexual preferences and interests
-  static BoxDecoration itemBoxDecoration = BoxDecoration(
-      color: const Color(0xFFF9E7F2),
-      borderRadius: BorderRadius.circular(15.0),
-      border: Border.all(
-        color: const Color(0xFFAA4E85),
-        width: 1,
-      ));
-
-  //text styles for headings in boxes
-  static TextStyle boxHeader = const TextStyle(
-      fontWeight: FontWeight.bold, color: Color(0xFFFF9B55), fontSize: 16);
-
-  //text styles for text in boxes
-  static TextStyle boxText = const TextStyle(
-      fontWeight: FontWeight.normal, color: Color(0xFFAA4E85), fontSize: 16);
-
-  static const containerWidth = 375.0;
-
-  static const boxPadding = EdgeInsets.all(8.0);
-}
 
 class HeaderElements extends StatelessWidget {
   final String name;
@@ -69,7 +38,7 @@ class HeaderElements extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.tertiary,
+                      color: Theme.of(context).colorScheme.primaryFixed,
                     ),
                   ),
                 ),
@@ -133,7 +102,7 @@ class _ProfileImageState extends State<ProfileImage> {
     return Container(
       height: 500,
       width: ProfileStyles.containerWidth,
-      decoration: ProfileStyles.boxDecoration,
+      decoration: ProfileStyles.boxDecoration(context),
       clipBehavior: Clip.hardEdge,
       child: hasCarousel
           ? Column(
@@ -196,13 +165,13 @@ class AboutMe extends StatelessWidget {
     return bio != ""
         ? Container(
             width: ProfileStyles.containerWidth,
-            decoration: ProfileStyles.boxDecoration,
+            decoration: ProfileStyles.boxDecoration(context),
             padding: ProfileStyles.boxPadding,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("About Me", style: ProfileStyles.boxHeader),
-                Text(bio, style: ProfileStyles.boxText)
+                Text("About Me", style: ProfileStyles.boxHeader(context)),
+                Text(bio, style: ProfileStyles.boxText(context))
               ],
             ),
           )
@@ -284,7 +253,7 @@ class KeyInfo extends StatelessWidget {
 
     return Container(
       width: ProfileStyles.containerWidth,
-      decoration: ProfileStyles.boxDecoration,
+      decoration: ProfileStyles.boxDecoration(context),
       padding: ProfileStyles.boxPadding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -293,7 +262,7 @@ class KeyInfo extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Text(
               "Key Info",
-              style: ProfileStyles.boxHeader,
+              style: ProfileStyles.boxHeader(context),
             ),
           ),
           const SizedBox(height: 8),
@@ -319,7 +288,7 @@ class KeyInfo extends StatelessWidget {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  //Text(field['label'] ?? '', style: ProfileStyles.boxText),
+                  //Text(field['label'] ?? '', style: ProfileStyles.boxText(context)),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     spacing: 10,
@@ -328,7 +297,7 @@ class KeyInfo extends StatelessWidget {
                       Flexible(
                         child: Text(
                           field['value'],
-                          style: ProfileStyles.boxText,
+                          style: ProfileStyles.boxText(context),
                           textAlign: TextAlign.right,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -357,7 +326,7 @@ class FieldsBox extends StatelessWidget {
     if (items.isEmpty) return const SizedBox();
     return Container(
       width: ProfileStyles.containerWidth,
-      decoration: ProfileStyles.boxDecoration,
+      decoration: ProfileStyles.boxDecoration(context),
       padding: ProfileStyles.boxPadding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -369,7 +338,7 @@ class FieldsBox extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     label,
-                    style: ProfileStyles.boxHeader,
+                    style: ProfileStyles.boxHeader(context),
                   ),
                 ),
                 Row(
@@ -379,7 +348,7 @@ class FieldsBox extends StatelessWidget {
                           alignment: Alignment.center,
                           width: 75,
                           decoration: ProfileStyles.itemBoxDecoration,
-                          child: Text(i, style: ProfileStyles.boxText)))
+                          child: Text(i, style: ProfileStyles.boxText(context))))
                     ]),
               ],
             ),
