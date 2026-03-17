@@ -33,8 +33,9 @@ class _LoginState extends State<LoginPage> {
         password: _passwordController.text.trim(),
       );
       if (mounted) {
-        Navigator.of(context).pushReplacement(
+        Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => NavMenu()),
+          (Route<dynamic> route) => false,
         );
       }
     } catch (e) {
