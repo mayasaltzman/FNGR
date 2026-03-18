@@ -52,14 +52,14 @@ class _MessagePageState extends State<MessagePage> {
                       ? NetworkImage(widget.recipientImage)
                       : null,
                   child: widget.recipientImage.isEmpty
-                      ? const Icon(Icons.person)
+                      ? Icon(Icons.person, color: Theme.of(context).colorScheme.secondary)
                       : null,
                 )),
             Text(
               widget.recipientName,
               style: TextStyle(
                 fontSize: 12,
-                color: Theme.of(context).colorScheme.secondaryFixed,
+                color: Theme.of(context).colorScheme.primaryContainer,
               ),
             )
           ],

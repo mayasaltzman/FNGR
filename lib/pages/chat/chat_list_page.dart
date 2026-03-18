@@ -27,7 +27,10 @@ class _ChatListState extends State<ChatList> {
           return const Center(child: CircularProgressIndicator());
         }
         if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-          return const Center(child: Text("No chats available"));
+          return Center(
+              child: Text("No chats available",
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.primaryFixed)));
         }
         final chats = snapshot.data!.docs.where((chatDoc) {
           final chatData = chatDoc.data() as Map<String, dynamic>;
@@ -74,7 +77,7 @@ class _ChatListState extends State<ChatList> {
                   final lastMessage = chatData['lastMessage'] ?? '';
                   final userPhoto = userData['photoURL'] ?? '';
 
-                  //icon not rendering 
+                  //icon not rendering its working on individual message page so check it out
                   return ListTile(
                     leading: CircleAvatar(
                       backgroundColor:
@@ -144,6 +147,9 @@ class _ChatListPageState extends State<ChatListPage> {
                 },
                 child: const Text("Message Requests"))
           ],
+          title: Text("Chats",
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondaryFixed)),
         ),
         body: SingleChildScrollView(
             child: Center(
