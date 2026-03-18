@@ -220,8 +220,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
                           : null,
                       bottom: isUserProfile
                           ? TabBar(
+                              dividerColor: Theme.of(context).colorScheme.secondaryFixed,
+                              labelColor: Theme.of(context).colorScheme.secondaryFixed,
+                              unselectedLabelColor: Theme.of(context).colorScheme.secondaryFixed,
                               tabs: [
-                                Tab(text: "Edit"),
+                                Tab(text: "Edit",),
                                 Tab(text: "View"),
                               ],
                             )

@@ -31,7 +31,10 @@ class TextInputField extends StatelessWidget {
           child: TextFormField(
             controller: controller,
             style: ProfileStyles.inputText(context),
-            decoration: ProfileStyles.inputDecoration(context),
+            decoration: ProfileStyles.inputDecoration(context).copyWith(
+                hintText: labelText,
+                hintStyle: TextStyle(
+                    color: Theme.of(context).colorScheme.primaryFixed)),
             validator: validator,
           ))
     ]);
@@ -71,7 +74,12 @@ class TextInputFieldLong extends StatelessWidget {
                 maxLines: 20,
                 maxLength: maxChars,
                 style: ProfileStyles.inputText(context),
-                decoration: ProfileStyles.bioInputDecoration(context, bio, remaining),
+                decoration: ProfileStyles.bioInputDecoration(
+                        context, bio, remaining)
+                    .copyWith(
+                        hintText: "Tell us a bit about yourself!",
+                        hintStyle: TextStyle(
+                            color: Theme.of(context).colorScheme.primaryFixed)),
               );
             },
           ),
@@ -85,8 +93,7 @@ class TextInputFieldBirthday extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text("Your birthday: DD-MM-YYYY",
-          style: ProfileStyles.inputHeader(context)),
+      Text("Your birthday", style: ProfileStyles.inputHeader(context)),
       Row(
         spacing: 10,
         children: [
@@ -99,7 +106,13 @@ class TextInputFieldBirthday extends StatelessWidget {
                   height: 50,
                   child: TextFormField(
                       style: ProfileStyles.inputText(context),
-                      decoration: ProfileStyles.inputDecoration(context)))
+                      decoration: ProfileStyles.inputDecoration(context)
+                          .copyWith(
+                              hintText: "DD",
+                              hintStyle: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primaryFixed))))
             ],
           ),
           Column(
@@ -111,7 +124,13 @@ class TextInputFieldBirthday extends StatelessWidget {
                   height: 50,
                   child: TextFormField(
                       style: ProfileStyles.inputText(context),
-                      decoration: ProfileStyles.inputDecoration(context)))
+                      decoration: ProfileStyles.inputDecoration(context)
+                          .copyWith(
+                              hintText: "MM",
+                              hintStyle: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primaryFixed))))
             ],
           ),
           Column(
@@ -123,7 +142,13 @@ class TextInputFieldBirthday extends StatelessWidget {
                   height: 50,
                   child: TextFormField(
                       style: ProfileStyles.inputText(context),
-                      decoration: ProfileStyles.inputDecoration(context)))
+                      decoration: ProfileStyles.inputDecoration(context)
+                          .copyWith(
+                              hintText: "YYYY",
+                              hintStyle: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primaryFixed))))
             ],
           ),
         ],

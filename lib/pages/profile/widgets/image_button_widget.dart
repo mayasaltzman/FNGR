@@ -30,6 +30,7 @@ class ImageButton extends StatelessWidget {
                     color: Theme.of(context).colorScheme.primaryFixed,
                   ),
                   borderRadius: BorderRadius.circular(15),
+                  color: Theme.of(context).colorScheme.primaryContainer
                 ),
                 child: image != null
                     ? Image.file(
