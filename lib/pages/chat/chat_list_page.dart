@@ -20,19 +20,20 @@ class _ChatListState extends State<ChatList> {
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: widget.listType == "accepted"
-      ? _firebaseService.getAcceptedChatsStream()
-      : _firebaseService.getUnaccceptedChatsStream(),
+          ? _firebaseService.getAcceptedChatsStream()
+          : _firebaseService.getUnaccceptedChatsStream(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
-        if (!snapshot.hasData || snapshot.data!.docs.isEmpty){
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
           return const Center(child: Text("No chats available"));
         }
         final chats = snapshot.data!.docs.where((chatDoc) {
           final chatData = chatDoc.data() as Map<String, dynamic>;
           final lastMessage = chatData['lastMessage'];
-          return lastMessage != null && (lastMessage as String).trim().isNotEmpty;
+          return lastMessage != null &&
+              (lastMessage as String).trim().isNotEmpty;
         }).toList();
 
         return ListView.separated(
@@ -43,7 +44,7 @@ class _ChatListState extends State<ChatList> {
                 child: Divider(
                   height: 20,
                   thickness: 0.75,
-                  color: Theme.of(context).colorScheme.tertiary,
+                  color: Theme.of(context).colorScheme.primaryFixed,
                 )),
             itemCount: chats.length,
             itemBuilder: (context, index) {
@@ -73,21 +74,28 @@ class _ChatListState extends State<ChatList> {
                   final lastMessage = chatData['lastMessage'] ?? '';
                   final userPhoto = userData['photoURL'] ?? '';
 
+                  //icon not rendering 
                   return ListTile(
                     leading: CircleAvatar(
+                      backgroundColor:
+                          Theme.of(context).colorScheme.primaryContainer,
                       backgroundImage:
                           userPhoto.isNotEmpty ? NetworkImage(userPhoto) : null,
-                      child:
-                          userPhoto.isEmpty ? const Icon(Icons.person) : null,
+                      child: userPhoto.isEmpty
+                          ? Icon(
+                              Icons.person,
+                              color: Theme.of(context).colorScheme.primaryFixed,
+                            )
+                          : null,
                     ),
                     title: Text(
                       userName,
                       style: TextStyle(
-                          color: Theme.of(context).colorScheme.tertiary),
+                          color: Theme.of(context).colorScheme.primaryFixed),
                     ),
                     trailing: Icon(
                       Icons.chevron_right,
-                      color: Theme.of(context).colorScheme.secondary,
+                      color: Theme.of(context).colorScheme.primaryFixed,
                     ),
                     onTap: () {
                       Navigator.push(
