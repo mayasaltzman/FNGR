@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../../chat/message_page.dart';
 import '../styles/user_profile_styles.dart';
 
-
 class HeaderElements extends StatelessWidget {
   final String name;
   final String age;
@@ -27,52 +26,9 @@ class HeaderElements extends StatelessWidget {
         Container(
             width: ProfileStyles.containerWidth,
             padding: ProfileStyles.boxPadding,
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // Name and age on the left
-                Flexible(
-                  child: Text(
-                    '${name}${(name.isNotEmpty && age != 'N/A' ? ', ' : '')} ${age != 'N/A' ? age : ''}',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.primaryFixed,
-                    ),
-                  ),
-                ),
-
-                // Message button on the right with icon
-                if (!isUser)
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MessagePage(
-                            recipientUid: userId,
-                            recipientName: name,
-                            recipientImage: photoURL,
-                          ),
-                        ),
-                      );
-                    },
-                    icon: const Icon(Icons.chat_bubble_outline),
-                    label: const Text("Message"),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.secondary,
-                      foregroundColor:
-                          Theme.of(context).colorScheme.secondaryFixed,
-                      elevation: 3,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                  ),
-              ],
             )),
       ],
     );
@@ -184,6 +140,7 @@ class KeyInfo extends StatelessWidget {
   final String lookingFor;
   final String relationshipStyle;
   final String height;
+  final String age;
   final double? distance;
   final String? location;
   final List<dynamic> sexuality;
@@ -197,6 +154,7 @@ class KeyInfo extends StatelessWidget {
       required this.lookingFor,
       required this.relationshipStyle,
       required this.height,
+      required this.age,
       required this.distance,
       required this.location,
       required this.sexuality,
@@ -215,6 +173,11 @@ class KeyInfo extends StatelessWidget {
             ? '${distance!.toStringAsFixed(1)} km away'
             : 'Unknown',
         'icon': Icons.location_on_outlined
+      },
+      {
+        'label': 'Age',
+        'value': age,
+        'icon': Icons.assignment_ind_rounded
       },
       {'label': 'Location', 'value': location, 'icon': Icons.home_outlined},
       {

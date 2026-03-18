@@ -5,6 +5,7 @@ import '../../services/location_service.dart';
 import './widgets/profile_view_widgets.dart';
 import './update_profile_page.dart';
 import './styles/user_profile_styles.dart';
+import '../chat/message_page.dart';
 
 class BuildUserProfilePage extends StatefulWidget {
   final String userId;
@@ -55,6 +56,7 @@ class _BuildUserProfilePageState extends State<BuildUserProfilePage> {
               lookingFor: widget.data['expectations'] ?? 'Unknown',
               relationshipStyle: widget.data['relationship_style'] ?? 'Unknown',
               height: widget.data['height'] ?? 'Unknown',
+              age: widget.data['age'] ?? 'Unknown',
               distance: widget.distance.isFinite ? widget.distance : null,
               location: widget.city ?? 'Unknown',
               sexuality: widget.data['sexuality'] ?? ['Unknown'],
@@ -173,7 +175,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         builder: (_, __) {
                           if (!isUserProfile) {
                             return Text(
-                              data['name'] ?? 'Profile',
+                              '${data['name']} ${data['age']}' ?? 'Profile',
                               style: TextStyle(
                                 color: Theme.of(context)
                                     .colorScheme
@@ -184,7 +186,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                           return Text(
                             tabController.index == 0
                                 ? 'Edit Profile'
-                                : data['name'],
+                                : '${data['name']} ${data['age']}',
                             style: TextStyle(
                               color:
                                   Theme.of(context).colorScheme.secondaryFixed,
@@ -192,6 +194,30 @@ class _UserProfilePageState extends State<UserProfilePage> {
                           );
                         },
                       ),
+                      actions: !isUserProfile
+                          ? [
+                              IconButton(
+                                icon: Icon(
+                                  Icons.messenger,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .secondaryFixed,
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => MessagePage(
+                                        recipientUid: userId,
+                                        recipientName: data['name'],
+                                        recipientImage: data['photoURL'],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ]
+                          : null,
                       bottom: isUserProfile
                           ? TabBar(
                               tabs: [
