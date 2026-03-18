@@ -59,20 +59,21 @@ abstract class ProfileStyles {
 
   static InputDecoration inputDecoration(BuildContext context) {
     return InputDecoration(
-      labelStyle: inputText(context),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide:
-            BorderSide(color: Theme.of(context).colorScheme.primaryFixed),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(
-          color: Theme.of(context).colorScheme.primaryFixed,
-          width: 2,
+        labelStyle: inputText(context),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide:
+              BorderSide(color: Theme.of(context).colorScheme.primaryFixed),
         ),
-      ),
-    );
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(
+            color: Theme.of(context).colorScheme.primaryFixed,
+            width: 2,
+          ),
+        ),
+        filled: true,
+        fillColor: Theme.of(context).colorScheme.primaryContainer);
   }
 
   static InputDecoration bioInputDecoration(
@@ -83,6 +84,8 @@ abstract class ProfileStyles {
     return InputDecoration(
       labelText: label,
       labelStyle: inputText(context),
+      filled: true,
+      fillColor: Theme.of(context).colorScheme.primaryContainer,
       floatingLabelBehavior: FloatingLabelBehavior.never,
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),

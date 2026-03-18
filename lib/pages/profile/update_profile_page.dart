@@ -8,6 +8,8 @@ import 'package:image_picker/image_picker.dart';
 import './widgets/image_button_widget.dart';
 import './edit_profile_page.dart';
 import '../../main.dart';
+import './widgets/multi_select_menu_widget.dart';
+import '../profile/create_profile_steps/styles/create_profile_styles.dart';
 
 //MAYA STILL FINISHING THIS
 
@@ -53,6 +55,8 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
   final _picker = ImagePicker();
 
   final TextEditingController _bioController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
   final MultiSelectController<String> sexualityController =
       MultiSelectController<String>();
   final MultiSelectController<String> genderController =
@@ -87,6 +91,8 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
   @override
   void dispose() {
     _bioController.dispose();
+    _nameController.dispose();
+    _locationController.dispose();
     sexualityController.dispose();
     genderController.dispose();
     pronounController.dispose();
@@ -206,79 +212,41 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    ImageButton(
-                        image: _selectedImages[0],
-                        onTap: () => _pickImage(0)),
-                    const SizedBox(width: 5),
                     Column(
                       children: [
                         ImageButton(
-                            image: _selectedImages[1],
-                            onTap: () => _pickImage(1)),
+                            image: _selectedImages[1], onTap: () => () {}),
                         const SizedBox(height: 10),
                         ImageButton(
-                            image: _selectedImages[2],
-                            onTap: () => _pickImage(2)),
+                            image: _selectedImages[2], onTap: () => () {}),
                       ],
                     ),
-                    const SizedBox(width: 5),
                     Column(
                       children: [
                         ImageButton(
-                            image: _selectedImages[3],
-                            onTap: () => _pickImage(3)),
+                            image: _selectedImages[3], onTap: () => () {}),
                         const SizedBox(height: 10),
                         ImageButton(
-                            image: _selectedImages[4],
-                            onTap: () => _pickImage(4)),
+                            image: _selectedImages[4], onTap: () => () {}),
                       ],
                     ),
                   ]),
+              TextInputField(controller: _nameController, labelText: widget.name, textType: "Name"),
+              TextInputField(controller: _locationController, labelText: "Location here", textType: "Location"),
               TextInputFieldLong(controller: _bioController, bio: widget.bio),
-              // MultiSelectDropdown(
-              //     controller: sexualityController, labelText: "Sexuality"),
-              // MultiSelectDropdown(
-              //     controller: genderController, labelText: "Gender Identity"),
-              // MultiSelectDropdown(
-              //     controller: pronounController, labelText: "Pronouns"),
-              // MultiSelectDropdown(
-              //     controller: sexualPrefController,
-              //     labelText: "Sexual Preferences"),
-              // MultiSelectDropdown(
-              //     controller: genderPresentationController,
-              //     labelText: "Gender Presentation"),
-              // MultiSelectDropdown(
-              //     controller: interestsController, labelText: "Interests"),
-              SingleSelectDropDown(
-                value: _relationshipStyle,
-                label: "Relationship Style",
-                onChanged: (newVal) {
-                  setState(() {
-                    _relationshipStyle = newVal;
-                  });
-                },
-                hintText: widget.rStyle,
+              Column(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text("Key Fields",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.primaryFixed,
+                            fontSize: 18)),
+                  )
+                ],
               ),
-              SingleSelectDropDown(
-                value: _relationshipStatus,
-                label: "Relationship Status",
-                onChanged: (newVal) {
-                  setState(() {
-                    _relationshipStatus = newVal;
-                  });
-                },
-                hintText: widget.rStatus,
-              ),
-              SingleSelectDropDown(
-                value: _lookingFor,
-                label: "Looking For",
-                onChanged: (newVal) {
-                  setState(() {
-                    _lookingFor = newVal;
-                  });
-                },
-                hintText: widget.lookingFor,
-              ),
+              MultiSelect(fieldTypes: []),
               Container(
                 alignment: Alignment.bottomRight,
                 child: TextButton(

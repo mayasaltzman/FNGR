@@ -27,12 +27,12 @@ class ProfileIntroPage extends StatelessWidget {
                   style: ProfileStyles.pageHeader(context)),
               TextInputField(
                   controller: _nameController,
-                  labelText: "Name",
-                  textType: "Your first name"),
+                  labelText: "Enter your name",
+                  textType: "What is your name?"),
               TextInputFieldBirthday(),
               TextInputField(
                   controller: _locationController,
-                  labelText: "Location",
+                  labelText: "Enter your location",
                   textType: "Where are you from?"),
               Spacer(),
               Align(
