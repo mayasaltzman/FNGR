@@ -1,38 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../chat/message_page.dart';
-
-//styles for the page
-abstract class ProfileStyles {
-  //styles for boxes that store profile info
-  static BoxDecoration boxDecoration = BoxDecoration(
-      color: const Color(0xFFFFF0E6),
-      borderRadius: BorderRadius.circular(15.0),
-      border: Border.all(
-        color: const Color(0xFFFF9B55),
-        width: 1,
-      ));
-
-  //styles for boxes that are individual items in sexual preferences and interests
-  static BoxDecoration itemBoxDecoration = BoxDecoration(
-      color: const Color(0xFFF9E7F2),
-      borderRadius: BorderRadius.circular(15.0),
-      border: Border.all(
-        color: const Color(0xFFAA4E85),
-        width: 1,
-      ));
-
-  //text styles for headings in boxes
-  static TextStyle boxHeader = const TextStyle(
-      fontWeight: FontWeight.bold, color: Color(0xFFFF9B55), fontSize: 16);
-
-  //text styles for text in boxes
-  static TextStyle boxText = const TextStyle(
-      fontWeight: FontWeight.normal, color: Color(0xFFAA4E85), fontSize: 16);
-
-  static const containerWidth = 375.0;
-
-  static const boxPadding = EdgeInsets.all(8.0);
-}
+import '../styles/user_profile_styles.dart';
 
 class HeaderElements extends StatelessWidget {
   final String name;
@@ -58,52 +25,9 @@ class HeaderElements extends StatelessWidget {
         Container(
             width: ProfileStyles.containerWidth,
             padding: ProfileStyles.boxPadding,
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // Name and age on the left
-                Flexible(
-                  child: Text(
-                    '${name}${(name.isNotEmpty && age != 'N/A' ? ', ' : '')} ${age != 'N/A' ? age : ''}',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.tertiary,
-                    ),
-                  ),
-                ),
-
-                // Message button on the right with icon
-                if (!isUser)
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MessagePage(
-                            recipientUid: userId,
-                            recipientName: name,
-                            recipientImage: photoURL,
-                          ),
-                        ),
-                      );
-                    },
-                    icon: const Icon(Icons.chat_bubble_outline),
-                    label: const Text("Message"),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.secondary,
-                      foregroundColor:
-                          Theme.of(context).colorScheme.secondaryFixed,
-                      elevation: 3,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                  ),
-              ],
             )),
       ],
     );
@@ -133,7 +57,7 @@ class _ProfileImageState extends State<ProfileImage> {
     return Container(
       height: 500,
       width: ProfileStyles.containerWidth,
-      decoration: ProfileStyles.boxDecoration,
+      decoration: ProfileStyles.boxDecoration(context),
       clipBehavior: Clip.hardEdge,
       child: hasCarousel
           ? Column(
@@ -147,8 +71,8 @@ class _ProfileImageState extends State<ProfileImage> {
                       height: 4,
                       width: 25,
                       color: _index == i
-                          ? Theme.of(context).colorScheme.tertiaryFixed
-                          : Theme.of(context).colorScheme.tertiary,
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.primaryFixed,
                     );
                   }),
                 ),
@@ -196,13 +120,13 @@ class AboutMe extends StatelessWidget {
     return bio != ""
         ? Container(
             width: ProfileStyles.containerWidth,
-            decoration: ProfileStyles.boxDecoration,
+            decoration: ProfileStyles.boxDecoration(context),
             padding: ProfileStyles.boxPadding,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("About Me", style: ProfileStyles.boxHeader),
-                Text(bio, style: ProfileStyles.boxText)
+                Text("About Me", style: ProfileStyles.boxHeader(context)),
+                Text(bio, style: ProfileStyles.boxText(context))
               ],
             ),
           )
@@ -215,6 +139,7 @@ class KeyInfo extends StatelessWidget {
   final String lookingFor;
   final String relationshipStyle;
   final String height;
+  final String age;
   final double? distance;
   final String? location;
   final List<dynamic> sexuality;
@@ -228,6 +153,7 @@ class KeyInfo extends StatelessWidget {
       required this.lookingFor,
       required this.relationshipStyle,
       required this.height,
+      required this.age,
       required this.distance,
       required this.location,
       required this.sexuality,
@@ -247,6 +173,7 @@ class KeyInfo extends StatelessWidget {
             : 'Unknown',
         'icon': Icons.location_on_outlined
       },
+      {'label': 'Age', 'value': age, 'icon': Icons.assignment_ind_rounded},
       {'label': 'Location', 'value': location, 'icon': Icons.home_outlined},
       {
         'label': 'Sexuality',
@@ -284,7 +211,7 @@ class KeyInfo extends StatelessWidget {
 
     return Container(
       width: ProfileStyles.containerWidth,
-      decoration: ProfileStyles.boxDecoration,
+      decoration: ProfileStyles.boxDecoration(context),
       padding: ProfileStyles.boxPadding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -293,7 +220,7 @@ class KeyInfo extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Text(
               "Key Info",
-              style: ProfileStyles.boxHeader,
+              style: ProfileStyles.boxHeader(context),
             ),
           ),
           const SizedBox(height: 8),
@@ -302,10 +229,10 @@ class KeyInfo extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(), // let parent scroll
             shrinkWrap: true, // important so it fits inside the column
             itemCount: fieldsFiltered.length,
-            separatorBuilder: (context, index) => const Divider(
+            separatorBuilder: (context, index) => Divider(
               height: 20,
               thickness: 2,
-              color: Color(0xFFD461A6),
+              color: Theme.of(context).colorScheme.secondary,
             ),
             itemBuilder: (context, index) {
               final field = fieldsFiltered[index];
@@ -319,16 +246,17 @@ class KeyInfo extends StatelessWidget {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  //Text(field['label'] ?? '', style: ProfileStyles.boxText),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     spacing: 10,
                     children: [
-                      Icon(field['icon'], color: Color(0xFFD461A6), size: 20),
+                      Icon(field['icon'],
+                          color: Theme.of(context).colorScheme.secondary,
+                          size: 20),
                       Flexible(
                         child: Text(
                           field['value'],
-                          style: ProfileStyles.boxText,
+                          style: ProfileStyles.boxText(context),
                           textAlign: TextAlign.right,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -345,7 +273,6 @@ class KeyInfo extends StatelessWidget {
   }
 }
 
-//sexual preferences and interests field box
 class FieldsBox extends StatelessWidget {
   final List<dynamic> items;
   final String label;
@@ -355,35 +282,29 @@ class FieldsBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (items.isEmpty) return const SizedBox();
+
+    // Convert list to comma-separated string
+    final String formattedItems = items.join(', ');
+
     return Container(
       width: ProfileStyles.containerWidth,
-      decoration: ProfileStyles.boxDecoration,
+      decoration: ProfileStyles.boxDecoration(context),
       padding: ProfileStyles.boxPadding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            child: Column(
-              children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    label,
-                    style: ProfileStyles.boxHeader,
-                  ),
-                ),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ...items.map((i) => Container(
-                          alignment: Alignment.center,
-                          width: 75,
-                          decoration: ProfileStyles.itemBoxDecoration,
-                          child: Text(i, style: ProfileStyles.boxText)))
-                    ]),
-              ],
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              label,
+              style: ProfileStyles.boxHeader(context),
             ),
-          )
+          ),
+          const SizedBox(height: 8),
+          Text(
+            formattedItems,
+            style: ProfileStyles.boxText(context),
+          ),
         ],
       ),
     );

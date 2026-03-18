@@ -1,49 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:test_milestone/pages/profile/create_profile_steps/profile_additional_page.dart';
 import '../../pages/auth/create_account.dart';
 import '../../services/firebase_service.dart';
 import '../../main.dart'; // Import NavMenu
-
-//styles for the page
-abstract class ProfileStyles {
-  //styles for boxes
-  static BoxDecoration get boxDecoration => BoxDecoration(
-    color: const Color.fromARGB(255, 255, 255, 255),
-    borderRadius: BorderRadius.circular(15),
-    border: Border.all(
-      color: const Color.fromARGB(255, 214, 212, 210),
-      width: 1, 
-    ));
-    
-  static ButtonStyle get buttonStyle => ElevatedButton.styleFrom(
-    backgroundColor: const Color(0xFFD461A6),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(15),
-      side: const BorderSide(
-        color: Color.fromARGB(255, 214, 212, 210),
-        width: 1,
-      ),
-    ),
-    padding: const EdgeInsets.symmetric(vertical: 14),
-  );
-
-  //text styles for headings in boxes
-  static TextStyle get boxHeader => const TextStyle(
-    fontWeight: FontWeight.bold, color: Color.fromARGB(255, 255, 255, 255), fontSize: 50);
-
-  //text styles for text above boxes
-  static TextStyle get instructionText => const TextStyle(
-    fontWeight: FontWeight.normal, color: Color(0xFF9F497D), fontSize: 16);
-
-  static TextStyle get boxText => const TextStyle(
-    fontWeight: FontWeight.w200, color: Color(0xFF1F1F1F), fontSize: 16);
-  
-  static TextStyle get buttonText => const TextStyle(
-    fontWeight: FontWeight.w900, color: Color.fromARGB(255, 255, 255, 255), fontSize: 16);
-
-  static const containerWidth = 375.0;
-
-  static const boxPadding = EdgeInsets.symmetric(vertical: 1, horizontal: 8);
-}
+import './styles/auth_styles.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -55,12 +15,12 @@ class LoginPage extends StatefulWidget {
 class _LoginState extends State<LoginPage> {
   final FirebaseService _firebaseService = FirebaseService();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController  = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   bool isLoading = false;
   bool rememberMe = false;
 
   Future<void> _signIn() async {
-     if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
       _showSnackBar('Please fill in all fields');
       return;
     }
@@ -70,11 +30,12 @@ class _LoginState extends State<LoginPage> {
     try {
       await _firebaseService.signIn(
         email: _emailController.text.trim(),
-        password:_passwordController.text.trim(),
+        password: _passwordController.text.trim(),
       );
       if (mounted) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) =>  NavMenu()),
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => NavMenu()),
+          (Route<dynamic> route) => false,
         );
       }
     } catch (e) {
@@ -87,10 +48,10 @@ class _LoginState extends State<LoginPage> {
   }
 
   void _showSnackBar(String message) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
-      );
-    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
 
   @override
   void dispose() {
@@ -102,71 +63,66 @@ class _LoginState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFFE0CA),
+      backgroundColor: Theme.of(context).colorScheme.primary,
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Padding( 
-              padding: const EdgeInsets.only(top: 200),             
+            Padding(
+              padding: const EdgeInsets.only(top: 200),
               child: Text(
-                'FNGR', 
-                style: ProfileStyles.boxHeader,
+                'FNGR',
+                style: LogInStyles.boxHeader(context),
               ),
             ),
-
             Padding(
-              padding: const EdgeInsets.only(right: 320, top: 40),              
+              padding: const EdgeInsets.only(right: 320, top: 40),
               child: Text(
                 'Email',
-                style: ProfileStyles.instructionText,
+                style: LogInStyles.instructionText(context),
               ),
             ),
-                      
             Padding(
               padding: const EdgeInsets.only(left: 10, top: 5),
-              child: Container(  
-                decoration: ProfileStyles.boxDecoration,
-                padding: ProfileStyles.boxPadding,
-                width: ProfileStyles.containerWidth,            
+              child: Container(
+                decoration: LogInStyles.boxDecoration(context),
+                padding: LogInStyles.boxPadding,
+                width: LogInStyles.containerWidth,
                 child: TextField(
                   controller: _emailController,
-                  style: ProfileStyles.boxText,
+                  style: LogInStyles.instructionText(context),
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: 'Enter your email',
-                    hintStyle: ProfileStyles.boxText,
+                    hintStyle: LogInStyles.instructionText(context),
                   ),
-                ), 
+                ),
               ),
             ),
-
             Padding(
-              padding: const EdgeInsets.only(right: 290, top: 10),              
+              padding: const EdgeInsets.only(right: 290, top: 10),
               child: Text(
                 'Password',
-                style: ProfileStyles.instructionText,
+                style: LogInStyles.instructionText(context),
               ),
             ),
-
-            Padding( 
-              padding: const EdgeInsets.only(left: 10, top: 5),             
+            Padding(
+              padding: const EdgeInsets.only(left: 10, top: 5),
               child: Container(
-                decoration: ProfileStyles.boxDecoration,
-                padding: ProfileStyles.boxPadding,
-                width: ProfileStyles.containerWidth, 
+                decoration: LogInStyles.boxDecoration(context),
+                padding: LogInStyles.boxPadding,
+                width: LogInStyles.containerWidth,
                 child: TextField(
                   controller: _passwordController,
-                  style: ProfileStyles.boxText,
+                  style: LogInStyles.instructionText(context),
                   obscureText: true,
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: 'Enter your password',
-                    hintStyle: ProfileStyles.boxText,
+                    hintStyle: LogInStyles.instructionText(context),
                   ),
-                ), 
+                ),
               ),
             ),
-            
             Padding(
               padding: const EdgeInsets.only(top: 20, left: 15),
               child: Row(
@@ -178,14 +134,15 @@ class _LoginState extends State<LoginPage> {
                         rememberMe = value ?? false;
                       });
                     },
-                    activeColor: const Color(0xFFD461A6),
-                    checkColor: Colors.white,
+                    activeColor: Theme.of(context).colorScheme.secondary,
+                    checkColor: Theme.of(context).colorScheme.secondaryFixed,
+                    side: BorderSide(
+                        color: Theme.of(context).colorScheme.primaryFixed),
                   ),
-                  const Text(
+                  Text(
                     'Remember Me',
-                    style: TextStyle(fontSize: 16, color: Color(0xFF1F1F1F), fontWeight: FontWeight.w200), 
+                    style: LogInStyles.instructionText(context),
                   ),
-                  
                   TextButton(
                     onPressed: () {
                       print('Clicked! - go to change password backend');
@@ -194,46 +151,40 @@ class _LoginState extends State<LoginPage> {
                       padding: const EdgeInsets.only(left: 80),
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
-                    child: const Text(
+                    child: Text(
                       'Forgot Password?',
-                      style: TextStyle(
-                        decoration: TextDecoration.underline, 
-                        decorationColor: Color(0xFF9F497D),
-                        color:  Color(0xFF9F497D),                  
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                      ),
+                      style: LogInStyles.linkText(context),
                     ),
                   ),
                 ],
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.only(top: 5),
-              child: Container( 
-                padding: ProfileStyles.boxPadding,
-                width: ProfileStyles.containerWidth,             
+              child: Container(
+                padding: LogInStyles.boxPadding,
+                width: LogInStyles.containerWidth,
                 child: ElevatedButton(
-                  style: ProfileStyles.buttonStyle,
-                  onPressed: isLoading ? null : () {
-                    _signIn();
-                  },
+                  style: LogInStyles.buttonStyle(context),
+                  onPressed: isLoading
+                      ? null
+                      : () {
+                          _signIn();
+                        },
                   child: Text(
                     'Login',
-                    style: ProfileStyles.buttonText,
+                    style: LogInStyles.buttonText(context),
                   ),
                 ),
               ),
             ),
-
-            const Padding(
-              padding: EdgeInsets.only(left: 20, right: 20, top: 10),  
+            Padding(
+              padding: EdgeInsets.only(left: 20, right: 20, top: 10),
               child: Row(
                 children: [
                   Expanded(
                     child: Divider(
-                      color: Colors.black,
+                      color: Theme.of(context).colorScheme.primaryFixed,
                       thickness: 0.5,
                     ),
                   ),
@@ -241,32 +192,34 @@ class _LoginState extends State<LoginPage> {
                     padding: EdgeInsets.symmetric(horizontal: 8),
                     child: Text(
                       "Don't have an account?",
-                      style: TextStyle(color: Color(0xFF1F1F1F), fontWeight: FontWeight.w200),
+                      style: LogInStyles.instructionText(context),
                     ),
                   ),
                   Expanded(
                     child: Divider(
-                      color: Colors.black,
+                      color: Theme.of(context).colorScheme.primaryFixed,
                       thickness: 0.5,
                     ),
                   ),
                 ],
               ),
-            ), 
-
+            ),
             Padding(
               padding: const EdgeInsets.only(top: 10),
               child: Container(
-                padding: ProfileStyles.boxPadding,
-                width: ProfileStyles.containerWidth,
+                padding: LogInStyles.boxPadding,
+                width: LogInStyles.containerWidth,
                 child: ElevatedButton(
-                  style: ProfileStyles.buttonStyle,
+                  style: LogInStyles.buttonStyle(context),
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateAccount()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const CreateAccount()));
                   },
                   child: Text(
-                    'Sign Up', 
-                    style: ProfileStyles.buttonText,
+                    'Sign Up',
+                    style: LogInStyles.buttonText(context),
                   ),
                 ),
               ),

@@ -6,23 +6,15 @@ import './user_profile_page.dart';
 import '../auth/settings_page.dart';
 
 abstract class ProfileStyles {
-  //styles for boxes that store profile info
-  static BoxDecoration boxDecoration = BoxDecoration(
-      color: const Color(0xFFFFF0E6),
-      borderRadius: BorderRadius.circular(15.0),
-      border: Border.all(
-        color: const Color(0xFFFF9B55),
-        width: 1,
-      ));
-
-  //styles for boxes that are individual items in sexual preferences and interests
-  static BoxDecoration itemBoxDecoration = BoxDecoration(
-      color: const Color(0xFFF9E7F2),
-      borderRadius: BorderRadius.circular(15.0),
-      border: Border.all(
-        color: const Color(0xFFAA4E85),
-        width: 1,
-      ));
+  static BoxDecoration boxDecoration(BuildContext context) {
+    return BoxDecoration(
+        color: Theme.of(context).colorScheme.primaryContainer,
+        borderRadius: BorderRadius.circular(15.0),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.primaryFixed,
+          width: 1,
+        ));
+  }
 
   static const containerWidth = 375.0;
 
@@ -47,7 +39,7 @@ class UserView extends StatelessWidget {
     return Center(
         child: Container(
             width: ProfileStyles.containerWidth,
-            decoration: ProfileStyles.boxDecoration,
+            decoration: ProfileStyles.boxDecoration(context),
             padding: ProfileStyles.boxPadding,
             alignment: Alignment.center,
             height: 150,
@@ -79,15 +71,12 @@ class UserView extends StatelessWidget {
                         spacing: 10,
                         children: [
                           Text(
-                            "$name,",
+                            "$name, $age",
                             style: TextStyle(
-                                color: Theme.of(context).colorScheme.tertiary,
+                                color:
+                                    Theme.of(context).colorScheme.primaryFixed,
                                 fontWeight: FontWeight.bold),
                           ),
-                          Text(age,
-                              style: TextStyle(
-                                  color: Theme.of(context).colorScheme.tertiary,
-                                  fontWeight: FontWeight.bold)),
                         ],
                       ),
                       TextButton.icon(
@@ -102,35 +91,19 @@ class UserView extends StatelessWidget {
                         icon: Icon(Icons.arrow_forward),
                         label: Text("Edit Profile"),
                         style: TextButton.styleFrom(
-                            foregroundColor:
-                                Theme.of(context).colorScheme.tertiary,
-                            backgroundColor:
-                                Theme.of(context).colorScheme.tertiaryFixed,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            side: BorderSide(
-                                color: Theme.of(context).colorScheme.tertiary)),
+                          foregroundColor:
+                              Theme.of(context).colorScheme.secondaryFixed,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
                         iconAlignment: IconAlignment.end,
                       )
                     ],
                   )
                 ])));
-  }
-}
-
-class SettingsView extends StatelessWidget {
-  Widget build(BuildContext context) {
-    return Center(
-        child: Container(
-      width: ProfileStyles.containerWidth,
-      decoration: ProfileStyles.boxDecoration,
-      padding: ProfileStyles.boxPadding,
-      alignment: Alignment.center,
-      height: 500,
-      child: Text("Advanced Settings Coming Soon",
-          style: TextStyle(color: Theme.of(context).colorScheme.tertiary)),
-    ));
   }
 }
 
@@ -198,7 +171,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         age: data['age'] ?? '',
                         userPhoto: data['photoURL'] ?? '',
                         userId: widget.userId),
-                    SettingsView()
                   ],
                 ),
               ),

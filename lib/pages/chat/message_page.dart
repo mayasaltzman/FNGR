@@ -52,14 +52,14 @@ class _MessagePageState extends State<MessagePage> {
                       ? NetworkImage(widget.recipientImage)
                       : null,
                   child: widget.recipientImage.isEmpty
-                      ? const Icon(Icons.person)
+                      ? Icon(Icons.person, color: Theme.of(context).colorScheme.secondary)
                       : null,
                 )),
             Text(
               widget.recipientName,
               style: TextStyle(
                 fontSize: 12,
-                color: Theme.of(context).colorScheme.secondaryFixed,
+                color: Theme.of(context).colorScheme.primaryContainer,
               ),
             )
           ],
@@ -118,7 +118,7 @@ class ApproveDeclineWidgetState extends State<ApproveDeclineWidget> {
               const SizedBox(height: 10),
               Container(
                 height: 78,
-                color: Theme.of(context).colorScheme.tertiaryFixed,
+                color: Theme.of(context).colorScheme.primaryContainer,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   spacing: 60,
@@ -128,8 +128,9 @@ class ApproveDeclineWidgetState extends State<ApproveDeclineWidget> {
                         child: Text(
                           "Decline",
                           style: TextStyle(
-                              color:
-                                  Theme.of(context).colorScheme.primaryFixed),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .primaryContainer),
                         )),
                     const VerticalDivider(
                       width: 20,
@@ -346,7 +347,8 @@ class _LoadChatState extends State<LoadChat> {
             return SimpleTextMessage(
               message: message,
               index: index,
-              sentBackgroundColor: Theme.of(context).colorScheme.tertiaryFixed,
+              sentBackgroundColor:
+                  Theme.of(context).colorScheme.primaryContainer,
               sentTextStyle: TextStyle(color: Colors.grey[900]),
               timeStyle: TextStyle(color: Colors.grey[600], fontSize: 10),
             );

@@ -4,39 +4,8 @@ import '../../services/firebase_service.dart';
 import '../../services/location_service.dart';
 import './widgets/profile_view_widgets.dart';
 import './update_profile_page.dart';
-
-//styles for the page
-abstract class ProfileStyles {
-  //styles for boxes that store profile info
-  static BoxDecoration boxDecoration = BoxDecoration(
-      color: const Color(0xFFFFF0E6),
-      borderRadius: BorderRadius.circular(15.0),
-      border: Border.all(
-        color: const Color(0xFFFF9B55),
-        width: 1,
-      ));
-
-  //styles for boxes that are individual items in sexual preferences and interests
-  static BoxDecoration itemBoxDecoration = BoxDecoration(
-      color: const Color(0xFFF9E7F2),
-      borderRadius: BorderRadius.circular(15.0),
-      border: Border.all(
-        color: const Color(0xFFAA4E85),
-        width: 1,
-      ));
-
-  //text styles for headings in boxes
-  static TextStyle boxHeader = const TextStyle(
-      fontWeight: FontWeight.bold, color: Color(0xFFFF9B55), fontSize: 16);
-
-  //text styles for text in boxes
-  static TextStyle boxText = const TextStyle(
-      fontWeight: FontWeight.normal, color: Color(0xFFAA4E85), fontSize: 16);
-
-  static const containerWidth = 375.0;
-
-  static const boxPadding = EdgeInsets.all(8.0);
-}
+import './styles/user_profile_styles.dart';
+import '../chat/message_page.dart';
 
 class BuildUserProfilePage extends StatefulWidget {
   final String userId;
@@ -79,13 +48,15 @@ class _BuildUserProfilePageState extends State<BuildUserProfilePage> {
               photoURL: widget.data['photoURL'] ?? '',
             ),
             ProfileImage(
-                imageUrl: widget.data['photoURL'] ?? '',
-                profileImages: widget.data['profileImages'] ?? []),
+              imageUrl: widget.data['photoURL'] ?? '',
+              profileImages: widget.data['profileImages'] ?? [],
+            ),
             AboutMe(bio: widget.data['bio'] ?? ''),
             KeyInfo(
               lookingFor: widget.data['expectations'] ?? 'Unknown',
               relationshipStyle: widget.data['relationship_style'] ?? 'Unknown',
               height: widget.data['height'] ?? 'Unknown',
+              age: widget.data['age'] ?? 'Unknown',
               distance: widget.distance.isFinite ? widget.distance : null,
               location: widget.city ?? 'Unknown',
               sexuality: widget.data['sexuality'] ?? ['Unknown'],
@@ -96,9 +67,13 @@ class _BuildUserProfilePageState extends State<BuildUserProfilePage> {
               genderExpression: widget.data['expression'] ?? ['Unknown'],
             ),
             FieldsBox(
-                items: widget.data['sexual_pref'] ?? [], label: "Preferences"),
+              items: widget.data['sexual_pref'] ?? [],
+              label: "Preferences",
+            ),
             FieldsBox(
-                items: widget.data['interests'] ?? [], label: "Interests"),
+              items: widget.data['interests'] ?? [],
+              label: "Interests",
+            ),
             const SizedBox(height: 16),
           ],
         ),
@@ -143,127 +118,159 @@ class _UserProfilePageState extends State<UserProfilePage> {
   @override
   Widget build(BuildContext context) {
     final isUserProfile = userId == _firebaseService.currentUserId;
-    print(userId);
-    return Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.secondary,
-          //leading: //!isUserProfile
-          //? null
-          leading: BackButton(
-            color: Theme.of(context).colorScheme.secondaryFixed,
-          ),
-          centerTitle: true,
-          title: Text(
-            isUserProfile ? 'Profile' : 'FNGR',
-            style:
-                TextStyle(color: Theme.of(context).colorScheme.secondaryFixed),
-          ),
-        ),
-        body: FutureBuilder<DocumentSnapshot>(
-            future: _firebaseService.getUserProfile(userId),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
 
-              if (!snapshot.hasData || !snapshot.data!.exists) {
-                return const Center(child: Text('User not found'));
-              }
+    return FutureBuilder<DocumentSnapshot>(
+      future: _firebaseService.getUserProfile(userId),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
 
-              final data = snapshot.data!.data() as Map<String, dynamic>;
+        if (!snapshot.hasData || !snapshot.data!.exists) {
+          return const Scaffold(
+            body: Center(child: Text('User not found')),
+          );
+        }
 
-              double distance = double.infinity;
-              final lat = data['lat'] as double? ?? 0.0;
-              final lng = data['long'] as double? ?? 0.0;
+        final data = snapshot.data!.data() as Map<String, dynamic>;
 
-              if (lat != 0.0 &&
-                  lng != 0.0 &&
-                  _locationService.latitude != null &&
-                  _locationService.longitude != null) {
-                distance = _locationService.calculateDistance(
-                    _locationService.latitude!,
-                    _locationService.longitude!,
-                    lat,
-                    lng);
-              }
+        double distance = double.infinity;
+        final lat = data['lat'] as double? ?? 0.0;
+        final lng = data['long'] as double? ?? 0.0;
 
-              return FutureBuilder<String?>(
-                  future: _locationService.getCityFromCoordinates(lat, lng),
-                  builder: (context, citySnapshot) {
-                    final city = citySnapshot.data;
-                    return Column(children: [
-                      Expanded(
-                          child: isUserProfile
-                              ? DefaultTabController(
-                                  length: 2,
-                                  child: Column(children: [
-                                    Container(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .tertiaryFixed,
-                                      child: TabBar(
-                                          dividerColor: Theme.of(context)
-                                              .colorScheme
-                                              .primaryContainer,
-                                          unselectedLabelColor: Colors.black,
-                                          labelColor: Theme.of(context)
-                                              .colorScheme
-                                              .primaryFixed,
-                                          indicatorColor: Theme.of(context)
-                                              .colorScheme
-                                              .primaryFixed,
-                                          tabs: [
-                                            Tab(text: "Edit"),
-                                            Tab(text: "View")
-                                          ]),
+        if (lat != 0.0 &&
+            lng != 0.0 &&
+            _locationService.latitude != null &&
+            _locationService.longitude != null) {
+          distance = _locationService.calculateDistance(
+            _locationService.latitude!,
+            _locationService.longitude!,
+            lat,
+            lng,
+          );
+        }
+
+        return FutureBuilder<String?>(
+          future: _locationService.getCityFromCoordinates(lat, lng),
+          builder: (context, citySnapshot) {
+            final city = citySnapshot.data;
+
+            return DefaultTabController(
+              length: isUserProfile ? 2 : 1,
+              child: Builder(
+                builder: (context) {
+                  final tabController = DefaultTabController.of(context);
+                  return Scaffold(
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    appBar: AppBar(
+                      backgroundColor: Theme.of(context).colorScheme.secondary,
+                      leading: BackButton(
+                        color: Theme.of(context).colorScheme.secondaryFixed,
+                      ),
+                      centerTitle: true,
+                      title: AnimatedBuilder(
+                        animation: tabController,
+                        builder: (_, __) {
+                          if (!isUserProfile) {
+                            return Text(
+                              '${data['name']} ${data['age']}' ?? 'Profile',
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .secondaryFixed,
+                              ),
+                            );
+                          }
+                          return Text(
+                            tabController.index == 0
+                                ? 'Edit Profile'
+                                : '${data['name']} ${data['age']}',
+                            style: TextStyle(
+                              color:
+                                  Theme.of(context).colorScheme.secondaryFixed,
+                            ),
+                          );
+                        },
+                      ),
+                      actions: !isUserProfile
+                          ? [
+                              IconButton(
+                                icon: Icon(
+                                  Icons.messenger,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .secondaryFixed,
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => MessagePage(
+                                        recipientUid: userId,
+                                        recipientName: data['name'],
+                                        recipientImage: data['photoURL'],
+                                      ),
                                     ),
-                                    Expanded(
-                                        child: TabBarView(children: [
-                                      UpdateProfilePage(
-                                        userId: userId,
-                                          bio: data['bio'] ?? '',
-                                          rStatus:
-                                              data['relationship_status'] ?? '',
-                                          rStyle:
-                                              data['relationship_style'] ?? '',
-                                          lookingFor:
-                                              data['expectations'] ?? '',
-                                          sexuality: data['sexuality'] ?? [],
-                                          gender: data['gender'] ?? [],
-                                          pronouns: data['pronouns'] ?? [],
-                                          presentation:
-                                              data['expression'] ?? [],
-                                          interests: data['interests'] ?? [],
-                                          preferences:
-                                              data['sexual_pref'] ?? [],
-                                          name: data['name'] ?? '',
-                                          age: data['age'] ?? '',
-                                          height: data['height'] ?? ''),
-                                      SingleChildScrollView(
-                                          child: Column(children: [
-                                        BuildUserProfilePage(
-                                            userId: userId,
-                                            data: data,
-                                            isUserProfile: isUserProfile,
-                                            distance: distance,
-                                            city: city)
-                                      ]))
-                                    ]))
-                                  ]),
-                                )
-                              : Expanded(
-                                  child: SingleChildScrollView(
-                                      child: Column(children: [
-                                  BuildUserProfilePage(
-                                      userId: userId,
-                                      data: data,
-                                      isUserProfile: isUserProfile,
-                                      distance: distance,
-                                      city: city)
-                                ]))))
-                    ]);
-                  });
-            }));
+                                  );
+                                },
+                              ),
+                            ]
+                          : null,
+                      bottom: isUserProfile
+                          ? TabBar(
+                              tabs: [
+                                Tab(text: "Edit"),
+                                Tab(text: "View"),
+                              ],
+                            )
+                          : null,
+                    ),
+                    body: TabBarView(
+                      children: isUserProfile
+                          ? [
+                              UpdateProfilePage(
+                                userId: userId,
+                                bio: data['bio'] ?? '',
+                                rStatus: data['relationship_status'] ?? '',
+                                rStyle: data['relationship_style'] ?? '',
+                                lookingFor: data['expectations'] ?? '',
+                                sexuality: data['sexuality'] ?? [],
+                                gender: data['gender'] ?? [],
+                                pronouns: data['pronouns'] ?? [],
+                                presentation: data['expression'] ?? [],
+                                interests: data['interests'] ?? [],
+                                preferences: data['sexual_pref'] ?? [],
+                                name: data['name'] ?? '',
+                                age: data['age'] ?? '',
+                                height: data['height'] ?? '',
+                              ),
+                              BuildUserProfilePage(
+                                userId: userId,
+                                data: data,
+                                isUserProfile: isUserProfile,
+                                distance: distance,
+                                city: city,
+                              ),
+                            ]
+                          : [
+                              BuildUserProfilePage(
+                                userId: userId,
+                                data: data,
+                                isUserProfile: isUserProfile,
+                                distance: distance,
+                                city: city,
+                              ),
+                            ],
+                    ),
+                  );
+                },
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 }

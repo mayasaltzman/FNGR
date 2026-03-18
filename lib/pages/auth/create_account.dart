@@ -3,48 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:test_milestone/pages/auth/login_page.dart';
 import '../../services/firebase_service.dart';
 import '../../pages/profile/create_profile_page.dart';
-
-//styles for the page
-abstract class ProfileStyles {
-  //styles for boxes
-  static BoxDecoration get boxDecoration => BoxDecoration(
-    color: const Color.fromARGB(255, 255, 255, 255),
-    borderRadius: BorderRadius.circular(15),
-    border: Border.all(
-      color: const Color.fromARGB(255, 214, 212, 210),
-      width: 1, 
-    ));
-    
-  static ButtonStyle get buttonStyle => ElevatedButton.styleFrom(
-    backgroundColor: const Color(0xFFD461A6),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(15),
-      side: const BorderSide(
-        color: Color.fromARGB(255, 214, 212, 210),
-        width: 1,
-      ),
-    ),
-    padding: const EdgeInsets.symmetric(vertical: 14),
-  );
-
-  //text styles for headings in boxes
-  static TextStyle get boxHeader => const TextStyle(
-    fontWeight: FontWeight.bold, color: Color.fromARGB(255, 255, 255, 255), fontSize: 30);
-
-  //text styles for text above boxes
-  static TextStyle get instructionText => const TextStyle(
-    fontWeight: FontWeight.normal, color: Color(0xFF9F497D), fontSize: 16);
-
-  static TextStyle get boxText => const TextStyle(
-    fontWeight: FontWeight.w200, color: Color(0xFF1F1F1F), fontSize: 16);
-  
-  static TextStyle get buttonText => const TextStyle(
-    fontWeight: FontWeight.w900, color: Color.fromARGB(255, 255, 255, 255), fontSize: 16);
-
-  static const containerWidth = 375.0;
-
-  static const boxPadding = EdgeInsets.symmetric(vertical: 1, horizontal: 8);
-}
+import './styles/auth_styles.dart';
 
 class CreateAccount extends StatefulWidget {
   const CreateAccount({super.key});
@@ -56,8 +15,9 @@ class CreateAccount extends StatefulWidget {
 class _CreateAccountState extends State<CreateAccount> {
   final FirebaseService firebaseService = FirebaseService();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController  = TextEditingController();
-  final TextEditingController _confirmPasswordController  = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   bool isLoading = false;
   bool rememberMe = false;
 
@@ -75,7 +35,6 @@ class _CreateAccountState extends State<CreateAccount> {
     });
 
     try {
-
       final userCredential = await firebaseService.createAccount(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
@@ -86,9 +45,9 @@ class _CreateAccountState extends State<CreateAccount> {
       }
 
       await firebaseService.createUserProfile(
-        uid: userCredential.user!.uid, 
+        uid: userCredential.user!.uid,
         email: _emailController.text.trim(),
-        );
+      );
       if (mounted) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const CreateProfilePage()),
@@ -102,12 +61,13 @@ class _CreateAccountState extends State<CreateAccount> {
       });
     }
   }
+
   void _showSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message)),
     );
   }
-  
+
   @override
   void dispose() {
     _emailController.dispose();
@@ -115,8 +75,9 @@ class _CreateAccountState extends State<CreateAccount> {
     super.dispose();
   }
 
-  void _confirmPassword(){
-    if (_confirmPasswordController.text.isEmpty || _passwordController.text.isEmpty) {
+  void _confirmPassword() {
+    if (_confirmPasswordController.text.isEmpty ||
+        _passwordController.text.isEmpty) {
       _showSnackBar('Please fill in all fields');
       return;
     }
@@ -130,98 +91,90 @@ class _CreateAccountState extends State<CreateAccount> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFFE0CA),
-      body: SingleChildScrollView(
-        child: Column(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        body: SingleChildScrollView(
+            child: Column(
           children: [
-            Padding(  
-              padding: const EdgeInsets.only(top: 200),          
-              child: Text(
-                'Create FNGR Account', 
-                style: ProfileStyles.boxHeader,
-              ),
-            ),
-            
             Padding(
-              padding: const EdgeInsets.only(right: 320, top: 40),              
+              padding: const EdgeInsets.only(top: 200),
+              child: Text('Create Account',
+                  style: LogInStyles.boxHeader(context),
+                  textAlign: TextAlign.center),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 320, top: 40),
               child: Text(
                 'Email',
-                style: ProfileStyles.instructionText,
+                style: LogInStyles.instructionText(context),
               ),
             ),
-
-            Padding(
-              padding: const EdgeInsets.only(left: 10, top: 5),
-              child: Container(      
-                decoration: ProfileStyles.boxDecoration,
-                padding: ProfileStyles.boxPadding,
-                width: ProfileStyles.containerWidth,         
-                child: TextField(
-                  controller: _emailController,
-                  style: ProfileStyles.boxText,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Enter your email',
-                    hintStyle: ProfileStyles.boxText,
-                  ),
-                ), 
-              ),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.only(right: 290, top: 10),              
-              child: Text(
-                'Password',
-                style: ProfileStyles.instructionText,
-              ),
-            ),
-
             Padding(
               padding: const EdgeInsets.only(left: 10, top: 5),
               child: Container(
-                decoration: ProfileStyles.boxDecoration,
-                padding: ProfileStyles.boxPadding,
-                width: ProfileStyles.containerWidth,
+                decoration: LogInStyles.boxDecoration(context),
+                padding: LogInStyles.boxPadding,
+                width: LogInStyles.containerWidth,
+                child: TextField(
+                  controller: _emailController,
+                  style: LogInStyles.instructionText(context),
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: 'Enter your email',
+                    hintStyle: LogInStyles.instructionText(context),
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 290, top: 10),
+              child: Text(
+                'Password',
+                style: LogInStyles.instructionText(context),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 10, top: 5),
+              child: Container(
+                decoration: LogInStyles.boxDecoration(context),
+                padding: LogInStyles.boxPadding,
+                width: LogInStyles.containerWidth,
                 child: TextField(
                   controller: _passwordController,
-                  style: ProfileStyles.boxText,
+                  style: LogInStyles.instructionText(context),
                   obscureText: true,
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     labelText: 'Enter your password',
-                    labelStyle: ProfileStyles.boxText,
-                  ), 
+                    labelStyle: LogInStyles.instructionText(context),
+                  ),
                 ),
               ),
             ),
-
             Padding(
-              padding: const EdgeInsets.only(right: 225, top: 10),              
+              padding: const EdgeInsets.only(right: 225, top: 10),
               child: Text(
                 'Confirm password',
-                style: ProfileStyles.instructionText,
+                style: LogInStyles.instructionText(context),
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.only(left: 10, top: 5),
               child: Container(
-                decoration: ProfileStyles.boxDecoration,
-                padding: ProfileStyles.boxPadding,
-                width: ProfileStyles.containerWidth,
+                decoration: LogInStyles.boxDecoration(context),
+                padding: LogInStyles.boxPadding,
+                width: LogInStyles.containerWidth,
                 child: TextField(
                   controller: _confirmPasswordController,
-                  style: ProfileStyles.boxText,
+                  style: LogInStyles.instructionText(context),
                   obscureText: true,
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     labelText: 'Re-enter password',
-                    labelStyle: ProfileStyles.boxText,
-                  ), 
+                    labelStyle: LogInStyles.instructionText(context),
+                  ),
                 ),
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.only(top: 20, left: 15),
               child: Row(
@@ -233,27 +186,30 @@ class _CreateAccountState extends State<CreateAccount> {
                         rememberMe = value ?? false;
                       });
                     },
-                    activeColor: const Color(0xFFD461A6),
-                    checkColor: Colors.white,
+                    activeColor: Theme.of(context).colorScheme.secondary,
+                    checkColor: Theme.of(context).colorScheme.secondaryFixed,
+                    side: BorderSide(
+                        color: Theme.of(context).colorScheme.primaryFixed),
                   ),
-                  const Text(
+                  Text(
                     'Remember Me',
-                    style: TextStyle(fontSize: 16, color: Color(0xFF1F1F1F), fontWeight: FontWeight.w200), 
+                    style: LogInStyles.instructionText(context),
                   ),
                 ],
               ),
             ),
-            
             Padding(
               padding: const EdgeInsets.only(top: 5),
               child: Container(
-                padding: ProfileStyles.boxPadding,
-                width: ProfileStyles.containerWidth,
+                padding: LogInStyles.boxPadding,
+                width: LogInStyles.containerWidth,
                 child: ElevatedButton(
-                  style: ProfileStyles.buttonStyle,
-                  onPressed: isLoading ? null : () {
-                    _confirmPassword();
-                  },
+                  style: LogInStyles.buttonStyle(context),
+                  onPressed: isLoading
+                      ? null
+                      : () {
+                          _confirmPassword();
+                        },
                   child: isLoading
                       ? const SizedBox(
                           height: 20,
@@ -262,19 +218,18 @@ class _CreateAccountState extends State<CreateAccount> {
                         )
                       : Text(
                           'Sign Up',
-                          style: ProfileStyles.buttonText,
+                          style: LogInStyles.buttonText(context),
                         ),
                 ),
               ),
             ),
-
-            const Padding(
-              padding: EdgeInsets.only(left: 20, right: 20, top: 10),  
+            Padding(
+              padding: EdgeInsets.only(left: 20, right: 20, top: 10),
               child: Row(
                 children: [
                   Expanded(
                     child: Divider(
-                      color: Colors.black,
+                      color: Theme.of(context).colorScheme.primaryFixed,
                       thickness: 0.5,
                     ),
                   ),
@@ -282,39 +237,39 @@ class _CreateAccountState extends State<CreateAccount> {
                     padding: EdgeInsets.symmetric(horizontal: 8),
                     child: Text(
                       'Already have an account?',
-                      style: TextStyle(color: Color(0xFF1F1F1F), fontWeight: FontWeight.w200),
+                      style: LogInStyles.instructionText(context),
                     ),
                   ),
                   Expanded(
                     child: Divider(
-                      color: Colors.black,
+                      color: Theme.of(context).colorScheme.primaryFixed,
                       thickness: 0.5,
                     ),
                   ),
                 ],
               ),
-            ), 
-
+            ),
             Padding(
               padding: const EdgeInsets.only(top: 10),
               child: Container(
-                padding: ProfileStyles.boxPadding,
-                width: ProfileStyles.containerWidth,
+                padding: LogInStyles.boxPadding,
+                width: LogInStyles.containerWidth,
                 child: ElevatedButton(
-                  style: ProfileStyles.buttonStyle,
+                  style: LogInStyles.buttonStyle(context),
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const LoginPage()));
                   },
                   child: Text(
-                    'Login', 
-                    style: ProfileStyles.buttonText,
+                    'Login',
+                    style: LogInStyles.buttonText(context),
                   ),
                 ),
               ),
             ),
           ],
-        )
-      )
-    );
+        )));
   }
 }
