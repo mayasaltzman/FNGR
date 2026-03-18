@@ -6,7 +6,6 @@ import './widgets/profile_view_widgets.dart';
 import './update_profile_page.dart';
 import './styles/user_profile_styles.dart';
 
-
 class BuildUserProfilePage extends StatefulWidget {
   final String userId;
   final Map<String, dynamic> data;
@@ -48,8 +47,9 @@ class _BuildUserProfilePageState extends State<BuildUserProfilePage> {
               photoURL: widget.data['photoURL'] ?? '',
             ),
             ProfileImage(
-                imageUrl: widget.data['photoURL'] ?? '',
-                profileImages: widget.data['profileImages'] ?? []),
+              imageUrl: widget.data['photoURL'] ?? '',
+              profileImages: widget.data['profileImages'] ?? [],
+            ),
             AboutMe(bio: widget.data['bio'] ?? ''),
             KeyInfo(
               lookingFor: widget.data['expectations'] ?? 'Unknown',
@@ -65,9 +65,13 @@ class _BuildUserProfilePageState extends State<BuildUserProfilePage> {
               genderExpression: widget.data['expression'] ?? ['Unknown'],
             ),
             FieldsBox(
-                items: widget.data['sexual_pref'] ?? [], label: "Preferences"),
+              items: widget.data['sexual_pref'] ?? [],
+              label: "Preferences",
+            ),
             FieldsBox(
-                items: widget.data['interests'] ?? [], label: "Interests"),
+              items: widget.data['interests'] ?? [],
+              label: "Interests",
+            ),
             const SizedBox(height: 16),
           ],
         ),
@@ -112,124 +116,135 @@ class _UserProfilePageState extends State<UserProfilePage> {
   @override
   Widget build(BuildContext context) {
     final isUserProfile = userId == _firebaseService.currentUserId;
-    return Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.secondary,
-          leading: BackButton(
-            color: Theme.of(context).colorScheme.secondaryFixed,
-          ),
-          centerTitle: true,
-          title: Text(
-            isUserProfile ? 'Profile' : 'FNGR',
-            style:
-                TextStyle(color: Theme.of(context).colorScheme.secondaryFixed),
-          ),
-        ),
-        body: FutureBuilder<DocumentSnapshot>(
-            future: _firebaseService.getUserProfile(userId),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
 
-              if (!snapshot.hasData || !snapshot.data!.exists) {
-                return const Center(child: Text('User not found'));
-              }
+    return FutureBuilder<DocumentSnapshot>(
+      future: _firebaseService.getUserProfile(userId),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
 
-              final data = snapshot.data!.data() as Map<String, dynamic>;
+        if (!snapshot.hasData || !snapshot.data!.exists) {
+          return const Scaffold(
+            body: Center(child: Text('User not found')),
+          );
+        }
 
-              double distance = double.infinity;
-              final lat = data['lat'] as double? ?? 0.0;
-              final lng = data['long'] as double? ?? 0.0;
+        final data = snapshot.data!.data() as Map<String, dynamic>;
 
-              if (lat != 0.0 &&
-                  lng != 0.0 &&
-                  _locationService.latitude != null &&
-                  _locationService.longitude != null) {
-                distance = _locationService.calculateDistance(
-                    _locationService.latitude!,
-                    _locationService.longitude!,
-                    lat,
-                    lng);
-              }
+        double distance = double.infinity;
+        final lat = data['lat'] as double? ?? 0.0;
+        final lng = data['long'] as double? ?? 0.0;
 
-              return FutureBuilder<String?>(
-                  future: _locationService.getCityFromCoordinates(lat, lng),
-                  builder: (context, citySnapshot) {
-                    final city = citySnapshot.data;
-                    return Column(children: [
-                      Expanded(
-                          child: isUserProfile
-                              ? DefaultTabController(
-                                  length: 2,
-                                  child: Column(children: [
-                                    Container(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .tertiaryFixed,
-                                      child: TabBar(
-                                          dividerColor: Theme.of(context)
-                                              .colorScheme
-                                              .primaryContainer,
-                                          unselectedLabelColor: Colors.black,
-                                          labelColor: Theme.of(context)
-                                              .colorScheme
-                                              .primaryFixed,
-                                          indicatorColor: Theme.of(context)
-                                              .colorScheme
-                                              .primaryFixed,
-                                          tabs: [
-                                            Tab(text: "Edit"),
-                                            Tab(text: "View")
-                                          ]),
-                                    ),
-                                    Expanded(
-                                        child: TabBarView(children: [
-                                      UpdateProfilePage(
-                                        userId: userId,
-                                          bio: data['bio'] ?? '',
-                                          rStatus:
-                                              data['relationship_status'] ?? '',
-                                          rStyle:
-                                              data['relationship_style'] ?? '',
-                                          lookingFor:
-                                              data['expectations'] ?? '',
-                                          sexuality: data['sexuality'] ?? [],
-                                          gender: data['gender'] ?? [],
-                                          pronouns: data['pronouns'] ?? [],
-                                          presentation:
-                                              data['expression'] ?? [],
-                                          interests: data['interests'] ?? [],
-                                          preferences:
-                                              data['sexual_pref'] ?? [],
-                                          name: data['name'] ?? '',
-                                          age: data['age'] ?? '',
-                                          height: data['height'] ?? ''),
-                                      SingleChildScrollView(
-                                          child: Column(children: [
-                                        BuildUserProfilePage(
-                                            userId: userId,
-                                            data: data,
-                                            isUserProfile: isUserProfile,
-                                            distance: distance,
-                                            city: city)
-                                      ]))
-                                    ]))
-                                  ]),
-                                )
-                              : Expanded(
-                                  child: SingleChildScrollView(
-                                      child: Column(children: [
-                                  BuildUserProfilePage(
-                                      userId: userId,
-                                      data: data,
-                                      isUserProfile: isUserProfile,
-                                      distance: distance,
-                                      city: city)
-                                ]))))
-                    ]);
-                  });
-            }));
+        if (lat != 0.0 &&
+            lng != 0.0 &&
+            _locationService.latitude != null &&
+            _locationService.longitude != null) {
+          distance = _locationService.calculateDistance(
+            _locationService.latitude!,
+            _locationService.longitude!,
+            lat,
+            lng,
+          );
+        }
+
+        return FutureBuilder<String?>(
+          future: _locationService.getCityFromCoordinates(lat, lng),
+          builder: (context, citySnapshot) {
+            final city = citySnapshot.data;
+
+            return DefaultTabController(
+              length: isUserProfile ? 2 : 1,
+              child: Builder(
+                builder: (context) {
+                  final tabController = DefaultTabController.of(context);
+                  return Scaffold(
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    appBar: AppBar(
+                      backgroundColor: Theme.of(context).colorScheme.secondary,
+                      leading: BackButton(
+                        color: Theme.of(context).colorScheme.secondaryFixed,
+                      ),
+                      centerTitle: true,
+                      title: AnimatedBuilder(
+                        animation: tabController,
+                        builder: (_, __) {
+                          if (!isUserProfile) {
+                            return Text(
+                              data['name'] ?? 'Profile',
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .secondaryFixed,
+                              ),
+                            );
+                          }
+                          return Text(
+                            tabController.index == 0
+                                ? 'Edit Profile'
+                                : data['name'],
+                            style: TextStyle(
+                              color:
+                                  Theme.of(context).colorScheme.secondaryFixed,
+                            ),
+                          );
+                        },
+                      ),
+                      bottom: isUserProfile
+                          ? TabBar(
+                              tabs: [
+                                Tab(text: "Edit"),
+                                Tab(text: "View"),
+                              ],
+                            )
+                          : null,
+                    ),
+                    body: TabBarView(
+                      children: isUserProfile
+                          ? [
+                              UpdateProfilePage(
+                                userId: userId,
+                                bio: data['bio'] ?? '',
+                                rStatus: data['relationship_status'] ?? '',
+                                rStyle: data['relationship_style'] ?? '',
+                                lookingFor: data['expectations'] ?? '',
+                                sexuality: data['sexuality'] ?? [],
+                                gender: data['gender'] ?? [],
+                                pronouns: data['pronouns'] ?? [],
+                                presentation: data['expression'] ?? [],
+                                interests: data['interests'] ?? [],
+                                preferences: data['sexual_pref'] ?? [],
+                                name: data['name'] ?? '',
+                                age: data['age'] ?? '',
+                                height: data['height'] ?? '',
+                              ),
+                              BuildUserProfilePage(
+                                userId: userId,
+                                data: data,
+                                isUserProfile: isUserProfile,
+                                distance: distance,
+                                city: city,
+                              ),
+                            ]
+                          : [
+                              BuildUserProfilePage(
+                                userId: userId,
+                                data: data,
+                                isUserProfile: isUserProfile,
+                                distance: distance,
+                                city: city,
+                              ),
+                            ],
+                    ),
+                  );
+                },
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 }
