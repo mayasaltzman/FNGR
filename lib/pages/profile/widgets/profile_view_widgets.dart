@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../chat/message_page.dart';
 import '../styles/user_profile_styles.dart';
 
 class HeaderElements extends StatelessWidget {
@@ -72,8 +71,8 @@ class _ProfileImageState extends State<ProfileImage> {
                       height: 4,
                       width: 25,
                       color: _index == i
-                          ? Theme.of(context).colorScheme.tertiaryFixed
-                          : Theme.of(context).colorScheme.tertiary,
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.primaryFixed,
                     );
                   }),
                 ),
@@ -174,11 +173,7 @@ class KeyInfo extends StatelessWidget {
             : 'Unknown',
         'icon': Icons.location_on_outlined
       },
-      {
-        'label': 'Age',
-        'value': age,
-        'icon': Icons.assignment_ind_rounded
-      },
+      {'label': 'Age', 'value': age, 'icon': Icons.assignment_ind_rounded},
       {'label': 'Location', 'value': location, 'icon': Icons.home_outlined},
       {
         'label': 'Sexuality',
@@ -234,10 +229,10 @@ class KeyInfo extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(), // let parent scroll
             shrinkWrap: true, // important so it fits inside the column
             itemCount: fieldsFiltered.length,
-            separatorBuilder: (context, index) => const Divider(
+            separatorBuilder: (context, index) => Divider(
               height: 20,
               thickness: 2,
-              color: Color(0xFFD461A6),
+              color: Theme.of(context).colorScheme.secondary,
             ),
             itemBuilder: (context, index) {
               final field = fieldsFiltered[index];
@@ -251,12 +246,13 @@ class KeyInfo extends StatelessWidget {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  //Text(field['label'] ?? '', style: ProfileStyles.boxText(context)),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     spacing: 10,
                     children: [
-                      Icon(field['icon'], color: Color(0xFFD461A6), size: 20),
+                      Icon(field['icon'],
+                          color: Theme.of(context).colorScheme.secondary,
+                          size: 20),
                       Flexible(
                         child: Text(
                           field['value'],
