@@ -60,8 +60,8 @@ class _ChatListState extends State<ChatList> {
                 future: _firebaseService.getUserProfile(otherUserId),
                 builder: (context, userSnapshot) {
                   if (!userSnapshot.hasData) {
-                    return const ListTile(
-                      title: Text('Loading...'),
+                    return ListTile(
+                      title: Text('Loading...', style: TextStyle(color: Theme.of(context).colorScheme.primaryFixed)),
                     );
                   }
                   print("user snapshot data: ${userSnapshot.data!.data()}");
