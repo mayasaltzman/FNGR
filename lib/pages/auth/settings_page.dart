@@ -4,6 +4,8 @@ import '../../services/firebase_service.dart';
 import '../../main.dart';
 import 'package:flutter/cupertino.dart';
 
+//DIDNT ADD SEMANTICS BECAUSE PAGE ISN'T IMPLEMENTED
+
 //styles for the page
 abstract class SettingsStyles {
   static ButtonStyle settingsButton(BuildContext context) {
@@ -15,20 +17,20 @@ abstract class SettingsStyles {
     );
   }
 
-  static Icon styledIcon(BuildContext context){
+  static Icon styledIcon(BuildContext context) {
     return Icon(
-        Icons.arrow_forward_ios,
-        color: Theme.of(context).colorScheme.primaryFixed,
-        size: 24,
-      );
+      Icons.arrow_forward_ios,
+      color: Theme.of(context).colorScheme.primaryFixed,
+      size: 24,
+    );
   }
-
 
   static TextStyle buttonText(BuildContext context) {
     return TextStyle(
-        fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primaryFixed, fontSize: 16);
+        fontWeight: FontWeight.bold,
+        color: Theme.of(context).colorScheme.primaryFixed,
+        fontSize: 16);
   }
-
 }
 
 class SettingsPage extends StatefulWidget {
@@ -231,8 +233,14 @@ class _SettingsState extends State<SettingsPage> {
                                 },
                           child: Text(
                             "Logout",
-                            style: TextStyle(color: Theme.of(context).colorScheme.secondaryFixed),
-                          ), style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.secondary)))
+                            style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .secondaryFixed),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.secondary)))
                 ],
               ),
             )),
