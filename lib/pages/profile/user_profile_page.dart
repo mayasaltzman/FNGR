@@ -39,6 +39,9 @@ class _BuildUserProfilePageState extends State<BuildUserProfilePage> {
         child: Column(
           spacing: 20,
           children: [
+            SizedBox(
+              height: 10,
+            ),
             ProfileImage(
               imageUrl: widget.data['photoURL'] ?? '',
               profileImages: widget.data['profileImages'] ?? [],
@@ -121,8 +124,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
         }
 
         if (!snapshot.hasData || !snapshot.data!.exists) {
-          return const Scaffold(
-            body: Center(child: Text('User not found')),
+          return Scaffold(
+            body: Center(
+                child: Semantics(
+              child: Text('User not found'),
+            )),
           );
         }
 
@@ -166,24 +172,33 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         animation: tabController,
                         builder: (_, __) {
                           if (!isUserProfile) {
-                            return Text(
-                              '${data['name']} ${data['age']}' ?? 'Profile',
-                              style: TextStyle(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .secondaryFixed,
+                            return Semantics(
+                              label:
+                                  '${data['name']} ${data['age']}' ?? 'Profile',
+                              child: Text(
+                                '${data['name']} ${data['age']}' ?? 'Profile',
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .secondaryFixed,
+                                ),
                               ),
                             );
                           }
-                          return Text(
-                            tabController.index == 0
-                                ? 'Edit Profile'
-                                : '${data['name']} ${data['age']}',
-                            style: TextStyle(
-                              color:
-                                  Theme.of(context).colorScheme.secondaryFixed,
-                            ),
-                          );
+                          return Semantics(
+                              label: tabController.index == 0
+                                  ? 'Edit Profile'
+                                  : '${data['name']} ${data['age']}',
+                              child: Text(
+                                tabController.index == 0
+                                    ? 'Edit Profile'
+                                    : '${data['name']} ${data['age']}',
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .secondaryFixed,
+                                ),
+                              ));
                         },
                       ),
                       actions: !isUserProfile
@@ -195,6 +210,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                       .colorScheme
                                       .secondaryFixed,
                                 ),
+
+                                tooltip:
+                                    'Message ${data['name']}', //this is for accessibility for icon buttons
                                 onPressed: () {
                                   Navigator.push(
                                     context,
