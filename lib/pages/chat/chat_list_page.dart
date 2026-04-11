@@ -28,9 +28,12 @@ class _ChatListState extends State<ChatList> {
         }
         if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
           return Center(
-              child: Text("No chats available",
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.primaryFixed)));
+              child: Semantics(
+            label: "No chats available",
+            child: Text("No chats available",
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.primaryFixed)),
+          ));
         }
         final chats = snapshot.data!.docs.where((chatDoc) {
           final chatData = chatDoc.data() as Map<String, dynamic>;
@@ -60,15 +63,24 @@ class _ChatListState extends State<ChatList> {
                 future: _firebaseService.getUserProfile(otherUserId),
                 builder: (context, userSnapshot) {
                   if (!userSnapshot.hasData) {
-                    return ListTile(
-                      title: Text('Loading...', style: TextStyle(color: Theme.of(context).colorScheme.primaryFixed)),
-                    );
+                    return Semantics(
+                        label: "User is loading",
+                        child: ListTile(
+                          title: Text('Loading...',
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primaryFixed)),
+                        ));
                   }
                   print("user snapshot data: ${userSnapshot.data!.data()}");
                   final data = userSnapshot.data!.data();
                   if (data == null) {
-                    return const ListTile(
-                      title: Text('Unknown User'),
+                    return Semantics(
+                      label: 'User not found',
+                      child: const ListTile(
+                        title: Text('Unknown User'),
+                      ),
                     );
                   }
                   final userData = data as Map<String, dynamic>;
@@ -78,40 +90,58 @@ class _ChatListState extends State<ChatList> {
                   final userPhoto = userData['photoURL'] ?? '';
 
                   //icon not rendering its working on individual message page so check it out
-                  return ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor:
-                          Theme.of(context).colorScheme.primaryContainer,
-                      backgroundImage:
-                          userPhoto.isNotEmpty ? NetworkImage(userPhoto) : null,
-                      child: userPhoto.isEmpty
-                          ? Icon(
-                              Icons.person,
-                              color: Theme.of(context).colorScheme.primaryFixed,
-                            )
-                          : null,
-                    ),
-                    title: Text(
-                      userName,
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.primaryFixed),
-                    ),
-                    trailing: Icon(
-                      Icons.chevron_right,
-                      color: Theme.of(context).colorScheme.primaryFixed,
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MessagePage(
-                            recipientUid: otherUserId,
-                            recipientName: userName,
-                            recipientImage: userPhoto,
-                          ),
+                  return Semantics(
+                    button: true,
+                    hint: 'double tap to read messages',
+                    child: ListTile(
+                      leading: Semantics(
+                        label: "alt text", //replace with user text
+                        child: CircleAvatar(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primaryContainer,
+                          backgroundImage: userPhoto.isNotEmpty
+                              ? NetworkImage(userPhoto)
+                              : null,
+                          child: userPhoto.isEmpty
+                              ? Icon(
+                                  Icons.person,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primaryFixed,
+                                )
+                              : null,
                         ),
-                      );
-                    },
+                      ),
+                      title: Semantics(
+                        label: userName,
+                        child: Text(
+                          userName,
+                          style: TextStyle(
+                              color:
+                                  Theme.of(context).colorScheme.primaryFixed),
+                        ),
+                      ),
+                      trailing: Semantics(
+                        label: "right arrow",
+                        hint: "open chat",
+                        child: Icon(
+                          Icons.chevron_right,
+                          color: Theme.of(context).colorScheme.primaryFixed,
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MessagePage(
+                              recipientUid: otherUserId,
+                              recipientName: userName,
+                              recipientImage: userPhoto,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   );
                 },
               );
@@ -137,19 +167,27 @@ class _ChatListPageState extends State<ChatListPage> {
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.secondary,
           actions: [
-            TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const RequestListPage()),
-                  );
-                },
-                child: const Text("Message Requests"))
+            Semantics(
+              button: true,
+              label: "message requests",
+              child: TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const RequestListPage()),
+                    );
+                  },
+                  child: const Text("Message Requests")),
+            )
           ],
-          title: Text("Chats",
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.secondaryFixed)),
+          title: Semantics(
+            header: true,
+            label: "chats",
+            child: Text("Chats",
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondaryFixed)),
+          ),
         ),
         body: SingleChildScrollView(
             child: Center(
