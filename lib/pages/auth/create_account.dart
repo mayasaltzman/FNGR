@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:test_milestone/pages/auth/login_page.dart';
 import '../../services/firebase_service.dart';
 import '../../pages/profile/create_profile_page.dart';
 import './styles/auth_styles.dart';
+import 'package:flutter/services.dart';
 
 class CreateAccount extends StatefulWidget {
   const CreateAccount({super.key});
@@ -66,6 +68,8 @@ class _CreateAccountState extends State<CreateAccount> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message)),
     );
+
+    SemanticsService.announce(message, Directionality.of(context));
   }
 
   @override
@@ -97,15 +101,22 @@ class _CreateAccountState extends State<CreateAccount> {
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 200),
-              child: Text('Create Account',
-                  style: LogInStyles.boxHeader(context),
-                  textAlign: TextAlign.center),
+              child: Semantics(
+                header: true,
+                label: "Create Account",
+                child: Text('Create Account',
+                    style: LogInStyles.boxHeader(context),
+                    textAlign: TextAlign.center),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.only(right: 320, top: 40),
-              child: Text(
-                'Email',
-                style: LogInStyles.instructionText(context),
+              child: Semantics(
+                label: "Email",
+                child: Text(
+                  'Email',
+                  style: LogInStyles.instructionText(context),
+                ),
               ),
             ),
             Padding(
@@ -114,22 +125,30 @@ class _CreateAccountState extends State<CreateAccount> {
                 decoration: LogInStyles.boxDecoration(context),
                 padding: LogInStyles.boxPadding,
                 width: LogInStyles.containerWidth,
-                child: TextField(
-                  controller: _emailController,
-                  style: LogInStyles.instructionText(context),
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Enter your email',
-                    hintStyle: LogInStyles.instructionText(context),
+                child: Semantics(
+                  label: "Enter your email",
+                  textField: true,
+                  isRequired: true,
+                  child: TextField(
+                    controller: _emailController,
+                    style: LogInStyles.instructionText(context),
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Enter your email',
+                      hintStyle: LogInStyles.instructionText(context),
+                    ),
                   ),
                 ),
               ),
             ),
             Padding(
               padding: const EdgeInsets.only(right: 290, top: 10),
-              child: Text(
-                'Password',
-                style: LogInStyles.instructionText(context),
+              child: Semantics(
+                label: "Password",
+                child: Text(
+                  'Password',
+                  style: LogInStyles.instructionText(context),
+                ),
               ),
             ),
             Padding(
@@ -138,62 +157,81 @@ class _CreateAccountState extends State<CreateAccount> {
                 decoration: LogInStyles.boxDecoration(context),
                 padding: LogInStyles.boxPadding,
                 width: LogInStyles.containerWidth,
-                child: TextField(
-                  controller: _passwordController,
-                  style: LogInStyles.instructionText(context),
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    labelText: 'Enter your password',
-                    labelStyle: LogInStyles.instructionText(context),
+                child: Semantics(
+                  textField: true,
+                  isRequired: true,
+                  label: "Enter your password",
+                  child: TextField(
+                    controller: _passwordController,
+                    style: LogInStyles.instructionText(context),
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      labelText: 'Enter your password',
+                      labelStyle: LogInStyles.instructionText(context),
+                    ),
                   ),
                 ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(right: 225, top: 10),
-              child: Text(
-                'Confirm password',
-                style: LogInStyles.instructionText(context),
-              ),
-            ),
+                padding: const EdgeInsets.only(right: 225, top: 10),
+                child: Semantics(
+                  label: "Confirm password",
+                  child: Text(
+                    'Confirm password',
+                    style: LogInStyles.instructionText(context),
+                  ),
+                )),
             Padding(
               padding: const EdgeInsets.only(left: 10, top: 5),
               child: Container(
-                decoration: LogInStyles.boxDecoration(context),
-                padding: LogInStyles.boxPadding,
-                width: LogInStyles.containerWidth,
-                child: TextField(
-                  controller: _confirmPasswordController,
-                  style: LogInStyles.instructionText(context),
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    labelText: 'Re-enter password',
-                    labelStyle: LogInStyles.instructionText(context),
-                  ),
-                ),
-              ),
+                  decoration: LogInStyles.boxDecoration(context),
+                  padding: LogInStyles.boxPadding,
+                  width: LogInStyles.containerWidth,
+                  child: Semantics(
+                    textField: true,
+                    isRequired: true,
+                    label: "Re-enter password",
+                    child: TextField(
+                      controller: _confirmPasswordController,
+                      style: LogInStyles.instructionText(context),
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        labelText: 'Re-enter password',
+                        labelStyle: LogInStyles.instructionText(context),
+                      ),
+                    ),
+                  )),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 20, left: 15),
               child: Row(
                 children: [
-                  Checkbox(
-                    value: rememberMe,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        rememberMe = value ?? false;
-                      });
-                    },
-                    activeColor: Theme.of(context).colorScheme.secondary,
-                    checkColor: Theme.of(context).colorScheme.secondaryFixed,
-                    side: BorderSide(
-                        color: Theme.of(context).colorScheme.primaryFixed),
+                  Semantics(
+                    label: "Remember me",
+                    hint: "Double tap to remember on next login",
+                    checked: rememberMe,
+                    child: Checkbox(
+                      value: rememberMe,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          rememberMe = value ?? false;
+                        });
+                      },
+                      activeColor: Theme.of(context).colorScheme.secondary,
+                      checkColor: Theme.of(context).colorScheme.secondaryFixed,
+                      side: BorderSide(
+                          color: Theme.of(context).colorScheme.primaryFixed),
+                    ),
                   ),
-                  Text(
-                    'Remember Me',
-                    style: LogInStyles.instructionText(context),
+                  Semantics(
+                    excludeSemantics: true,
+                    child: Text(
+                      'Remember Me',
+                      style: LogInStyles.instructionText(context),
+                    ),
                   ),
                 ],
               ),
@@ -201,27 +239,30 @@ class _CreateAccountState extends State<CreateAccount> {
             Padding(
               padding: const EdgeInsets.only(top: 5),
               child: Container(
-                padding: LogInStyles.boxPadding,
-                width: LogInStyles.containerWidth,
-                child: ElevatedButton(
-                  style: LogInStyles.buttonStyle(context),
-                  onPressed: isLoading
-                      ? null
-                      : () {
-                          _confirmPassword();
-                        },
-                  child: isLoading
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : Text(
-                          'Sign Up',
-                          style: LogInStyles.buttonText(context),
-                        ),
-                ),
-              ),
+                  padding: LogInStyles.boxPadding,
+                  width: LogInStyles.containerWidth,
+                  child: Semantics(
+                    button: true,
+                    label: "Sign up",
+                    child: ElevatedButton(
+                      style: LogInStyles.buttonStyle(context),
+                      onPressed: isLoading
+                          ? null
+                          : () {
+                              _confirmPassword();
+                            },
+                      child: isLoading
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : Text(
+                              'Sign Up',
+                              style: LogInStyles.buttonText(context),
+                            ),
+                    ),
+                  )),
             ),
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20, top: 10),
@@ -234,12 +275,14 @@ class _CreateAccountState extends State<CreateAccount> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    child: Text(
-                      'Already have an account?',
-                      style: LogInStyles.instructionText(context),
-                    ),
-                  ),
+                      padding: EdgeInsets.symmetric(horizontal: 8),
+                      child: Semantics(
+                        label: "Already have an account?",
+                        child: Text(
+                          'Already have an account?',
+                          style: LogInStyles.instructionText(context),
+                        ),
+                      )),
                   Expanded(
                     child: Divider(
                       color: Theme.of(context).colorScheme.primaryFixed,
@@ -252,22 +295,25 @@ class _CreateAccountState extends State<CreateAccount> {
             Padding(
               padding: const EdgeInsets.only(top: 10),
               child: Container(
-                padding: LogInStyles.boxPadding,
-                width: LogInStyles.containerWidth,
-                child: ElevatedButton(
-                  style: LogInStyles.buttonStyle(context),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const LoginPage()));
-                  },
-                  child: Text(
-                    'Login',
-                    style: LogInStyles.buttonText(context),
-                  ),
-                ),
-              ),
+                  padding: LogInStyles.boxPadding,
+                  width: LogInStyles.containerWidth,
+                  child: Semantics(
+                    button: true,
+                    label: "Login",
+                    child: ElevatedButton(
+                      style: LogInStyles.buttonStyle(context),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LoginPage()));
+                      },
+                      child: Text(
+                        'Login',
+                        style: LogInStyles.buttonText(context),
+                      ),
+                    ),
+                  )),
             ),
           ],
         )));

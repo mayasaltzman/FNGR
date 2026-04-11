@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:test_milestone/pages/profile/create_profile_steps/profile_additional_page.dart';
+import 'package:flutter/rendering.dart';
 import '../../pages/auth/create_account.dart';
 import '../../services/firebase_service.dart';
 import '../../main.dart'; // Import NavMenu
 import './styles/auth_styles.dart';
+import 'package:flutter/services.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -40,6 +41,10 @@ class _LoginState extends State<LoginPage> {
       }
     } catch (e) {
       _showSnackBar('Login failed: $e');
+      if (mounted) {
+        SemanticsService.announce(
+            'Login failed: $e', Directionality.of(context));
+      }
     } finally {
       setState(() {
         isLoading = false;
@@ -51,6 +56,8 @@ class _LoginState extends State<LoginPage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message)),
     );
+
+    SemanticsService.announce(message, Directionality.of(context));
   }
 
   @override
