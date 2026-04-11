@@ -4,7 +4,6 @@ import '../../services/firebase_service.dart';
 import '../../services/location_service.dart';
 import './widgets/profile_view_widgets.dart';
 import './update_profile_page.dart';
-import './styles/user_profile_styles.dart';
 import '../chat/message_page.dart';
 
 class BuildUserProfilePage extends StatefulWidget {
@@ -40,13 +39,6 @@ class _BuildUserProfilePageState extends State<BuildUserProfilePage> {
         child: Column(
           spacing: 20,
           children: [
-            HeaderElements(
-              name: widget.data['name'] ?? 'Unknown',
-              age: widget.data['age']?.toString() ?? 'N/A',
-              isUser: widget.isUserProfile,
-              userId: widget.userId,
-              photoURL: widget.data['photoURL'] ?? '',
-            ),
             ProfileImage(
               imageUrl: widget.data['photoURL'] ?? '',
               profileImages: widget.data['profileImages'] ?? [],

@@ -31,8 +31,8 @@ class MyApp extends StatelessWidget {
           fontFamily: "Gilroy-bold",
           colorScheme: const ColorScheme.light(
               primary: Color(0xFFFAF5F8), //app background
-              primaryContainer:
-                  Color.fromARGB(255, 249, 237, 245), //to distinguish from background
+              primaryContainer: Color.fromARGB(
+                  255, 249, 237, 245), //to distinguish from background
               primaryFixed: Color(0xFFAA4E85), //pink dark text
               secondary: Color(0xFFD461A6), //header color
               secondaryFixed: Color(0xFFFFFFFF), //white
@@ -105,6 +105,7 @@ class _NavMenuState extends State<NavMenu> {
         unselectedItemColor: Theme.of(context).colorScheme.primaryFixed,
         currentIndex: widget.selectedIndex,
         onTap: _onItemTapped,
+        //this is already accessible
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),

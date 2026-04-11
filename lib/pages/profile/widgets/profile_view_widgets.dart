@@ -1,39 +1,6 @@
 import 'package:flutter/material.dart';
 import '../styles/user_profile_styles.dart';
 
-class HeaderElements extends StatelessWidget {
-  final String name;
-  final String age;
-  final bool isUser;
-  final String userId;
-  final String photoURL;
-
-  const HeaderElements({
-    super.key,
-    required this.name,
-    required this.age,
-    required this.isUser,
-    required this.userId,
-    required this.photoURL,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      spacing: 20,
-      children: [
-        Container(
-            width: ProfileStyles.containerWidth,
-            padding: ProfileStyles.boxPadding,
-            child: const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-            )),
-      ],
-    );
-  }
-}
-
 //image box
 class ProfileImage extends StatefulWidget {
   final String? imageUrl;
@@ -81,12 +48,15 @@ class _ProfileImageState extends State<ProfileImage> {
                     controller: _pageController,
                     onPageChanged: (i) => setState(() => _index = i),
                     children: images.map((img) {
-                      return Image.network(
-                        img,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) =>
-                            const Center(child: Icon(Icons.person, size: 100)),
-                      );
+                      return Semantics(
+                          image: true,
+                          label: "user image", //this will change to alt text
+                          child: Image.network(
+                            img,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) => const Center(
+                                child: Icon(Icons.person, size: 100)),
+                          ));
                     }).toList(),
                   ),
                 ),
@@ -125,8 +95,15 @@ class AboutMe extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("About Me", style: ProfileStyles.boxHeader(context)),
-                Text(bio, style: ProfileStyles.boxText(context))
+                Semantics(
+                  label: "About me",
+                  child:
+                      Text("About Me", style: ProfileStyles.boxHeader(context)),
+                ),
+                Semantics(
+                  label: bio,
+                  child: Text(bio, style: ProfileStyles.boxText(context)),
+                )
               ],
             ),
           )
@@ -218,9 +195,12 @@ class KeyInfo extends StatelessWidget {
         children: [
           Align(
             alignment: Alignment.centerLeft,
-            child: Text(
-              "Key Info",
-              style: ProfileStyles.boxHeader(context),
+            child: Semantics(
+              label: "Key Info",
+              child: Text(
+                "Key Info",
+                style: ProfileStyles.boxHeader(context),
+              ),
             ),
           ),
           const SizedBox(height: 8),
@@ -243,27 +223,34 @@ class KeyInfo extends StatelessWidget {
                 return const SizedBox.shrink();
               }
 
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    spacing: 10,
-                    children: [
-                      Icon(field['icon'],
-                          color: Theme.of(context).colorScheme.secondary,
-                          size: 20),
-                      Flexible(
-                        child: Text(
-                          field['value'],
-                          style: ProfileStyles.boxText(context),
-                          textAlign: TextAlign.right,
-                          overflow: TextOverflow.ellipsis,
+              return Semantics(
+                label: '${field['label']}: ${field['value']}',
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      spacing: 10,
+                      children: [
+                        ExcludeSemantics(
+                          child: Icon(
+                            field['icon'],
+                            color: Theme.of(context).colorScheme.secondary,
+                            size: 20,
+                          ),
                         ),
-                      ),
-                    ],
-                  )
-                ],
+                        Flexible(
+                          child: Text(
+                            field['value'],
+                            style: ProfileStyles.boxText(context),
+                            textAlign: TextAlign.right,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               );
             },
           ),
@@ -294,15 +281,20 @@ class FieldsBox extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Align(
-            alignment: Alignment.centerLeft,
+              alignment: Alignment.centerLeft,
+              child: Semantics(
+                label: label,
+                child: Text(
+                  label,
+                  style: ProfileStyles.boxHeader(context),
+                ),
+              )),
+          Semantics(
+            label: formattedItems,
             child: Text(
-              label,
-              style: ProfileStyles.boxHeader(context),
+              formattedItems,
+              style: ProfileStyles.boxText(context),
             ),
-          ),
-          Text(
-            formattedItems,
-            style: ProfileStyles.boxText(context),
           ),
         ],
       ),
