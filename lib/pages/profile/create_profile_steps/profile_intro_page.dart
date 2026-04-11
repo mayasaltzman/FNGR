@@ -23,12 +23,16 @@ class ProfileIntroPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: ProfileStyles.spacing,
             children: [
-              Text("Weclome! Why don't you introduce yourself 😊",
-                  style: ProfileStyles.pageHeader(context)),
-              TextInputField(
-                  controller: _nameController,
-                  labelText: "Enter your name",
-                  textType: "What is your name?"),
+              Semantics(
+                child: Text("Weclome! Why don't you introduce yourself 😊",
+                    style: ProfileStyles.pageHeader(context)),
+              ),
+              Semantics(
+                child: TextInputField(
+                    controller: _nameController,
+                    labelText: "Enter your name",
+                    textType: "What is your name?"),
+              ),
               TextInputFieldBirthday(),
               TextInputField(
                   controller: _locationController,

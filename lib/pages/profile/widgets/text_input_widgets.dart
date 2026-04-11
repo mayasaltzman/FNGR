@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import '../create_profile_steps/styles/create_profile_styles.dart';
 
 class TextInputField extends StatelessWidget {
@@ -19,23 +20,31 @@ class TextInputField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       SizedBox(
-        child: Text(
-          textType,
-          style: ProfileStyles.inputHeader(context),
-          softWrap: true,
+        child: Semantics(
+          label: textType,
+          child: Text(
+            textType,
+            style: ProfileStyles.inputHeader(context),
+            softWrap: true,
+          ),
         ),
       ),
       const SizedBox(width: 20),
       SizedBox(
           height: 50,
-          child: TextFormField(
-            controller: controller,
-            style: ProfileStyles.inputText(context),
-            decoration: ProfileStyles.inputDecoration(context).copyWith(
-                hintText: labelText,
-                hintStyle: TextStyle(
-                    color: Theme.of(context).colorScheme.primaryFixed)),
-            validator: validator,
+          child: Semantics(
+            textField: true,
+            isRequired: true,
+            hint: labelText,
+            child: TextFormField(
+              controller: controller,
+              style: ProfileStyles.inputText(context),
+              decoration: ProfileStyles.inputDecoration(context).copyWith(
+                  hintText: labelText,
+                  hintStyle: TextStyle(
+                      color: Theme.of(context).colorScheme.primaryFixed)),
+              validator: validator,
+            ),
           ))
     ]);
   }
@@ -59,7 +68,10 @@ class TextInputFieldLong extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("About me", style: ProfileStyles.inputHeader(context)),
+        Semantics(
+          label: "About me",
+          child: Text("About me", style: ProfileStyles.inputHeader(context)),
+        ),
         SizedBox(
           width: 400,
           child: ValueListenableBuilder<TextEditingValue>(
@@ -67,19 +79,25 @@ class TextInputFieldLong extends StatelessWidget {
             builder: (context, value, child) {
               final remaining = maxChars - value.text.length;
 
-              return TextFormField(
-                controller: controller,
-                keyboardType: TextInputType.multiline,
-                minLines: 5,
-                maxLines: 20,
-                maxLength: maxChars,
-                style: ProfileStyles.inputText(context),
-                decoration: ProfileStyles.bioInputDecoration(
-                        context, bio, remaining)
-                    .copyWith(
-                        hintText: "Tell us a bit about yourself!",
-                        hintStyle: TextStyle(
-                            color: Theme.of(context).colorScheme.primaryFixed)),
+              return Semantics(
+                label: 'Tell us a bit about yourself!',
+                hint: 'Enter a bio',
+                child: TextFormField(
+                  controller: controller,
+                  keyboardType: TextInputType.multiline,
+                  minLines: 5,
+                  maxLines: 20,
+                  maxLength: maxChars,
+                  style: ProfileStyles.inputText(context),
+                  decoration:
+                      ProfileStyles.bioInputDecoration(context, bio, remaining)
+                          .copyWith(
+                              hintText: "Tell us a bit about yourself!",
+                              hintStyle: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primaryFixed)),
+                ),
               );
             },
           ),
@@ -93,68 +111,97 @@ class TextInputFieldBirthday extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text("Your birthday", style: ProfileStyles.inputHeader(context)),
+      Semantics(
+        label: "Your birthday",
+        child: Text("Your birthday", style: ProfileStyles.inputHeader(context)),
+      ),
       Row(
         spacing: 10,
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Day", style: ProfileStyles.inputText(context)),
+              Semantics(
+                child: Text("Day", style: ProfileStyles.inputText(context)),
+              ),
               SizedBox(
                   width: 80,
                   height: 50,
-                  child: TextFormField(
-                      style: ProfileStyles.inputText(context),
-                      decoration: ProfileStyles.inputDecoration(context)
-                          .copyWith(
-                              hintText: "DD",
-                              hintStyle: TextStyle(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primaryFixed))))
+                  child: Semantics(
+                    label: "DD",
+                    hint: "Enter day in form of DD",
+                    isRequired: true,
+                    child: TextFormField(
+                        style: ProfileStyles.inputText(context),
+                        decoration: ProfileStyles.inputDecoration(context)
+                            .copyWith(
+                                hintText: "DD",
+                                hintStyle: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primaryFixed))),
+                  ))
             ],
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Month", style: ProfileStyles.inputText(context)),
+              Semantics(
+                label: "Month",
+                child: Text("Month", style: ProfileStyles.inputText(context)),
+              ),
               SizedBox(
                   width: 80,
                   height: 50,
-                  child: TextFormField(
-                      style: ProfileStyles.inputText(context),
-                      decoration: ProfileStyles.inputDecoration(context)
-                          .copyWith(
-                              hintText: "MM",
-                              hintStyle: TextStyle(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primaryFixed))))
+                  child: Semantics(
+                    label: "MM",
+                    hint: "Enter day in form of MM",
+                    isRequired: true,
+                    child: TextFormField(
+                        style: ProfileStyles.inputText(context),
+                        decoration: ProfileStyles.inputDecoration(context)
+                            .copyWith(
+                                hintText: "MM",
+                                hintStyle: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primaryFixed))),
+                  ))
             ],
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Year", style: ProfileStyles.inputText(context)),
+              Semantics(
+                label: "Year",
+                child: Text("Year", style: ProfileStyles.inputText(context)),
+              ),
               SizedBox(
                   width: 190,
                   height: 50,
-                  child: TextFormField(
-                      style: ProfileStyles.inputText(context),
-                      decoration: ProfileStyles.inputDecoration(context)
-                          .copyWith(
-                              hintText: "YYYY",
-                              hintStyle: TextStyle(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primaryFixed))))
+                  child: Semantics(
+                    label: "YYYY",
+                    hint: "Enter day in form of YYYY",
+                    isRequired: true,
+                    child: TextFormField(
+                        style: ProfileStyles.inputText(context),
+                        decoration: ProfileStyles.inputDecoration(context)
+                            .copyWith(
+                                hintText: "YYYY",
+                                hintStyle: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primaryFixed))),
+                  ))
             ],
           ),
         ],
       ),
-      Text("You cannot update your birthday later",
-          style: ProfileStyles.inputText(context))
+      Semantics(
+        label: "You cannot update your birthday later",
+        child: Text("You cannot update your birthday later",
+            style: ProfileStyles.inputText(context)),
+      )
     ]);
   }
 }
