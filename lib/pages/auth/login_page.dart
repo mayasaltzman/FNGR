@@ -68,41 +68,53 @@ class _LoginState extends State<LoginPage> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 200),
-              child: Text(
-                'FNGR',
-                style: LogInStyles.boxHeader(context),
-              ),
-            ),
+                padding: const EdgeInsets.only(top: 200),
+                child: Semantics(
+                  label: "Finger",
+                  hint: "Finger login page",
+                  header: true,
+                  child: Text(
+                    'FNGR',
+                    style: LogInStyles.boxHeader(context),
+                  ),
+                )),
             Padding(
-              padding: const EdgeInsets.only(right: 320, top: 40),
-              child: Text(
-                'Email',
-                style: LogInStyles.instructionText(context),
-              ),
-            ),
+                padding: const EdgeInsets.only(right: 320, top: 40),
+                child: Semantics(
+                    label: "Email",
+                    child: Text(
+                      'Email',
+                      style: LogInStyles.instructionText(context),
+                    ))),
             Padding(
               padding: const EdgeInsets.only(left: 10, top: 5),
               child: Container(
-                decoration: LogInStyles.boxDecoration(context),
-                padding: LogInStyles.boxPadding,
-                width: LogInStyles.containerWidth,
-                child: TextField(
-                  controller: _emailController,
-                  style: LogInStyles.instructionText(context),
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Enter your email',
-                    hintStyle: LogInStyles.instructionText(context),
-                  ),
-                ),
-              ),
+                  decoration: LogInStyles.boxDecoration(context),
+                  padding: LogInStyles.boxPadding,
+                  width: LogInStyles.containerWidth,
+                  child: Semantics(
+                    textField: true,
+                    isRequired: true,
+                    label: 'Enter your email',
+                    child: TextField(
+                      controller: _emailController,
+                      style: LogInStyles.instructionText(context),
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Enter your email',
+                        hintStyle: LogInStyles.instructionText(context),
+                      ),
+                    ),
+                  )),
             ),
             Padding(
               padding: const EdgeInsets.only(right: 290, top: 10),
-              child: Text(
-                'Password',
-                style: LogInStyles.instructionText(context),
+              child: Semantics(
+                label: "Password",
+                child: Text(
+                  'Password',
+                  style: LogInStyles.instructionText(context),
+                ),
               ),
             ),
             Padding(
@@ -111,38 +123,49 @@ class _LoginState extends State<LoginPage> {
                 decoration: LogInStyles.boxDecoration(context),
                 padding: LogInStyles.boxPadding,
                 width: LogInStyles.containerWidth,
-                child: TextField(
-                  controller: _passwordController,
-                  style: LogInStyles.instructionText(context),
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Enter your password',
-                    hintStyle: LogInStyles.instructionText(context),
-                  ),
-                ),
+                child: Semantics(
+                    textField: true,
+                    isRequired: true,
+                    child: TextField(
+                      controller: _passwordController,
+                      style: LogInStyles.instructionText(context),
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Enter your password',
+                        hintStyle: LogInStyles.instructionText(context),
+                      ),
+                    )),
               ),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 20, left: 15),
               child: Row(
                 children: [
-                  Checkbox(
-                    value: rememberMe,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        rememberMe = value ?? false;
-                      });
-                    },
-                    activeColor: Theme.of(context).colorScheme.secondary,
-                    checkColor: Theme.of(context).colorScheme.secondaryFixed,
-                    side: BorderSide(
-                        color: Theme.of(context).colorScheme.primaryFixed),
+                  Semantics(
+                    label: "Remember me",
+                    hint: "Double tap to remember on next login",
+                    checked: rememberMe,
+                    child: Checkbox(
+                      value: rememberMe,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          rememberMe = value ?? false;
+                        });
+                      },
+                      activeColor: Theme.of(context).colorScheme.secondary,
+                      checkColor: Theme.of(context).colorScheme.secondaryFixed,
+                      side: BorderSide(
+                          color: Theme.of(context).colorScheme.primaryFixed),
+                    ),
                   ),
-                  Text(
-                    'Remember Me',
-                    style: LogInStyles.instructionText(context),
-                  ),
+                  Semantics(
+                      excludeSemantics: true,
+                      child: Text(
+                        'Remember Me',
+                        style: LogInStyles.instructionText(context),
+                      )),
+                  //this does not have functionality yet so didnt add semantics
                   TextButton(
                     onPressed: () {
                       print('Clicked! - go to change password backend');
@@ -162,21 +185,24 @@ class _LoginState extends State<LoginPage> {
             Padding(
               padding: const EdgeInsets.only(top: 5),
               child: Container(
-                padding: LogInStyles.boxPadding,
-                width: LogInStyles.containerWidth,
-                child: ElevatedButton(
-                  style: LogInStyles.buttonStyle(context),
-                  onPressed: isLoading
-                      ? null
-                      : () {
-                          _signIn();
-                        },
-                  child: Text(
-                    'Login',
-                    style: LogInStyles.buttonText(context),
-                  ),
-                ),
-              ),
+                  padding: LogInStyles.boxPadding,
+                  width: LogInStyles.containerWidth,
+                  child: Semantics(
+                    label: "Login",
+                    button: true,
+                    child: ElevatedButton(
+                      style: LogInStyles.buttonStyle(context),
+                      onPressed: isLoading
+                          ? null
+                          : () {
+                              _signIn();
+                            },
+                      child: Text(
+                        'Login',
+                        style: LogInStyles.buttonText(context),
+                      ),
+                    ),
+                  )),
             ),
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20, top: 10),
@@ -190,9 +216,12 @@ class _LoginState extends State<LoginPage> {
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 8),
-                    child: Text(
-                      "Don't have an account?",
-                      style: LogInStyles.instructionText(context),
+                    child: Semantics(
+                      label: "Don't have an account?",
+                      child: Text(
+                        "Don't have an account?",
+                        style: LogInStyles.instructionText(context),
+                      ),
                     ),
                   ),
                   Expanded(
@@ -207,22 +236,25 @@ class _LoginState extends State<LoginPage> {
             Padding(
               padding: const EdgeInsets.only(top: 10),
               child: Container(
-                padding: LogInStyles.boxPadding,
-                width: LogInStyles.containerWidth,
-                child: ElevatedButton(
-                  style: LogInStyles.buttonStyle(context),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const CreateAccount()));
-                  },
-                  child: Text(
-                    'Sign Up',
-                    style: LogInStyles.buttonText(context),
-                  ),
-                ),
-              ),
+                  padding: LogInStyles.boxPadding,
+                  width: LogInStyles.containerWidth,
+                  child: Semantics(
+                    label: "Sign up",
+                    button: true,
+                    child: ElevatedButton(
+                      style: LogInStyles.buttonStyle(context),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const CreateAccount()));
+                      },
+                      child: Text(
+                        'Sign Up',
+                        style: LogInStyles.buttonText(context),
+                      ),
+                    ),
+                  )),
             ),
           ],
         ),

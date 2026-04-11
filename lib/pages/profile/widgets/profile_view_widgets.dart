@@ -300,7 +300,6 @@ class FieldsBox extends StatelessWidget {
               style: ProfileStyles.boxHeader(context),
             ),
           ),
-          const SizedBox(height: 8),
           Text(
             formattedItems,
             style: ProfileStyles.boxText(context),
