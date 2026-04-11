@@ -2,10 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_chat_core/flutter_chat_core.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:test_milestone/pages/profile/user_profile_page.dart';
 import '../../services/firebase_service.dart';
+import 'package:flutter/services.dart';
 
 class MessagePage extends StatefulWidget {
   final String recipientUid;
@@ -46,20 +48,27 @@ class _MessagePageState extends State<MessagePage> {
                             UserProfilePage(userId: widget.recipientUid)),
                   );
                 },
-                child: CircleAvatar(
-                  radius: 20,
-                  backgroundImage: widget.recipientImage.isNotEmpty
-                      ? NetworkImage(widget.recipientImage)
-                      : null,
-                  child: widget.recipientImage.isEmpty
-                      ? Icon(Icons.person, color: Theme.of(context).colorScheme.secondary)
-                      : null,
-                )),
-            Text(
-              widget.recipientName,
-              style: TextStyle(
-                fontSize: 12,
-                color: Theme.of(context).colorScheme.primaryContainer,
+                child: Semantics(
+                    label: "User image", //change to alt text
+                    button: true,
+                    child: CircleAvatar(
+                      radius: 20,
+                      backgroundImage: widget.recipientImage.isNotEmpty
+                          ? NetworkImage(widget.recipientImage)
+                          : null,
+                      child: widget.recipientImage.isEmpty
+                          ? Icon(Icons.person,
+                              color: Theme.of(context).colorScheme.secondary)
+                          : null,
+                    ))),
+            Semantics(
+              label: widget.recipientName,
+              child: Text(
+                widget.recipientName,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Theme.of(context).colorScheme.primaryContainer,
+                ),
               ),
             )
           ],
@@ -110,11 +119,16 @@ class ApproveDeclineWidgetState extends State<ApproveDeclineWidget> {
           child: Column(
             children: [
               const Padding(padding: EdgeInsets.all(5)),
-              Text("${widget.userName} wants to send you a message"),
+              Semantics(
+                label: "${widget.userName} wants to send you a message",
+                child: Text("${widget.userName} wants to send you a message"),
+              ),
               const SizedBox(height: 10),
-              const Text(
-                  "Do you want them to send you messages from now on? They’ll only known you’ve seen their request if you choose Allow.",
-                  textAlign: TextAlign.center),
+              Semantics(
+                child: Text(
+                    "Do you want them to send you messages from now on? They’ll only known you’ve seen their request if you choose Allow.",
+                    textAlign: TextAlign.center),
+              ),
               const SizedBox(height: 10),
               Container(
                 height: 78,
@@ -123,24 +137,32 @@ class ApproveDeclineWidgetState extends State<ApproveDeclineWidget> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   spacing: 60,
                   children: [
-                    TextButton(
-                        onPressed: widget.rejectChat,
-                        child: Text(
-                          "Decline",
-                          style: TextStyle(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .primaryContainer),
-                        )),
+                    Semantics(
+                      label: "Decline",
+                      button: true,
+                      child: TextButton(
+                          onPressed: widget.rejectChat,
+                          child: Text(
+                            "Decline",
+                            style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .primaryContainer),
+                          )),
+                    ),
                     const VerticalDivider(
                       width: 20,
                       thickness: 1,
                       color: Colors.grey,
                     ),
-                    TextButton(
-                        onPressed: widget.acceptChat,
-                        child: const Text("Allow",
-                            style: TextStyle(color: Colors.black)))
+                    Semantics(
+                      button: true,
+                      label: "Allow",
+                      child: TextButton(
+                          onPressed: widget.acceptChat,
+                          child: const Text("Allow",
+                              style: TextStyle(color: Colors.black))),
+                    )
                   ],
                 ),
               )
@@ -201,6 +223,8 @@ class MessageWidgetState extends State<MessageWidget> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error: $e')),
         );
+
+        SemanticsService.announce('Error: $e', Directionality.of(context));
       }
     }
   }
@@ -224,6 +248,7 @@ class MessageWidgetState extends State<MessageWidget> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Failed to send message: $e')),
         );
+        SemanticsService.announce('Error: $e', Directionality.of(context));
       }
     }
   }
@@ -241,6 +266,7 @@ class MessageWidgetState extends State<MessageWidget> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Failed to accept: $e')),
         );
+        SemanticsService.announce('Error: $e', Directionality.of(context));
       }
     }
   }
@@ -256,6 +282,7 @@ class MessageWidgetState extends State<MessageWidget> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Failed to reject: $e')),
         );
+        SemanticsService.announce('Error: $e', Directionality.of(context));
       }
     }
   }
@@ -289,7 +316,10 @@ class MessageWidgetState extends State<MessageWidget> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return CircularProgressIndicator();
           } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
+            return Semantics(
+              label: 'Error: ${snapshot.error}',
+              child: Text('Error: ${snapshot.error}'),
+            );
           }
           return _isAccepted || _isInitiator
               ? LoadChat(
@@ -344,13 +374,19 @@ class _LoadChatState extends State<LoadChat> {
         builders: Builders(
           textMessageBuilder: (context, message, index,
               {required bool isSentByMe, MessageGroupStatus? groupStatus}) {
-            return SimpleTextMessage(
-              message: message,
-              index: index,
-              sentBackgroundColor:
-                  Theme.of(context).colorScheme.primaryContainer,
-              sentTextStyle: TextStyle(color: Colors.grey[900]),
-              timeStyle: TextStyle(color: Colors.grey[600], fontSize: 10),
+            final sender = isSentByMe ? 'You' : 'Other user';
+            final text = message.text;
+
+            return Semantics(
+              label: '$sender said: $text',
+              child: SimpleTextMessage(
+                message: message,
+                index: index,
+                sentBackgroundColor:
+                    Theme.of(context).colorScheme.tertiaryFixed,
+                sentTextStyle: TextStyle(color: Colors.grey[900]),
+                timeStyle: TextStyle(color: Colors.grey[600], fontSize: 10),
+              ),
             );
           },
         ),
@@ -381,7 +417,10 @@ class _LoadChatState extends State<LoadChat> {
           );
         }
         if (snapshot.hasError) {
-          return Center(child: Text('Error loading messages'));
+          return Center(
+              child: Semantics(
+            child: Text('Error loading messages'),
+          ));
         }
 
         if (snapshot.hasData) {
@@ -410,13 +449,19 @@ class _LoadChatState extends State<LoadChat> {
           builders: Builders(
             textMessageBuilder: (context, message, index,
                 {required bool isSentByMe, MessageGroupStatus? groupStatus}) {
-              return SimpleTextMessage(
-                message: message,
-                index: index,
-                sentBackgroundColor:
-                    Theme.of(context).colorScheme.tertiaryFixed,
-                sentTextStyle: TextStyle(color: Colors.grey[900]),
-                timeStyle: TextStyle(color: Colors.grey[600], fontSize: 10),
+              final sender = isSentByMe ? 'You' : 'Other user';
+              final text = message.text;
+
+              return Semantics(
+                label: '$sender said: $text',
+                child: SimpleTextMessage(
+                  message: message,
+                  index: index,
+                  sentBackgroundColor:
+                      Theme.of(context).colorScheme.tertiaryFixed,
+                  sentTextStyle: TextStyle(color: Colors.grey[900]),
+                  timeStyle: TextStyle(color: Colors.grey[600], fontSize: 10),
+                ),
               );
             },
           ),
