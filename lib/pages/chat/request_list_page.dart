@@ -17,10 +17,14 @@ class _RequestListPageState extends State<RequestListPage> {
           leading:
               BackButton(color: Theme.of(context).colorScheme.secondaryFixed),
           backgroundColor: Theme.of(context).colorScheme.secondary,
-          title: Text(
-            "Message Requests",
-            style:
-                TextStyle(color: Theme.of(context).colorScheme.secondaryFixed),
+          title: Semantics(
+            header: true,
+            label: "message requests",
+            child: Text(
+              "Message Requests",
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondaryFixed),
+            ),
           ),
         ),
         body: const SingleChildScrollView(
