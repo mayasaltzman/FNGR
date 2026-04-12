@@ -66,11 +66,16 @@ class _MultiSelectState extends State<MultiSelect> {
                         /// Heading
                         Padding(
                           padding: const EdgeInsets.only(bottom: 6),
-                          child: Text(data['field_type'] ?? data['field_type'],
-                              style: TextStyle(
-                                color:
-                                    Theme.of(context).colorScheme.primaryFixed,
-                              )),
+                          child: Semantics(
+                            label: '', //left off here
+                            child:
+                                Text(data['field_type'] ?? data['field_type'],
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primaryFixed,
+                                    )),
+                          ),
                         ),
 
                         /// Button

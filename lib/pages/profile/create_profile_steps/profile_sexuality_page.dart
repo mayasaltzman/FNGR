@@ -29,9 +29,13 @@ class ProfileSexualityPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 30,
               children: [
-                Text(
-                    "Lets get a bit more information to help build your profile!",
-                    style: ProfileStyles.pageHeader(context)),
+                Semantics(
+                  label:
+                      "Lets get a bit more information to help build your profile!",
+                  child: Text(
+                      "Lets get a bit more information to help build your profile!",
+                      style: ProfileStyles.pageHeader(context)),
+                ),
                 MultiSelect(fieldTypes: fieldTypes),
                 Spacer(),
                 Align(
