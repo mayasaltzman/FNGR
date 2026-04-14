@@ -1,19 +1,16 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-
+import 'package:test_milestone/pages/profile/widgets/text_input_widgets.dart';
 
 class ImageButton extends StatelessWidget {
   final File? image;
   final VoidCallback onTap;
 
-  const ImageButton({
-    super.key,
-    required this.image,
-    required this.onTap
-  });
+  const ImageButton({super.key, required this.image, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController _photo = TextEditingController();
     return Column(
       children: [
         SizedBox(
@@ -26,12 +23,11 @@ class ImageButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(15),
               child: Container(
                 decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Theme.of(context).colorScheme.primaryFixed,
-                  ),
-                  borderRadius: BorderRadius.circular(15),
-                  color: Theme.of(context).colorScheme.primaryContainer
-                ),
+                    border: Border.all(
+                      color: Theme.of(context).colorScheme.primaryFixed,
+                    ),
+                    borderRadius: BorderRadius.circular(15),
+                    color: Theme.of(context).colorScheme.primaryContainer),
                 child: image != null
                     ? Image.file(
                         image!,
@@ -40,14 +36,16 @@ class ImageButton extends StatelessWidget {
                         height: double.infinity,
                       )
                     : Center(
-                      child: Icon(
-                        Icons.add, 
+                        child: Icon(
+                        Icons.add,
                         color: Theme.of(context).colorScheme.primaryFixed,
-                      )
-                    ),
+                      )),
               ),
             ),
           ),
+        ),
+        SizedBox(
+         
         ),
       ],
     );

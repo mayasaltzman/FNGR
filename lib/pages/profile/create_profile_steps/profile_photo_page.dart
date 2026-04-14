@@ -46,72 +46,87 @@ class ProfilePhotoPage extends StatelessWidget {
     }
 
     return Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        appBar: AppBar(
-          title: Text("Create Profile",
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.secondaryFixed)),
-          backgroundColor: Theme.of(context).colorScheme.secondary,
-          leading: BackButton(
-            color: Theme.of(context).colorScheme.secondaryFixed,
-          ),
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      appBar: AppBar(
+        title: Text("Create Profile",
+            style:
+                TextStyle(color: Theme.of(context).colorScheme.secondaryFixed)),
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        leading: BackButton(
+          color: Theme.of(context).colorScheme.secondaryFixed,
         ),
-        body: Padding(
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
           padding: EdgeInsets.all(ProfileStyles.formPadding),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: 10,
             children: [
-              Text("Add some photos for people to get a sense of who you are:",
-                  style: ProfileStyles.pageHeader(context)),
-              Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Column(
-                      children: [
-                        ImageButton(
-                            image: _selectedImages[1], onTap: () => () {}),
-                        const SizedBox(height: 10),
-                        ImageButton(
-                            image: _selectedImages[2], onTap: () => () {}),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        ImageButton(
-                            image: _selectedImages[3], onTap: () => () {}),
-                        const SizedBox(height: 10),
-                        ImageButton(
-                            image: _selectedImages[4], onTap: () => () {}),
-                      ],
-                    ),
-                  ]),
-              TextButton(
-                onPressed: () {
-                  showDialogBox(context);
-                },
-                style: ProfileStyles.textButton(context),
-                child: Text("Photo Tips"),
+              Text(
+                "Add some photos for people to get a sense of who you are:",
+                style: ProfileStyles.pageHeader(context),
               ),
-              Spacer(),
+              SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    children: [
+                      ImageButton(image: _selectedImages[1], onTap: () {}),
+                      TextButton(
+                        onPressed: () => showDialogBox(context),
+                        style: ProfileStyles.textButton(context),
+                        child: Text("Add alt text"),
+                      ),
+                      SizedBox(height: 10),
+                      ImageButton(image: _selectedImages[2], onTap: () {}),
+                      TextButton(
+                        onPressed: () => showDialogBox(context),
+                        style: ProfileStyles.textButton(context),
+                        child: Text("Add alt text"),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      ImageButton(image: _selectedImages[3], onTap: () {}),
+                      TextButton(
+                        onPressed: () => showDialogBox(context),
+                        style: ProfileStyles.textButton(context),
+                        child: Text("Add alt text"),
+                      ),
+                      SizedBox(height: 10),
+                      ImageButton(image: _selectedImages[4], onTap: () {}),
+                      TextButton(
+                        onPressed: () => showDialogBox(context),
+                        style: ProfileStyles.textButton(context),
+                        child: Text("Add alt text"),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
               Align(
-                  alignment: Alignment.bottomRight,
-                  child: ElevatedButton.icon(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProfileAdditionalPage()),
-                        );
-                      },
-                      label: Text("Skip"),
-                      icon: Icon(Icons.arrow_forward_ios),
-                      iconAlignment: IconAlignment.end,
-                      style: ProfileStyles.nextButton(context)))
+                alignment: Alignment.bottomRight,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProfileAdditionalPage(),
+                      ),
+                    );
+                  },
+                  label: Text("Skip"),
+                  icon: Icon(Icons.arrow_forward_ios),
+                  style: ProfileStyles.nextButton(context),
+                ),
+              ),
             ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
